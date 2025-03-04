@@ -5,29 +5,71 @@
 
 body {
   margin: 10px;
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  grid-template-areas: 
+    "titleBanner titleBanner"
+    "teamWindow teamExplore";
+  gap: 20px;
+}
+
+body > div {
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 10px 10px 10px darkgray;
+  background-color: antiquewhite;
+}
+
+#titleBanner {
+  grid-area: titleBanner;
+  text-align: center;
+}
+
+#teamWindow {
+  grid-area: teamWindow;
+  min-width: 350px;
+}
+
+#nom {
+  width: 100px;
+}
+
+#exploreWindow {
+  grid-area: teamExplore;
+  min-width: 400px;
 }
 
 h1, h2 {
-  padding: 10px;
+  margin-bottom: 10px;
 }
 
 table {
-    margin-top: 10px;
-    border-collapse: collapse;
-    width: 80%;
-  }
-  
-  td, th {
-    border: 1px solid black;
-    padding: 5px;
-    text-align: center;
-  }
-  
-  #spawnMsg {
-    display: inline-block;
-  }
+  margin-top: 10px;
+  border-collapse: collapse;
+}
 
-  .combatMsg {
-    display: inline-block;
-    padding-top: 10px;
+td, th {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: center;
+}
+
+#spawnMsg {
+  display: inline-block;
+}
+
+.combatMsg {
+  display: inline-block;
+  padding-top: 10px;
+}
+
+@media (max-width: 786px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "titleBanner"
+      "teamWindow"
+      "teamExplore";
   }
+}
