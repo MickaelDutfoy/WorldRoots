@@ -97,6 +97,10 @@ body > div {
   text-align: center;
 }
 
+#arcadeLink p, #storyLink p {
+  padding-bottom: 0;
+}
+
 #introLore {
   grid-area: introLore;
   text-align: center;
