@@ -3,31 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐲 MEUPORG 🐲</title>
+    <title>WorldRoots</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/global.css">
 </head>
-<body>
+<body class="indexbody">
     <div id="titleBanner">
-        <h1>🐲 MEUPORG 🐲</h1>
-        <p>Minimalistic Evolutive Underground Powerful Operative Role Playing Game</p>
+        <h1><a href="index.html">WorldRoots v0.1</a></h1>
+        <p>RPG old-school minimaliste en JavaScript</p>
     </div>
-    <div id="teamWindow">
-        <h2>🧙‍♂️ Créer ton aventurier 🧝‍♀️</h2>
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" placeholder="Entrez un nom">
-        <label for="classe">Classe :</label>
-        <select id="classe">
-            <option value="Guerrier">Guerrier</option>
-            <option value="Mage">Mage</option>
-            <option value="Voleur">Voleur</option>
-            <option value="Paladin">Paladin</option>
-        </select>
-        <button id="creerPerso">Créer</button>
+    <div id="disclaimer">
+        <p>WorldRoots est un RPG tour par tour à l'ancienne, dans l'héritage des tous premiers Final Fantasy.</p>
+        <p>À l'origine, il s'agit d'un projet pour mettre en application JavaScript dans le cadre d'une formation. Toutefois, j'aime à penser qu'il puisse un jour faire le bonheur de quelque aventurier vidéoludique en quête de nostalgie rôlistique.</p>
+        <p>Je vous souhaite un bon moment par ici !</p>
     </div>
-    <div id="exploreWindow">
-        <h2>🗡 Générer une rencontre hostile 🏹</h2>
-        <button id="genererMob">Générer</button>
+    <div id="changeLog">
+        <p>v0.1 : Release initiale.</p>
+        <ul>
+            <li>Le mode histoire est indisponible.</li>
+            <li>Le mode arcade présente des fonctionnalités limitées.</li>
+        </ul>
     </div>
-    <script src="js/script.js"></script>
+    <div id="arcadeLink">
+        <a href="arcade.html">Jouer au mode arcade</a>
+    </div>
+    <div id="storyLink">
+        <a href="intro.html">Jouer au mode histoire</a>
+    </div>
 </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldRoots</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+<body class="arcadebody">
+    <div id="titleBanner">
+        <h1><a href="index.html">WorldRoots v0.1</a></h1>
+        <p>RPG old-school minimaliste en JavaScript</p>
+    </div>
+    <div id="teamWindow">
+        <h2>Créer un aventurier</h2>
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" placeholder="Entrez un nom">
+        <label for="classe">Classe :</label>
+        <select id="classe">
+            <option value="Guerrier">Guerrier</option>
+            <option value="Mage">Mage</option>
+            <option value="Voleur">Voleur</option>
+            <option value="Paladin">Paladin</option>
+        </select>
+        <button id="creerPerso">Créer</button>
+    </div>
+    <div id="exploreWindow">
+        <h2>Générer une rencontre hostile</h2>
+        <button id="genererMob">Générer</button>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>

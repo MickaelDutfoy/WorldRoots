@@ -5,6 +5,34 @@
 
 body {
   margin: 10px;
+  font-family: "MedievalSharp";
+}
+
+body > div > a {
+  color: darkgreen;
+  text-decoration: none;
+}
+
+body > div > a:hover {
+  color: green;
+}
+
+p {
+  padding: 5px;
+}
+
+.indexbody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 
+    "titleBanner titleBanner"
+    "disclaimer disclaimer"
+    "changeLog changeLog"
+    "arcadeLink storyLink";
+  gap: 20px;
+}
+
+.arcadebody {
   display: grid;
   grid-template-columns: 3fr 7fr;
   grid-template-areas: 
@@ -13,12 +41,22 @@ body {
   gap: 20px;
 }
 
+.introbody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input, select, button {
+  font-family: "MedievalSharp";
+}
+
 body > div {
   border: 2px solid black;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 10px 10px 10px darkgray;
-  background-color: antiquewhite;
+  background: linear-gradient(to bottom right, #faebd7, #c7b8a4);
 }
 
 #titleBanner {
@@ -26,9 +64,47 @@ body > div {
   text-align: center;
 }
 
+#titleBanner a {
+  text-decoration: none;
+  color: darkgreen;
+}
+
+#titleBanner a:hover {
+  color: green;
+}
+
+#disclaimer {
+  grid-area: disclaimer;
+  text-align: center;
+}
+
+#changeLog {
+  grid-area: changeLog;
+  text-align: justify;
+}
+
+#changeLog ul {
+  padding-left: 40px;
+}
+
+#arcadeLink {
+  grid-area: arcadeLink;
+  text-align: center;
+}
+
+#storyLink {
+  grid-area: storyLink;
+  text-align: center;
+}
+
+#introLore {
+  grid-area: introLore;
+  text-align: center;
+}
+
 #teamWindow {
   grid-area: teamWindow;
-  min-width: 350px;
+  min-width: 360px;
 }
 
 #nom {
@@ -55,7 +131,12 @@ td, th {
   text-align: center;
 }
 
+#fightConsole p {
+  padding: 0;
+}
+
 #spawnMsg {
+  padding: 0;
   display: inline-block;
 }
 
@@ -65,7 +146,7 @@ td, th {
 }
 
 @media (max-width: 786px) {
-  body {
+  .arcadebody {
     grid-template-columns: 1fr;
     grid-template-areas: 
       "titleBanner"

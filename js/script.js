@@ -55,27 +55,21 @@ const grimoire = { // liste et fonctionnement des sorts
 
     cast(sort) {
         document.getElementById("spellList").remove();
-        let newMsg = document.createElement("p");
         if ( personnage.mp < sort.mp ) {
-            newMsg.innerHTML = `Tu n'as pas assez de MP !`;
-            fightConsole.appendChild(newMsg);
+            fightMsg(`Tu n'as pas assez de MP !`);
         } else {
             personnage.mp -= sort.mp;
-            let mpCost = document.createElement("p");
-            mpCost.innerHTML = `Tu perds ${sort.mp} MP.`;
-            fightConsole.appendChild(mpCost);
+            fightMsg(`Tu perds ${sort.mp} MP.`);
             personnage.fichePerso();
             if ( sort.type === "attack" ) {
-                let dmg = Math.floor(( personnage.stats.intelligence + sort.degats - mob.stats.volonte ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                newMsg.innerHTML = `Tu utilises ${sort.nom} ! ${mob.nom} perd ${dmg} HP.`;
-                fightConsole.appendChild(newMsg);
+                let dmg = Math.floor(( 2 * personnage.stats.intelligence + sort.degats - mob.stats.volonte ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+                fightMsg(`Tu utilises ${sort.nom} ! ${mob.nom} perd ${dmg} HP.`);
                 mob.hp = mob.hp - dmg;
                 if (mob.isDead()) return;
                 mob.attaquer(personnage);
             } else if ( sort.type === "heal" ) {
                 personnage.hp += sort.soin; if ( personnage.hp > personnage.maxhp ) { personnage.hp = personnage.maxhp };
-                newMsg.innerHTML = `Tu utilises ${sort.nom} ! Tu gagnes ${sort.soin} HP.`;
-                fightConsole.appendChild(newMsg);
+                fightMsg(`Tu utilises ${sort.nom} ! Tu gagnes ${sort.soin} HP.`);
                 mob.attaquer(personnage);
             }
         }
@@ -122,13 +116,9 @@ const ennemis = { // liste et génération des ennemis
     popMob() {
         let mobData = ennemis.mobList[Math.floor(Math.random() * ennemis.mobList.length)];
         mob = new Ennemi(mobData.nom, mobData.niveau, mobData.stats, mobData.xpDrop, mobData.lootTable);
-        const exploreWindow = document.getElementById("exploreWindow");
-        const spawnMsg = document.createElement("p");
-        spawnMsg.id = "spawnMsg";
         exploreWindow.appendChild(spawnMsg);
-        
-        document.getElementById("spawnMsg").innerHTML = `⚔️ Un ${mob.nom} apparaît ! <button id="fightBtn">Combattre</button>`;
-        fightConsole.id = "fightConsole";
+        fightConsole.innerHTML = "";
+        document.getElementById("spawnMsg").innerHTML = `Un ${mob.nom} apparaît ! <button id="fightBtn">Combattre</button>`;
         exploreWindow.appendChild(fightConsole);
         document.getElementById("fightBtn").addEventListener("click", fight);
     }
@@ -225,6 +215,8 @@ function createCharacter() { // création d'un personnage
         return;
     }
     personnage = new Personnage(nom, classe);
+    fightConsole.innerHTML = "";
+    spawnMsg.innerHTML = "";
     fichePerso.innerHTML = '<tr><td id="name"></td><td id="class"></td><td id="level"></td></tr><tr><td id="stats"></td><td id="inventory"></td><td id="spells"></td></tr><tr><td id="HP"></td><td id="MP"></td><td id="XP"></td></tr>';
     document.getElementById('creerPerso').parentNode.insertBefore(fichePerso, document.getElementById('creerPerso').nextSibling);
     personnage.fichePerso();
@@ -242,39 +234,28 @@ class Ennemi { // fonctionnement d'un ennemi
     }
 
     attaquer(cible) {
-        let dmg = Math.floor((this.stats.force - cible.stats.vitalite) * (Math.random() * 0.3 + 0.85));
+        let dmg = Math.floor((3 * this.stats.force - cible.stats.vitalite) * (Math.random() * 0.3 + 0.85));
         if (dmg < 0) dmg = 0;
-        
-        let newMsg = document.createElement("p");
-        newMsg.innerHTML = `${this.nom} attaque ${cible.nom} et lui inflige ${dmg} dégâts.`;
-        fightConsole.appendChild(newMsg);
-
+        fightMsg(`${this.nom} attaque ${cible.nom} et lui inflige ${dmg} dégâts.`);
         cible.hp -= dmg;
         cible.fichePerso(); // Mettre à jour l'affichage du personnage
 
         if (cible.hp <= 0) {
             cible.hp = 0;
             cible.fichePerso();
-            let newMsg = document.createElement("p");
-            newMsg.innerHTML = `${cible.nom} est vaincu(e) !`;
-            fightConsole.appendChild(newMsg);
+            fightMsg(`${cible.nom} est vaincu(e) !`);
             document.getElementById("fightButtons").remove();
         }
     }
 
     isDead() {
         if (this.hp <= 0) {
-            let newMsg = document.createElement("p");
-            newMsg.innerHTML = `${this.nom} meurt dans d'atroces souffrances.`;
-            fightConsole.appendChild(newMsg);
+            fightMsg(`${this.nom} meurt dans d'atroces souffrances.`);
             document.getElementById("fightButtons").remove();
             personnage.gagnerXP(this.xpDrop);
-            
             let loots = mob.lootTable.filter(objet => Math.random() < objet.chance);
             if (loots.length > 0) {
-                let newMsg = document.createElement("p");
-                newMsg.innerHTML = `Tu trouves : ${loots.map(objet => objet.item.nom).join(", ")}.`;
-                fightConsole.appendChild(newMsg);
+                fightMsg(`Tu trouves : ${loots.map(objet => objet.item.nom).join(", ")}.`);
             }
             loots.forEach(objet => {
                 if (objet.item.nom.endsWith("pièces d'or")) {
@@ -307,10 +288,8 @@ function fight() { // options de combat
     document.getElementById("item").addEventListener("click", afficherItems);
 
     function attack() {
-        let dmg = Math.floor(( personnage.stats.force + personnage.arme.valeur - mob.stats.vitalite ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 }; // formule dégâts joueur -> mob
-        let newMsg = document.createElement("p");
-        newMsg.innerHTML = `Tu utilises ${personnage.arme.nom} et envoies des grosses patates à ${mob.nom} ! Il perd ${dmg} points de vie.`;
-        fightConsole.appendChild(newMsg);
+        let dmg = Math.floor(( 2 * personnage.stats.force + personnage.arme.valeur - mob.stats.vitalite ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 }; // formule dégâts joueur -> mob
+        fightMsg(`Tu utilises ${personnage.arme.nom} et envoies des grosses patates à ${mob.nom} ! Il perd ${dmg} points de vie.`)
         mob.hp = mob.hp - dmg;
         if (mob.isDead()) return;
         mob.attaquer(personnage);
@@ -347,22 +326,17 @@ function fight() { // options de combat
     }
     
     function utiliserItem(item) {
-        let newMsg = document.createElement("p");
-    
         if (item.effet === "heal") {
             personnage.hp += item.valeur;
             if (personnage.hp > personnage.maxhp) personnage.hp = personnage.maxhp;
-            newMsg.innerHTML = `Tu utilises ${item.nom} et récupères ${item.valeur} HP !`;
+            fightMsg(`Tu utilises ${item.nom} et récupères ${item.valeur} HP !`);
         } 
         else if (item.effet === "dégâts") {
             let dmg = Math.floor((item.valeur) * (Math.random() * 0.3 + 0.85));
-            newMsg.innerHTML = `Tu lances ${item.nom} sur ${mob.nom} ! Il perd ${dmg} HP.`;
+            fightMsg(`Tu lances ${item.nom} sur ${mob.nom} ! Il perd ${dmg} HP.`);
             mob.hp -= dmg;
             if (mob.isDead()) return;
         }
-    
-        fightConsole.appendChild(newMsg);
-    
         // Trouver l'objet dans l'inventaire
         let index = personnage.inventaire.findIndex(i => i.objet.id === item.id);
         if (index !== -1) {
@@ -371,7 +345,6 @@ function fight() { // options de combat
                 personnage.inventaire.splice(index, 1); // Supprimer si plus de stock
             }
         }
-    
         // MAJ de l'affichage après utilisation
         personnage.fichePerso();
         document.getElementById("itemList").remove(); 
@@ -380,7 +353,17 @@ function fight() { // options de combat
     
 };
 
-const fightConsole = document.createElement("div");
+function fightMsg(message, delay = 0) {
+    setTimeout(() => {
+        let newMsg = document.createElement("p");
+        newMsg.innerHTML = message;
+        fightConsole.appendChild(newMsg);
+    }, delay);
+}
+
+const fightConsole = document.createElement("div"); fightConsole.id = "fightConsole";
 const fichePerso = document.createElement('table');
+const exploreWindow = document.getElementById("exploreWindow");
+const spawnMsg = document.createElement("p"); spawnMsg.id = "spawnMsg";
 document.getElementById("creerPerso").addEventListener("click", createCharacter);
 document.getElementById("genererMob").addEventListener("click", ennemis.popMob);
