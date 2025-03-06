@@ -295,8 +295,8 @@ class Personnage { // fonctionnement d'un personnage
         } 
         else {
             tempoMsg = 0;
-            if ( this.pointsLvlUp === 0) { fightMsg(`Plus de points disponibles !`) }
-            else { fightMsg(`Impossible de baisser une statistique sous sa valeur de départ !`) }
+            if ( this.pointsLvlUp > 0) { fightMsg(`Impossible de baisser une statistique sous sa valeur de départ !`) }
+            else { fightMsg(`Plus de points disponibles !`) }
         }
     
         this.levelUpTable();
