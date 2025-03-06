@@ -21,6 +21,35 @@ p {
   padding: 5px;
 }
 
+.red {
+  color: red;
+}
+
+.purple {
+  color: purple;
+}
+
+.blue {
+  color: blue;
+}
+
+.green {
+  color: green;
+}
+
+.orange {
+  color: orangered;
+}
+
+abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+button, input, select {
+  padding: 5px;
+}
+
 .indexbody {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28,13 +57,14 @@ p {
     "titleBanner titleBanner"
     "disclaimer disclaimer"
     "changeLog changeLog"
-    "arcadeLink storyLink";
+    "arcadeLink storyLink"
+    "contact contact";
   gap: 20px;
 }
 
 .arcadebody {
   display: grid;
-  grid-template-columns: 3fr 7fr;
+  grid-template-columns: 4fr 6fr;
   grid-template-areas: 
     "titleBanner titleBanner"
     "teamWindow teamExplore";
@@ -66,7 +96,7 @@ body > div {
 
 #titleBanner a {
   text-decoration: none;
-  color: darkgreen;
+  color: #006400;
 }
 
 #titleBanner a:hover {
@@ -99,6 +129,11 @@ body > div {
 
 #arcadeLink p, #storyLink p {
   padding-bottom: 0;
+}
+
+#contact {
+  grid-area: contact;
+  text-align: center;
 }
 
 #introLore {
