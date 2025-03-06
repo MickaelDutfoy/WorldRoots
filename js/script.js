@@ -101,7 +101,7 @@ class Ennemi { // fonctionnement d'un ennemi
         if (this.hp <= 0) {
             document.getElementById("genererMob").addEventListener("click", ennemis.popMob);
             document.getElementById("genererMob").removeEventListener("click", ennemis.disablePopMob);
-            fightMsg(`${this.nom} meurt.`);
+            fightMsg(`${this.nom} est vaincu(e).`);
             document.getElementById("fightButtons").remove();
             personnage.gagnerXP(this.niveau * 5);
             if ( Math.random() < 0.8 ) {
@@ -288,15 +288,13 @@ class Personnage { // fonctionnement d'un personnage
         if (operation === "+" && this.pointsLvlUp > 0) {
             this.statsTemp[stat]++;
             this.pointsLvlUp--;
-        } 
-        else if (operation === "-" && this.statsTemp[stat] > this.stats[stat]) {
+        } else if (operation === "-" && this.statsTemp[stat] > this.stats[stat]) {
             this.statsTemp[stat]--;
             this.pointsLvlUp++;
-        } 
-        else {
-            tempoMsg = 0;
-            if ( this.pointsLvlUp > 0) { fightMsg(`Impossible de baisser une statistique sous sa valeur de départ !`) }
-            else { fightMsg(`Plus de points disponibles !`) }
+        } else if (operation === "-" && this.statsTemp[stat] === this.stats[stat]) {
+            tempoMsg = 0; fightMsg(`Impossible de baisser une statistique sous sa valeur de départ !`)
+        } else if (this.pointsLvlUp === 0) {
+            tempoMsg = 0; fightMsg(`Plus de points disponibles !`)
         }
     
         this.levelUpTable();
