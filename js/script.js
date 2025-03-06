@@ -402,6 +402,7 @@ function fight() { // options de combat
 
     function spell() {
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
+        if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const spellList = document.createElement("div");
         spellList.id = "spellList";
@@ -416,6 +417,7 @@ function fight() { // options de combat
     };
 
     function afficherItems() {
+        if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const itemList = document.createElement("div");

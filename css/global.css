@@ -6,6 +6,7 @@
 body {
   margin: 10px;
   font-family: "MedievalSharp";
+  background-color: #222;
 }
 
 body > div > a {
@@ -85,7 +86,7 @@ body > div {
   border: 2px solid black;
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 10px 10px 10px darkgray;
+  box-shadow: 3px 5px 10px darkgray;
   background: linear-gradient(to bottom right, #faebd7, #c7b8a4);
 }
 
