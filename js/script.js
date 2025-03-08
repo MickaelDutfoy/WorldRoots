@@ -1,4 +1,32 @@
-class Item { // création des objets
+class Item { // liste des objets
+    static catalogue = {
+        baton: new Item("Bâton", "baton", "equipement", "arme", {force: 0, intelligence: 1}),
+        batonArgent: new Item("Bâton d'argent", "batonArgent", "equipement", "arme", {force: 0, intelligence: 3}),
+        dague: new Item("Dague", "dague", "equipement", "arme", {force: 1, intelligence: 0}),
+        epee: new Item("Épée", "epee", "equipement", "arme", {force: 2, intelligence: 0}),
+        hache: new Item("Hache", "hache", "equipement", "arme", {force: 3, intelligence: 0}),
+        massue: new Item("Massue", "massue", "equipement", "arme", {force: 4, intelligence: -1}),
+
+        robe: new Item("Robe", "robe", "equipement", "armure", {agilite: 1, vitalite: 0, volonte: 1}),
+        cotteDeMailles: new Item("Cotte de mailles", "cotteDeMailles", "equipement", "armure", {agilite: 0, vitalite: 1, volonte: 0}),
+        plastron: new Item("Plastron", "plastron", "equipement", "armure", {agilite: 0, vitalite: 3, volonte: 0}),
+        armureDeCuir: new Item("Armure de cuir", "armureDeCuir", "equipement", "armure", {agilite: 2, vitalite: 0, volonte: 0}),
+    
+        potionXXS: new Item("Potion XXS", "potionXXS", "consommable", "heal", 15),
+        potionXS: new Item("Potion XS", "potionXS", "consommable", "heal", 30),
+        potionS: new Item("Potion S", "potionS", "consommable", "heal", 60),
+        potionM: new Item("Potion M", "potionM", "consommable", "heal", 120),
+        potionL: new Item("Potion L", "potionL", "consommable", "heal", 240),
+    
+        etherXXS: new Item("Ether XXS", "etherXXS", "consommable", "regen", 10),
+        etherXS: new Item("Ether XS", "etherXS", "consommable", "regen", 20),
+        etherS: new Item("Ether S", "etherS", "consommable", "regen", 40),
+        etherM: new Item("Ether M", "etherM", "consommable", "regen", 80),
+        etherL: new Item("Ether L", "etherL", "consommable", "regen", 160),
+    
+        grenade: new Item("Grenade", "grenade", "consommable", "dégâts", 25)
+    };
+    
     constructor(nom, id, type, effet, valeur) {
         this.nom = nom;
         this.id = id;
@@ -6,29 +34,20 @@ class Item { // création des objets
         this.effet = effet; // "heal", "dégâts", "buff", "arme"
         this.valeur = valeur; // Dégâts pour une arme, soin pour une potion, etc.
     }
+
+    static getItem(id) {
+        return this.catalogue[id]
+    }
 };
 
-const catalogueItems = { // liste des objets
-    baton: new Item("Bâton", "baton", "equipement", "arme", 3),
-    dague: new Item("Dague", "dague", "equipement", "arme", 5),
-    epee: new Item("Épée", "epee", "equipement", "arme", 8),
-    hache: new Item("Hache", "hache", "equipement", "arme", 10),
-    massue: new Item("Massue", "massue", "equipement", "arme", 12),
+class Spell { // liste des sorts
+    static grimoire = {
+        bouleDeFeu: new Spell("Boule de feu", "bouleDeFeu", "attack", 5, 15, 1),
+        chaineEclairs: new Spell("Chaîne d'éclairs", "chaineEclairs", "attack", 8, 12, "all"),
+        dagueFantome: new Spell("Dague fantôme", "daguefantome", "attack", 3, 10, 1),
+        lumiereDivine: new Spell("Lumière divine", "lumiereDivine", "heal", 5, 10, 1),
+    };
 
-    potionXXS: new Item("Potion XXS", "potionXXS", "consommable", "heal", 10),
-    potionXS: new Item("Potion XS", "potionXS", "consommable", "heal", 20),
-    potionS: new Item("Potion S", "potionS", "consommable", "heal", 30),
-    potionM: new Item("Potion M", "potionM", "consommable", "heal", 40),
-    potionL: new Item("Potion L", "potionL", "consommable", "heal", 50),
-
-    etherXXS: new Item("Ether XXS", "etherXXS", "consommable", "regen", 10),
-    etherXS: new Item("Ether XS", "etherXS", "consommable", "regen", 20),
-    etherS: new Item("Ether S", "etherS", "consommable", "regen", 30),
-
-    grenade: new Item("Grenade", "grenade", "consommable", "dégâts", 25)
-};
-
-class Spell { // création des sorts
     constructor(nom, id, type, mp, valeur, cible) {
         this.nom = nom;
         this.id = id;
@@ -37,139 +56,123 @@ class Spell { // création des sorts
         this.valeur = valeur; // "heal", "dégâts", "buff", "arme"
         this.cible = cible; // Dégâts pour une arme, soin pour une potion, etc.
     }
-};
 
-const grimoire = { // liste et fonctionnement des sorts
-    bouleDeFeu: new Spell("Boule de feu", "bouleDeFeu", "attack", 5, 15, 1),
-    chaineDEclairs: new Spell("Chaîne d'éclairs", "chaineDEclairs", "attack", 8, 12, "all"),
-    dagueFantome: new Spell("Dague fantôme", "daguefantome", "attack", 3, 10, 1),
-    lumiereDivine: new Spell("Lumière divine", "lumiereDivine", "heal", 5, 10, 1),
-
-    cast(sort) {
-        document.getElementById("spellList").remove();
-        if ( personnage.mp < sort.mp ) {
-            fightMsg(`${personnage.nom} n'a pas assez de MP !`);
-        } else {
-            personnage.mp -= sort.mp;
-            fightMsg(`<span class="purple">${personnage.nom} perd ${sort.mp} MP</span>.`);
-            personnage.fichePerso();
-            if ( sort.type === "attack" ) {
-                let dmg = Math.floor(( 2 * personnage.stats.intelligence + sort.valeur - mob.stats.volonte ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                fightMsg(`${personnage.nom} utilise ${sort.nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
-                mob.hp = mob.hp - dmg;
-                if (mob.isDead()) return;
-                mob.attaquer(personnage);
-            } else if ( sort.type === "heal" ) {
-                personnage.hp += sort.valeur; if ( personnage.hp > personnage.maxhp ) { personnage.hp = personnage.maxhp };
-                fightMsg(`${personnage.nom} utilise ${sort.nom} ! <span class="green">${personnage.nom} gagne ${sort.valeur} HP</span>.`);
-                mob.attaquer(personnage);
-            }
-        }
+    static getSpell(id) {
+        return this.grimoire[id]
     }
 };
 
-class Ennemi { // fonctionnement d'un ennemi
-    constructor(nom, niveau, stats, lootTable) {
+class Ennemi { // fonctionnement des ennemis
+    static mobList = [
+        // mobs level 0
+        { nom: "Rat", id: "rat", niveau: 0,
+            stats: { force: 1, intelligence: 2, agilite: 3, vitalite: 1, volonte: 1 }},
+        { nom: "Zombie", id: "zombie", niveau: 0,
+            stats: { force: 1, intelligence: 1, agilite: 1, vitalite: 3, volonte: 2 }},
+        // mobs level 1
+        { nom: "Gobelin", id: "gobelin", niveau: 1,
+            stats: { force: 2, intelligence: 1, agilite: 3, vitalite: 2, volonte: 2 },
+            lootTable: [{ item: Item.getItem("dague"), chance: 0.2 }]},
+        { nom: "Squelette", id: "squelette", niveau: 1,
+            stats: { force: 2, intelligence: 1, agilite: 1, vitalite: 3, volonte: 3 },
+            lootTable: [{ item: Item.getItem("epee"), chance: 0.2 }]},
+        // mobs level 2
+        { nom: "Loup", id: "loup", niveau: 2,
+            stats: { force: 2, intelligence: 1, agilite: 4, vitalite: 3, volonte: 2 }},
+        { nom: "Goule", id: "goule", niveau: 2,
+            stats: { force: 1, intelligence: 1, agilite: 1, vitalite: 5, volonte: 4 }},
+        // mobs level 3
+        { nom: "Orc", id: "orc", niveau: 3,
+            stats: { force: 5, intelligence: 1, agilite: 1, vitalite: 4, volonte: 3 },
+            lootTable: [{ item: Item.getItem("hache"), chance: 0.2 }]},
+        { nom: "Spectre", id: "spectre", niveau: 3,
+            stats: { force: 2, intelligence: 3, agilite: 2, vitalite: 3, volonte: 4 }},
+        // mobs level 4
+        { nom: "Hobgobelin", id: "hobgobelin", niveau: 3,
+            stats: { force: 4, intelligence: 2, agilite: 4, vitalite: 3, volonte: 3 },
+            lootTable: [{ item: Item.getItem("plastron"), chance: 0.2 }]},
+        { nom: "Vampire", id: "spectre", niveau: 3,
+            stats: { force: 3, intelligence: 3, agilite: 2, vitalite: 4, volonte: 4 }},
+        // mobs level 5
+        { nom: "Troll", id: "troll", niveau: 5,
+            stats: { force: 6, intelligence: 1, agilite: 1, vitalite: 6, volonte: 4 },
+            lootTable: [{ item: Item.getItem("massue"), chance: 0.2 }]},
+        { nom: "Liche", id: "liche", niveau: 5,
+            stats: { force: 3, intelligence: 4, agilite: 2, vitalite: 3, volonte: 5 },
+            lootTable: [{ item: Item.getItem("batonArgent"), chance: 0.2 }]},
+        ];
+
+    constructor(nom, niveau, stats, lootTable = []) {
         this.nom = nom;
         this.niveau = niveau;
         this.stats = stats;
         this.hp = 10 * stats.vitalite;
         this.mp = 5 * stats.intelligence;
-        this.lootTable = lootTable;
+        this.lootTable = [...lootTable];
+        let potion;
+        if (niveau >= 0 && niveau <= 4) potion = Item.getItem("potionXXS");
+        else if (niveau >= 5 && niveau <= 9) potion = Item.getItem("potionXS");
+        else if (niveau >= 10 && niveau <= 14) potion = Item.getItem("potionS");
+        else if (niveau >= 15 && niveau <= 19) potion = Item.getItem("potionM");
+        else if (niveau >= 20 && niveau <= 24) potion = Item.getItem("potionL");
+        this.lootTable.push({ item: potion, chance: 0.5 });
+        let ether;
+        if (niveau >= 0 && niveau <= 4) ether = Item.getItem("etherXXS");
+        else if (niveau >= 5 && niveau <= 9) ether = Item.getItem("etherXS");
+        else if (niveau >= 10 && niveau <= 14) ether = Item.getItem("etherS");
+        else if (niveau >= 15 && niveau <= 19) ether = Item.getItem("etherM");
+        else if (niveau >= 20 && niveau <= 24) ether = Item.getItem("etherL");
+        this.lootTable.push({ item: ether, chance: 0.3 });
     }
-
-    attaquer(cible) {
-        if ( Math.random() * 100 < Math.min(personnage.stats.agilite, 50) ) {
-            fightMsg(`${cible.nom} <strong>esquive</strong> l'attaque de ${this.nom} !`);
-        } else {
-            let dmg = Math.floor((3 * this.stats.force - cible.stats.vitalite) * (Math.random() * 0.3 + 0.85));
-            if (dmg < 0) dmg = 0;
-            fightMsg(`${this.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
-            cible.hp -= dmg;
-            cible.fichePerso(); // Mettre à jour l'affichage du personnage
-            if (cible.hp <= 0) {
-                document.getElementById("genererMob").addEventListener("click", ennemis.popMob);
-                document.getElementById("genererMob").removeEventListener("click", ennemis.disablePopMob);
-                fightMsg(`${cible.nom} est vaincu(e) !`, tempoMsg);
-                createBtn.style.display = "inline-block";
-                document.getElementById("fightButtons").remove();
-            }
-        }
-    }
-
-    isDead() {
-        if (this.hp <= 0) {
-            document.getElementById("genererMob").addEventListener("click", ennemis.popMob);
-            document.getElementById("genererMob").removeEventListener("click", ennemis.disablePopMob);
-            fightMsg(`${this.nom} est vaincu(e).`);
-            document.getElementById("fightButtons").remove();
-            personnage.gagnerXP(this.niveau * 5);
-            if ( Math.random() < 0.8 ) {
-                let goldLoot = Math.floor((Math.random() * 0.2 + 0.4 ) * this.niveau * 6);
-                personnage.or += goldLoot;
-                fightMsg(`${personnage.nom} obtient ${goldLoot} pièces d'or.`);
-            }
-            let loots = mob.lootTable.filter(objet => Math.random() < objet.chance);
-            if (loots.length > 0) {
-                fightMsg(`${personnage.nom} trouve : ${loots.map(objet => objet.item.nom).join(", ")}.`);
-            }
-            loots.forEach(objet => {
-                personnage.ajouterObjet(objet.item);
-            });
-            personnage.fichePerso();
-            return true; // Pour dire que le mob est mort
-        }
-        return false; // Il est encore vivant
-    }
-};
-
-const ennemis = { // liste et génération des ennemis
-    mobList: [
-        { nom: "Gobelin", niveau: 1,
-            stats: { force: 2, intelligence: 1, agilite: 3, vitalite: 2, volonte: 2 },
-            lootTable: [
-            { item: catalogueItems.potionXXS, chance: 0.5 },
-            { item: catalogueItems.dague, chance: 0.2 }]},
-        { nom: "Orc", niveau: 2,
-            stats: { force: 4, intelligence: 1, agilite: 1, vitalite: 4, volonte: 2 },
-            lootTable: [
-            { item: catalogueItems.potionXS, chance: 0.5 },
-            { item: catalogueItems.hache, chance: 0.2 }]},
-        { nom: "Squelette", niveau: 1,
-            stats: { force: 2, intelligence: 1, agilite: 1, vitalite: 3, volonte: 3 },
-            lootTable: [
-            { item: catalogueItems.potionXXS, chance: 0.5 },
-            { item: catalogueItems.epee, chance: 0.2 }]},
-        { nom: "Zombie", niveau: 2,
-            stats: { force: 1, intelligence: 1, agilite: 1, vitalite: 5, volonte: 4 },
-            lootTable: [
-            { item: catalogueItems.potionXS, chance: 0.5 },
-            { item: catalogueItems.etherXXS, chance: 0.3 }]},
-        { nom: "Troll", niveau: 5,
-            stats: { force: 6, intelligence: 1, agilite: 1, vitalite: 6, volonte: 4 },
-            lootTable: [
-            { item: catalogueItems.potionS, chance: 0.5 },
-            { item: catalogueItems.etherXS, chance: 0.3 },
-            { item: catalogueItems.massue, chance: 0.2 }]},
-        ],
     
-    popMob() {
-        let mobData = ennemis.mobList[Math.floor(Math.random() * ennemis.mobList.length)];
-        mob = new Ennemi(mobData.nom, mobData.niveau, mobData.stats, mobData.lootTable);
-        exploreWindow.appendChild(spawnMsg);
-        fightConsole.innerHTML = "";
-        document.getElementById("spawnMsg").innerHTML = `Un ${mob.nom} (niveau ${mob.niveau}) apparaît ! <button id="fightBtn">Combattre</button>`;
-        exploreWindow.appendChild(fightConsole);
-        document.getElementById("fightBtn").addEventListener("click", fight);
-    },
+    static getMob(id) {
+        return this.mobList.find(item => item.id === id);
+    }
 
-    disablePopMob() { 
+    static popMob() {
+        if ( personnage === null || personnage.hp <= 0 ) {
+            tempoMsg = 0; logMsg("Tu dois d'abord créer un personnage !");
+            return;
+        } else if ( personnage.niveau >= 8 ) {
+            tempoMsg = 0; logMsg(`Dans cette version, aucun ennemi n'est disponible pour un personnage de niveau ${personnage.niveau}. Recommencez un personnage en actualisant la page ou revenez un autre jour !`);
+            return;
+        }
+        mobs = []; msgLog.innerHTML = "";
+        if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
+        let mobCount = 1 + Math.floor(Math.random() * 3);
+        for ( let i = 0 ; i < mobCount ; i++ ) {
+            let mobData = Ennemi.mobList[Math.floor(Math.random() * Ennemi.mobList.length)];
+            if ( mobData.niveau < personnage.niveau - 2 || mobData.niveau > personnage.niveau ) { i--; } else {
+                mobs.push(new Ennemi(mobData.nom, mobData.niveau, mobData.stats, mobData.lootTable));
+            }
+        }
+        let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets"; let ennemyList = "";
+        for ( let i = 0 ; i < mobs.length ; i++ ) {
+            ennemyList += ` ${mobs[i].nom} (niveau ${mobs[i].niveau})`;
+            if (i < mobs.length ) ennemyList += ", ";
+        }
+        if ( mobs.length === 1 ) {
+            ennemyList = `Un(e) ${mobs[0].nom} (niveau ${mobs[0].niveau}) apparaît`;
+        } else {
+            ennemyList = `Les ennemis suivants apparaissent :`;
+            for ( let i = 1 ; i <= mobs.length ; i++ ) {
+                ennemyList += ` ${mobs[i-1].nom} (niveau ${mobs[i-1].niveau})`;
+                if (i < mobs.length ) ennemyList += ", ";
+            }
+        }
+        ennemyList += `. <button id="fightBtn">Combattre</button>`
+        ennemyTargets.innerHTML = ennemyList;
+        msgLog.appendChild(ennemyTargets);
+        document.getElementById("fightBtn").addEventListener("click", fight);
+    }
+
+    static disablePopMob() { 
         tempoMsg = 0;
-        fightMsg(`Impossible de générer un nouvel ennemi avant que celui-ci ne soit vaincu !`);
+        logMsg(`Impossible de générer une nouvelle rencontre avant d'avoir terminé celle-ci !`);
     }
 };
 
-class Personnage { // fonctionnement d'un personnage
+class Personnage { // fonctionnement des personnages
     constructor(nom, classe) {
         this.nom = nom;
         this.classe = classe;
@@ -180,33 +183,62 @@ class Personnage { // fonctionnement d'un personnage
         this.sorts = [];
         this.stats = {};
         this.pointsLvlUp = 0;
-
         this.definirStatsDeClasse();
-        this.maxhp = 10 * this.stats.vitalite;
-        this.maxmp = 10 * this.stats.volonte;
-        this.hp = this.maxhp;
-        this.mp = this.maxmp;
     }
 
     definirStatsDeClasse() {
         const classes = {
-            "Guerrier": { stats: {force: 3, intelligence: 1, agilite: 2, vitalite: 3, volonte: 1}, arme: catalogueItems.epee },
-            "Mage": { stats: {force: 1, intelligence: 3, agilite: 3, vitalite: 1, volonte: 2}, sorts: [grimoire.bouleDeFeu, grimoire.chaineDEclairs], arme: catalogueItems.baton },
-            "Voleur": { stats: {force: 2, intelligence: 2, agilite: 3, vitalite: 2, volonte: 1}, sorts: [grimoire.dagueFantome], arme: catalogueItems.dague },
-            "Paladin": { stats: {force: 2, intelligence: 2, agilite: 1, vitalite: 2, volonte: 3}, sorts: [grimoire.lumiereDivine], arme: catalogueItems.epee }
+            "Guerrier": { stats: {force: 3, intelligence: 1, agilite: 2, vitalite: 3, volonte: 1}, arme: Item.getItem("epee"), armure: Item.getItem("cotteDeMailles")},
+            "Mage": { stats: {force: 1, intelligence: 3, agilite: 3, vitalite: 1, volonte: 2}, sorts: [Spell.getSpell("bouleDeFeu"), Spell.getSpell("chaineEclairs")], arme: Item.getItem("baton"), armure: Item.getItem("robe")},
+            "Voleur": { stats: {force: 2, intelligence: 2, agilite: 3, vitalite: 2, volonte: 1}, sorts: [Spell.getSpell("dagueFantome")], arme: Item.getItem("dague"), armure: Item.getItem("armureDeCuir")},
+            "Paladin": { stats: {force: 2, intelligence: 2, agilite: 1, vitalite: 2, volonte: 3}, sorts: [Spell.getSpell("lumiereDivine")], arme: Item.getItem("epee"), armure: Item.getItem("cotteDeMailles")}
         };
-    
         let config = classes[this.classe];
-        if (!config) return;
-    
-        Object.assign(this.stats, config.stats); // On ne copie que les stats, pas les autres propriétés
-    
-        if (config.arme) this.ajouterObjet(config.arme);
+        this.stats = config.stats;
+        this.arme = config.arme;
+        this.armure = config.armure;
         if (config.sorts) config.sorts.forEach(sort => this.ajouterSort(sort));
-    
-        this.ajouterObjet(catalogueItems.potionXXS); // Tous les persos démarrent avec une potion
-        this.arme = this.inventaire[0].objet; // Equipement par défaut
+        this.ajouterObjet(Item.getItem("potionXXS"));
+        this.maxhp = 10 * (this.stats.vitalite + this.armure.valeur.vitalite);
+        this.maxmp = 10 * (this.stats.volonte + this.armure.valeur.volonte);
+        this.hp = this.maxhp;
+        this.mp = this.maxmp;
     }
+
+    static createCharacter() {
+        const nom = document.getElementById("nom").value;
+        const classe = document.getElementById("classe").value;
+        if (!nom) {
+            tempoMsg = 0; logMsg("Tu dois entrer un nom !");
+            return;
+        }
+        personnage = new Personnage(nom, classe);
+        createBtn.style.display = "none";
+        fichePerso.innerHTML = `
+            <tr>
+                <td id="name"></td>
+                <td id="class"></td>
+                <td id="level"></td>
+            </tr>
+            <tr>
+                <td id="stats"></td>
+                <td id="inventory"></td>
+                <td id="spells"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;" id="weapon"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align:center;" id="armor"></td>
+            </tr>  
+            <tr>
+                <td id="HP"></td>
+                <td id="MP"></td>
+                <td id="XP"></td>
+            </tr>`;
+        document.getElementById("teamWindow").appendChild(fichePerso);
+        personnage.fichePerso();
+    };
 
     ajouterObjet(objet) {
         let itemTrouve = this.inventaire.find(i => i.objet.id === objet.id);
@@ -224,7 +256,7 @@ class Personnage { // fonctionnement d'un personnage
     }
 
     gagnerXP(xp) {
-        fightMsg(`<span class="orange">${this.nom} gagne ${xp} XP</span>.`);
+        logMsg(`<span class="orange">${this.nom} gagne ${xp} XP</span>.`);
         this.experience += xp;
         while (this.experience >= 10 * this.niveau) {
             this.experience -= 10 * this.niveau;
@@ -233,14 +265,14 @@ class Personnage { // fonctionnement d'un personnage
             if ( this.pointsLvlUp === 0 ) { document.getElementById("teamWindow").appendChild(lvlUpWindow) }
             this.pointsLvlUp += 2;
             this.niveau++; this.levelUp();
-            fightMsg(`<span class="orange">${this.nom} passe niveau ${this.niveau}</span> ! Les HP/MP ont été restaurés.`); this.fichePerso();
+            logMsg(`<span class="orange">${this.nom} passe niveau ${this.niveau}</span> ! Les HP/MP ont été restaurés.`); this.fichePerso();
         }
     }
 
     levelUp() {
-        this.statsTemp = { ...this.stats }; // Copie temporaire des stats pour l'affichage
-        this.levelUpTable(); // Utilisation de `this.` pour éviter les problèmes de contexte
-        this.addLevelUpListeners(); // Ajout des events
+        this.statsTemp = { ...this.stats };
+        this.levelUpTable();
+        this.addLevelUpListeners();
     }
     
     levelUpTable = () => {
@@ -285,6 +317,10 @@ class Personnage { // fonctionnement d'un personnage
     }
     
     modifyStat = (stat, operation) => {
+        if ( onFight ) {
+            tempoMsg = 0; logMsg(`Impossible d'attribuer des points pendant le combat !`)
+            return;
+        }
         if (operation === "+" && this.pointsLvlUp > 0) {
             this.statsTemp[stat]++;
             this.pointsLvlUp--;
@@ -292,11 +328,10 @@ class Personnage { // fonctionnement d'un personnage
             this.statsTemp[stat]--;
             this.pointsLvlUp++;
         } else if (operation === "-" && this.statsTemp[stat] === this.stats[stat]) {
-            tempoMsg = 0; fightMsg(`Impossible de baisser une statistique sous sa valeur de départ !`)
+            tempoMsg = 0; logMsg(`Impossible de baisser une statistique sous sa valeur actuelle !`)
         } else if (this.pointsLvlUp === 0) {
-            tempoMsg = 0; fightMsg(`Plus de points disponibles !`)
+            tempoMsg = 0; logMsg(`Plus de points disponibles !`)
         }
-    
         this.levelUpTable();
         this.addLevelUpListeners(); 
     }
@@ -310,179 +345,372 @@ class Personnage { // fonctionnement d'un personnage
         }
         this.stats = { ...this.statsTemp };
         if ( this.pointsLvlUp === 0 ) { lvlUpWindow.remove(); }
-        this.maxhp = 10 * this.stats.vitalite;
-        this.maxmp = 10 * this.stats.volonte;
+        this.maxhp = 10 * (this.stats.vitalite + this.armure.valeur.vitalite);
+        this.maxmp = 10 * (this.stats.volonte + this.armure.valeur.volonte);
         this.fichePerso();
     }
     
     fichePerso() {
-        if (!document.getElementById("name")) return; // Si la fiche n'est pas encore affichée, on ne fait rien
+        if (!document.getElementById("name")) return;
         document.getElementById("name").textContent = this.nom;
         document.getElementById("class").textContent = this.classe;
         document.getElementById("level").textContent = `Niveau : ${this.niveau}`;
         document.getElementById("stats").innerHTML = `
-        <abbr title="Régit la capacité d'esquive.">Agilité</abbr> : ${this.stats.agilite}<br>
-        <abbr title="Régit les dégâts physiques.">Force</abbr> : ${this.stats.force}<br>
-        <abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${this.stats.intelligence}<br>
-        <abbr title="Régit les HP max et la résistance physique.">Vitalité</abbr> : ${this.stats.vitalite}<br>
-        <abbr title="Régit les MP max et la résistance magique.">Volonté</abbr> : ${this.stats.volonte}`;
+        <abbr title="Régit la capacité d'esquive.">Agilité</abbr> : ${this.stats.agilite} (+${this.armure.valeur.agilite})<br>
+        <abbr title="Régit les dégâts physiques.">Force</abbr> : ${this.stats.force} (+${this.arme.valeur.force})<br>
+        <abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${this.stats.intelligence} (+${this.arme.valeur.intelligence})<br>
+        <abbr title="Régit les HP max et la résistance physique.">Vitalité</abbr> : ${this.stats.vitalite} (+${this.armure.valeur.vitalite})<br>
+        <abbr title="Régit les MP max et la résistance magique.">Volonté</abbr> : ${this.stats.volonte} (+${this.armure.valeur.volonte})`;
         const nomsObjets = this.inventaire.map(i => `${i.objet.nom} x${i.quantite}`);
         document.getElementById("inventory").innerHTML = `Inventaire :<br>${this.or} pièces d'or<br>${nomsObjets.join("<br>")}`;
         const nomsSorts = this.sorts.map(sort => sort.nom);
         document.getElementById("spells").innerHTML = `Sorts :<br>${nomsSorts.join("<br>")}`;
         let displayHP = document.getElementById("HP");
-        if ( this.hp <= this.maxhp / 4 ) {
-            displayHP.style.color = "red";
-        } else {
-            displayHP.style.color = "black";
-        }
         displayHP.textContent = `HP : ${this.hp} / ${this.maxhp}`;
+        displayHP.style.color = this.hp <= this.maxhp / 4 ? "red" : "black";
         let displayMP = document.getElementById("MP");
-        if ( this.mp <= this.maxmp / 4 ) {
-            displayMP.style.color = "purple";
-        } else {
-            displayMP.style.color = "black";
-        }
-        document.getElementById("MP").textContent = `MP : ${this.mp} / ${this.maxmp}`;
+        displayMP.textContent = `MP : ${this.mp} / ${this.maxmp}`;
+        displayMP.style.color = this.mp <= this.maxmp / 4 ? "purple" : "black";
         document.getElementById("XP").textContent = `XP : ${this.experience} / ${10 * this.niveau}`;
-        if ( personnage.hp <= 0 ) {
+        if (this.hp <= 0) {
             fichePerso.remove();
             lvlUpWindow.remove();
+            return;
         }
+        let armesDispo = this.inventaire
+            .filter(item => item.objet.effet === "arme")
+            .map(item => item.objet)
+            .filter((arme, index, self) => self.findIndex(a => a.nom === arme.nom) === index);   
+        if (this.arme) armesDispo.unshift(this.arme);
+        let selectArmeHTML = `<select id="selectArme">`;
+        armesDispo.forEach(arme => {
+            let selected = this.arme && this.arme.nom === arme.nom ? "selected" : "";
+            selectArmeHTML += `<option value="${arme.nom}" ${selected}>${arme.nom} (+${arme.valeur.force || 0} FOR, +${arme.valeur.intelligence || 0} INT)</option>`;
+        });
+        selectArmeHTML += `</select>`; 
+        document.getElementById("weapon").innerHTML = `Arme : ${selectArmeHTML}`;
+        let armuresDispo = this.inventaire
+            .filter(item => item.objet.effet === "armure")
+            .map(item => item.objet)
+            .filter((armure, index, self) => self.findIndex(a => a.nom === armure.nom) === index); 
+        if (this.armure) armuresDispo.unshift(this.armure);
+        let selectArmureHTML = `<select id="selectArmure">`;
+        armuresDispo.forEach(armure => {
+            let selected = this.armure && this.armure.nom === armure.nom ? "selected" : "";
+            selectArmureHTML += `<option value="${armure.nom}" ${selected}>${armure.nom} (+${armure.valeur.agilite || 0} AGI, +${armure.valeur.vitalite || 0} VIT, +${armure.valeur.volonte || 0} VOL)</option>`;
+        });
+        selectArmureHTML += `</select>`;  
+        document.getElementById("armor").innerHTML = `Armure : ${selectArmureHTML}`;
+        document.getElementById("selectArme").addEventListener("change", (e) => {
+            let nouvelleArme = armesDispo.find(obj => obj.nom === e.target.value);
+            if (this.arme) {
+                let armeExistante = this.inventaire.find(obj => obj.objet.nom === this.arme.nom);
+                if (armeExistante) {
+                    armeExistante.quantite++;
+                } else {
+                    this.inventaire.push({ objet: this.arme, quantite: 1 });
+                }
+            }
+            let itemInventaire = this.inventaire.find(obj => obj.objet.nom === nouvelleArme.nom);
+            if (itemInventaire) {
+                if (itemInventaire.quantite > 1) {
+                    itemInventaire.quantite--;
+                } else {
+                    this.inventaire = this.inventaire.filter(obj => obj.objet.nom !== nouvelleArme.nom);
+                }
+            }
+            this.arme = nouvelleArme;
+            this.fichePerso();
+        });
+        document.getElementById("selectArmure").addEventListener("change", (e) => {
+            let nouvelleArmure = armuresDispo.find(obj => obj.nom === e.target.value);
+            if (this.armure) {
+                let armureExistante = this.inventaire.find(obj => obj.objet.nom === this.armure.nom);
+                if (armureExistante) {
+                    armureExistante.quantite++;
+                } else {
+                    this.inventaire.push({ objet: this.armure, quantite: 1 });
+                }
+            }
+            let itemInventaire = this.inventaire.find(obj => obj.objet.nom === nouvelleArmure.nom);
+            if (itemInventaire) {
+                if (itemInventaire.quantite > 1) {
+                    itemInventaire.quantite--;
+                } else {
+                    this.inventaire = this.inventaire.filter(obj => obj.objet.nom !== nouvelleArmure.nom);
+                }
+            }
+            this.armure = nouvelleArmure;
+            this.maxhp = 10 * (this.stats.vitalite + this.armure.valeur.vitalite);
+            this.maxmp = 10 * (this.stats.volonte + this.armure.valeur.volonte);
+            if (this.hp > this.maxhp) this.hp = this.maxhp;
+            if (this.mp > this.maxmp) this.mp = this.maxmp;
+            this.fichePerso();
+        });
     }
 };
 
-function createCharacter() { // création d'un personnage
-    const nom = document.getElementById("nom").value;
-    const classe = document.getElementById("classe").value;
-    if (!nom) {
-        console.log("Tu dois entrer un nom !");
+function fight() { // fonctionnement du combat
+    if ( personnage === null || personnage.hp <= 0 ) {
+        tempoMsg = 0; logMsg("Tu dois d'abord créer un personnage !");
         return;
     }
-    personnage = new Personnage(nom, classe);
-    fightConsole.innerHTML = "";
-    spawnMsg.innerHTML = "";
-    fichePerso.innerHTML = '<tr><td id="name"></td><td id="class"></td><td id="level"></td></tr><tr><td id="stats"></td><td id="inventory"></td><td id="spells"></td></tr><tr><td id="HP"></td><td id="MP"></td><td id="XP"></td></tr>';
-    document.getElementById("teamWindow").appendChild(fichePerso);
-    personnage.fichePerso();
-    createBtn.style.display = "none";
-};
-
-function fight() { // options de combat
-    if ( !personnage ) {
-        fightMsg("Tu dois d'abord créer un personnage !");
-        return;
-    }
-    if ( personnage.hp <= 0 ) {
-        fightMsg("Les morts ne combattent pas.");
-        return;
-    }
-    document.getElementById("genererMob").removeEventListener("click", ennemis.popMob);
-    document.getElementById("genererMob").addEventListener("click", ennemis.disablePopMob);
+    document.getElementById("genererMob").removeEventListener("click", Ennemi.popMob);
+    document.getElementById("genererMob").addEventListener("click", Ennemi.disablePopMob);
     document.getElementById("fightBtn").remove();
-    fightConsole.innerHTML = '<p class="combatMsg">Le combat commence !</p> <div id="fightButtons"><button id="attack">Attaquer</button><button id="spell">Lancer un sort</button><button id="item">Utiliser un objet</button></div>'
+    const combatStart = document.createElement("div");
+    combatStart.innerHTML = '<p class="combatMsg">Le combat commence !</p> <div id="fightButtons"><button id="attack">Attaquer</button><button id="spell">Lancer un sort</button><button id="item">Utiliser un objet</button></div>'
+    msgLog.appendChild(combatStart);
+    onFight = true; document.getElementById("exploreWindow").classList.add("fight");
+    let ennemyTargets = document.createElement("div");
+    let xpGained = 0; let lootsGained = []; let goldGained = 0;
     document.getElementById("attack").addEventListener("click", attack);
     document.getElementById("spell").addEventListener("click", spell);
-    document.getElementById("item").addEventListener("click", afficherItems);
+    document.getElementById("item").addEventListener("click", items);
+
+    function targetSelect(action, effect = null) {
+        let ennemyList = ``;
+        for ( let i = 0 ; i < mobs.length ; i++ ) {
+            ennemyList += `<button id="target${i}">${mobs[i].nom}</button>`;
+        }
+        ennemyTargets.innerHTML = ennemyList; ennemyTargets.id = "TargetBtns";
+        msgLog.appendChild(ennemyTargets);  
+        for (let i = 0; i < mobs.length; i++) {
+            let targetBtn = document.getElementById(`target${i}`);
+            let newTargetBtn = targetBtn.cloneNode(true);
+            targetBtn.parentNode.replaceChild(newTargetBtn, targetBtn);
+            newTargetBtn.addEventListener("click", () => { 
+                cibleIndex = i;
+                if ( action === "attack" ) {
+                    attackDmg();
+                } else if ( action === "spell" ) {
+                    spellResolve(effect);
+                } else if ( action === "item" ) {
+                    useItem(effect);
+                }
+            });
+        }
+    }  
 
     function attack() {
+        if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
-        tempoMsg = 0;
-        if ( Math.random() * 100 < Math.min(mob.stats.agilite, 50) ) {
-            fightMsg(`${mob.nom} <strong>esquive</strong> l'attaque de ${personnage.nom} !`);
-        } else {
-            let dmg = Math.floor(( 2 * personnage.stats.force + personnage.arme.valeur - mob.stats.vitalite ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 }; // formule dégâts joueur -> mob
-            fightMsg(`${personnage.nom} attaque ${mob.nom} avec ${personnage.arme.nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
-            mob.hp = mob.hp - dmg;
-            if (mob.isDead()) return;
-        }
-        mob.attaquer(personnage);
+        targetSelect("attack");
     };
 
+    function attackDmg() {
+        ennemyTargets.remove();
+        tempoMsg = 0;
+        if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agilite, 50) ) {
+            logMsg(`${cible.nom} <strong>esquive</strong> l'attaque de ${personnage.nom} !`);
+        } else {
+            let dmg = Math.floor(( 3 * ( personnage.stats.force + personnage.arme.valeur.force ) - mobs[cibleIndex].stats.vitalite ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            logMsg(`${personnage.nom} attaque ${mobs[cibleIndex].nom} avec ${personnage.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
+            if (isFightOver()) return;
+        }
+        mobAttack(personnage);
+    }
+
     function spell() {
+        if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const spellList = document.createElement("div");
         spellList.id = "spellList";
-        fightConsole.appendChild(spellList);
+        msgLog.appendChild(spellList);
         personnage.sorts.forEach(sort => {
             let spellBtn = document.createElement("button");
             spellBtn.innerHTML = `${sort.nom}`;
             spellBtn.id = `${sort.id}`;
             spellList.appendChild(spellBtn);
-            spellBtn.onclick = () => grimoire.cast(sort);
+            if ( sort.type === "attack" && sort.cible === 1 ) {
+                spellBtn.onclick = () => targetSelect("spell", sort);
+            } else if ( sort.type === "attack" && sort.cible === "all" ) {
+                spellBtn.onclick = () => spellResolve(sort);
+            } else if ( sort.type === "heal" ) {
+                spellBtn.onclick = () => spellResolve(sort);
+            }
         });
     };
 
-    function afficherItems() {
+    function spellResolve(sort) {
+        if ( personnage.mp < sort.mp ) {
+            logMsg(`${personnage.nom} n'a pas assez de MP !`);
+            return;
+        }
+        document.getElementById("spellList").remove();
+        ennemyTargets.remove();
+        personnage.mp -= sort.mp;
+        logMsg(`<span class="purple">${personnage.nom} perd ${sort.mp} MP</span> et utilise ${sort.nom}.`);
+        personnage.fichePerso();
+        if ( sort.type === "attack" && sort.cible === 1 ) {
+            let dmg = Math.floor(( 2 * ( personnage.stats.intelligence + personnage.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.volonte ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            logMsg(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
+            if (isFightOver()) return;
+        } else if ( sort.type === "attack" && sort.cible === "all" ) {
+            cibleIndex = "all";
+            for (let i = 0; i < mobs.length; i++) {
+                let dmg = Math.floor(( 2 * ( personnage.stats.intelligence + personnage.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.volonte ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+                logMsg(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                mobs[i].hp = mobs[i].hp - dmg;
+            }
+            if (isFightOver()) return;
+        } else if ( sort.type === "heal" ) {
+            personnage.hp += sort.valeur; if ( personnage.hp > personnage.maxhp ) { personnage.hp = personnage.maxhp };
+            logMsg(`${personnage.nom} utilise ${sort.nom} ! <span class="green">${personnage.nom} gagne ${sort.valeur} HP</span>.`);
+
+        }
+        mobAttack(personnage);
+    }
+
+    function items() {
+        if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const itemList = document.createElement("div");
         itemList.id = "itemList";
-        fightConsole.appendChild(itemList);
-    
-        // Filtrer uniquement les objets consommables
+        msgLog.appendChild(itemList);
         const objetsUtilisables = personnage.inventaire.filter(i => i.objet.type === "consommable");
-    
         objetsUtilisables.forEach(i => {
             let itemBtn = document.createElement("button");
             itemBtn.innerHTML = `${i.objet.nom} x${i.quantite}`;
             itemBtn.id = i.objet.id;
             itemList.appendChild(itemBtn);
-            itemBtn.onclick = () => utiliserItem(i.objet);
+            if ( i.objet.effet === "dégâts" ) {
+                itemBtn.onclick = () => targetSelect("item", i.objet);
+            } else if ( i.objet.effet === "heal" || i.objet.effet === "regen" ) {
+                itemBtn.onclick = () => useItem(i.objet);
+            }
         });
     }
-    
-    function utiliserItem(item) {
+
+    function useItem(item) {
         if (item.effet === "heal") {
             personnage.hp += item.valeur;
             if (personnage.hp > personnage.maxhp) personnage.hp = personnage.maxhp;
-            fightMsg(`${personnage.nom} utilise ${item.nom}. <span class="green">${personnage.nom} récupère ${item.valeur} HP</span> !`);
+            logMsg(`${personnage.nom} utilise ${item.nom}. <span class="green">${personnage.nom} récupère ${item.valeur} HP</span> !`);
         } else if (item.effet === "regen") {
             personnage.mp += item.valeur;
             if (personnage.mp > personnage.maxmp) personnage.mp = personnage.maxmp;
-            fightMsg(`${personnage.nom} utilise ${item.nom}. <span class="blue">${personnage.nom} récupère ${item.valeur} MP</span> !`);
+            logMsg(`${personnage.nom} utilise ${item.nom}. <span class="blue">${personnage.nom} récupère ${item.valeur} MP</span> !`);
         } else if (item.effet === "dégâts") {
             let dmg = Math.floor((item.valeur) * (Math.random() * 0.3 + 0.85));
-            fightMsg(`${personnage.nom} lance ${item.nom} sur ${mob.nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
+            logMsg(`${personnage.nom} lance ${item.nom} sur ${mobs[cibleIndex].nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
             mob.hp -= dmg;
-            if (mob.isDead()) return;
+            if (isFightOver()) return;
         }
-        // Trouver l'objet dans l'inventaire
         let index = personnage.inventaire.findIndex(i => i.objet.id === item.id);
         if (index !== -1) {
             personnage.inventaire[index].quantite--;
             if (personnage.inventaire[index].quantite <= 0) {
-                personnage.inventaire.splice(index, 1); // Supprimer si plus de stock
+                personnage.inventaire.splice(index, 1);
             }
         }
-        // MAJ de l'affichage après utilisation
         personnage.fichePerso();
         document.getElementById("itemList").remove(); 
-        mob.attaquer(personnage);
+        mobAttack(personnage);
     }
-    
+
+    function mobAttack(cible) {
+        for (let i = 0; i < mobs.length; i++) {
+            if ( Math.random() * 100 < Math.min((personnage.stats.agilite + personnage.arme.valeur.agilite), 50) ) {
+                logMsg(`${cible.nom} <strong>esquive</strong> l'attaque de ${mobs[i].nom} !`);
+            } else {
+                let dmg = Math.floor((3 * mobs[i].stats.force - (cible.stats.vitalite + cible.armure.valeur.vitalite)) * (Math.random() * 0.3 + 0.85));
+                if (dmg < 0) dmg = 0;
+                logMsg(`${mobs[i].nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+                cible.hp -= dmg;
+                cible.fichePerso();
+                if (cible.hp <= 0) {
+                    document.getElementById("genererMob").addEventListener("click", Ennemi.popMob);
+                    document.getElementById("genererMob").removeEventListener("click", Ennemi.disablePopMob);
+                    logMsg(`${cible.nom} est <strong>vaincu(e)</strong> !`);
+                    onFight = false; document.getElementById("exploreWindow").classList.remove("fight");
+                    createBtn.style.display = "inline-block";
+                    document.getElementById("fightButtons").remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    function isFightOver() {
+        if ( cibleIndex === "all" ) {
+            let indicesToRemove = [];
+            for (let i = 0; i < mobs.length; i++) {
+                if ( mobs[i].hp <= 0 ) {
+                    logMsg(`${mobs[i].nom} est <strong>vaincu(e)</strong>.`);
+                    xpGained += 5 + mobs[i].niveau * 5;
+                    if ( Math.random() < 0.8 ) {
+                        goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[i].niveau * 6);
+                    }
+                    let loots = mobs[i].lootTable.filter(objet => Math.random() < objet.chance);
+                    if (loots.length > 0) {
+                        loots.forEach(objet => {
+                            lootsGained.push(objet.item);
+                        });
+                    }
+                    indicesToRemove.push(i);
+                }
+            }
+            for (let i = indicesToRemove.length - 1; i >= 0; i--) {
+                mobs.splice(indicesToRemove[i], 1);
+            }
+        } else {
+            if ( mobs[cibleIndex].hp <= 0 ) {
+                logMsg(`${mobs[cibleIndex].nom} est <strong>vaincu(e)</strong>.`);
+                xpGained += 5 + mobs[cibleIndex].niveau * 5;
+                if ( Math.random() < 0.8 ) {
+                    goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cibleIndex].niveau * 6);
+                }
+                let loots = mobs[cibleIndex].lootTable.filter(objet => Math.random() < objet.chance);
+                if (loots.length > 0) {
+                    loots.forEach(objet => {
+                        lootsGained.push(objet.item);
+                    });
+                }
+                mobs.splice(cibleIndex, 1);
+            }
+        }
+        if ( mobs.length === 0 ) { // tous les mobs sont morts
+            document.getElementById("genererMob").addEventListener("click", Ennemi.popMob);
+            document.getElementById("genererMob").removeEventListener("click", Ennemi.disablePopMob);
+            document.getElementById("fightButtons").remove();
+            personnage.gagnerXP(xpGained);
+            personnage.or += goldGained;
+            if ( goldGained > 0 ) logMsg(`${personnage.nom} obtient ${goldGained} pièces d'or.`);
+            if ( lootsGained.length > 0 ) { 
+                logMsg(`${personnage.nom} trouve : ${lootsGained.map(objet => objet.nom).join(", ")}.`);
+                lootsGained.forEach(objet => {
+                    personnage.ajouterObjet(objet);
+                });
+            }
+            personnage.fichePerso();
+            onFight = false; document.getElementById("exploreWindow").classList.remove("fight"); return true;
+        }
+        return false;
+    }
 };
 
-let tempoMsg = 0;
-function fightMsg(message) {
+function logMsg(message) { // fonctionnement de la fenêtre d'évènements
     setTimeout(() => {
         let newMsg = document.createElement("p");
         newMsg.innerHTML = message;
-        fightConsole.appendChild(newMsg);
+        msgLog.appendChild(newMsg);
     }, tempoMsg);
     tempoMsg += 400;
 }
 
-let personnage = false;
-const fightConsole = document.createElement("div"); fightConsole.id = "fightConsole";
-const fichePerso = document.createElement('table'); fichePerso.id = "fichePerso";
+let personnage = null; let mobs = []; let tempoMsg = 0; let onFight = false;
+const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = "";
+const fichePerso = document.createElement('table'); fichePerso.id = "fichePerso"; fichePerso.innerHTML = "";
 const lvlUpWindow = document.createElement("table"); lvlUpWindow.id = "lvlUpWindow";
-const exploreWindow = document.getElementById("exploreWindow");
-const spawnMsg = document.createElement("p"); spawnMsg.id = "spawnMsg";
+const exploreWindow = document.getElementById("exploreWindow"); exploreWindow.appendChild(msgLog);
 const createBtn = document.getElementById("creerPerso");
-createBtn.addEventListener("click", createCharacter);
-document.getElementById("genererMob").addEventListener("click", ennemis.popMob);
+createBtn.addEventListener("click", Personnage.createCharacter);
+document.getElementById("genererMob").addEventListener("click", Ennemi.popMob);

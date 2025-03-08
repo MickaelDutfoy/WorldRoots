@@ -144,7 +144,7 @@ body > div {
 
 #teamWindow {
   grid-area: teamWindow;
-  min-width: 360px;
+  min-width: 470px;
 }
 
 #nom {
@@ -153,7 +153,11 @@ body > div {
 
 #exploreWindow {
   grid-area: teamExplore;
-  min-width: 400px;
+  min-width: 470px;
+}
+
+.fight {
+  background: linear-gradient(to bottom right, #fac9b5, #c79682);
 }
 
 h1, h2 {
@@ -171,7 +175,7 @@ td, th {
   text-align: center;
 }
 
-#fightConsole p {
+#msgLog p {
   padding: 0;
 }
 
@@ -185,7 +189,7 @@ td, th {
   padding-top: 10px;
 }
 
-@media (max-width: 786px) {
+@media (max-width: 1024px) {
   .arcadebody {
     grid-template-columns: 1fr;
     grid-template-areas: 
