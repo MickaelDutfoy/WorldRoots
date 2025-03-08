@@ -3,7 +3,7 @@ class Item { // liste des objets
         baton: new Item("Bâton", "baton", "equipement", "arme", {force: 0, intelligence: 1}),
         batonArgent: new Item("Bâton d'argent", "batonArgent", "equipement", "arme", {force: 0, intelligence: 3}),
         dague: new Item("Dague", "dague", "equipement", "arme", {force: 1, intelligence: 0}),
-        epee: new Item("Épée", "epee", "equipement", "arme", {force: 2, intelligence: 0}),
+        epee: new Item("Épée", "epee", "equipement", "arme", {force: +2, intelligence: 0}),
         hache: new Item("Hache", "hache", "equipement", "arme", {force: 3, intelligence: 0}),
         massue: new Item("Massue", "massue", "equipement", "arme", {force: 4, intelligence: -1}),
 
@@ -356,11 +356,12 @@ class Personnage { // fonctionnement des personnages
         document.getElementById("class").textContent = this.classe;
         document.getElementById("level").textContent = `Niveau : ${this.niveau}`;
         document.getElementById("stats").innerHTML = `
-        <abbr title="Régit la capacité d'esquive.">Agilité</abbr> : ${this.stats.agilite} (+${this.armure.valeur.agilite})<br>
-        <abbr title="Régit les dégâts physiques.">Force</abbr> : ${this.stats.force} (+${this.arme.valeur.force})<br>
-        <abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${this.stats.intelligence} (+${this.arme.valeur.intelligence})<br>
-        <abbr title="Régit les HP max et la résistance physique.">Vitalité</abbr> : ${this.stats.vitalite} (+${this.armure.valeur.vitalite})<br>
-        <abbr title="Régit les MP max et la résistance magique.">Volonté</abbr> : ${this.stats.volonte} (+${this.armure.valeur.volonte})`;
+        <abbr title="Régit la capacité d'esquive.">Agilité</abbr> : ${this.stats.agilite} (${this.armure.valeur.agilite < 0 ? '-' : '+'}${Math.abs(this.armure.valeur.agilite)})<br>
+        <abbr title="Régit les dégâts physiques.">Force</abbr> : ${this.stats.force} (${this.arme.valeur.force < 0 ? '-' : '+'}${Math.abs(this.arme.valeur.force)})<br>
+        <abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${this.stats.intelligence} (${this.arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(this.arme.valeur.intelligence)})<br>
+        <abbr title="Régit les HP max et la résistance physique.">Vitalité</abbr> : ${this.stats.vitalite} (${this.armure.valeur.vitalite < 0 ? '-' : '+'}${Math.abs(this.armure.valeur.vitalite)})<br>
+        <abbr title="Régit les MP max et la résistance magique.">Volonté</abbr> : ${this.stats.volonte} (${this.armure.valeur.volonte < 0 ? '-' : '+'}${Math.abs(this.armure.valeur.volonte)})<br>
+        `;
         const nomsObjets = this.inventaire.map(i => `${i.objet.nom} x${i.quantite}`);
         document.getElementById("inventory").innerHTML = `Inventaire :<br>${this.or} pièces d'or<br>${nomsObjets.join("<br>")}`;
         const nomsSorts = this.sorts.map(sort => sort.nom);
@@ -385,7 +386,7 @@ class Personnage { // fonctionnement des personnages
         let selectArmeHTML = `<select id="selectArme">`;
         armesDispo.forEach(arme => {
             let selected = this.arme && this.arme.nom === arme.nom ? "selected" : "";
-            selectArmeHTML += `<option value="${arme.nom}" ${selected}>${arme.nom} (+${arme.valeur.force || 0} FOR, +${arme.valeur.intelligence || 0} INT)</option>`;
+            selectArmeHTML += `<option value="${arme.nom}" ${selected}>${arme.nom} (${arme.valeur.force < 0 ? '-' : '+'}${Math.abs(arme.valeur.force)} FOR, ${arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(arme.valeur.intelligence)} INT)</option>`;
         });
         selectArmeHTML += `</select>`; 
         document.getElementById("weapon").innerHTML = `Arme : ${selectArmeHTML}`;
@@ -397,7 +398,7 @@ class Personnage { // fonctionnement des personnages
         let selectArmureHTML = `<select id="selectArmure">`;
         armuresDispo.forEach(armure => {
             let selected = this.armure && this.armure.nom === armure.nom ? "selected" : "";
-            selectArmureHTML += `<option value="${armure.nom}" ${selected}>${armure.nom} (+${armure.valeur.agilite || 0} AGI, +${armure.valeur.vitalite || 0} VIT, +${armure.valeur.volonte || 0} VOL)</option>`;
+            selectArmureHTML += `<option value="${armure.nom}" ${selected}>${armure.nom} (${armure.valeur.agilite < 0 ? '-' : '+'}${Math.abs(armure.valeur.agilite)} AGI, ${armure.valeur.vitalite < 0 ? '-' : '+'}${Math.abs(armure.valeur.vitalite)} VIT, ${armure.valeur.volonte < 0 ? '-' : '+'}${Math.abs(armure.valeur.volonte)} VOL)</option>`;
         });
         selectArmureHTML += `</select>`;  
         document.getElementById("armor").innerHTML = `Armure : ${selectArmureHTML}`;
