@@ -636,22 +636,26 @@ function fight() { // fonctionnement du combat
         }
     }
 
+    function deadMob(cible) {
+        logMsg(`${mobs[cible].nom} est <strong>vaincu(e)</strong>.`);
+        xpGained += 5 + mobs[cible].niveau * 5;
+        if ( Math.random() < 0.8 ) {
+            goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 6);
+        }
+        let loots = mobs[cible].lootTable.filter(objet => Math.random() < objet.chance);
+        if (loots.length > 0) {
+            loots.forEach(objet => {
+                lootsGained.push(objet.item);
+            });
+        }
+    }
+
     function isFightOver() {
         if ( cibleIndex === "all" ) {
             let indicesToRemove = [];
             for (let i = 0; i < mobs.length; i++) {
                 if ( mobs[i].hp <= 0 ) {
-                    logMsg(`${mobs[i].nom} est <strong>vaincu(e)</strong>.`);
-                    xpGained += 5 + mobs[i].niveau * 5;
-                    if ( Math.random() < 0.8 ) {
-                        goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[i].niveau * 6);
-                    }
-                    let loots = mobs[i].lootTable.filter(objet => Math.random() < objet.chance);
-                    if (loots.length > 0) {
-                        loots.forEach(objet => {
-                            lootsGained.push(objet.item);
-                        });
-                    }
+                    deadMob(i);
                     indicesToRemove.push(i);
                 }
             }
@@ -660,21 +664,11 @@ function fight() { // fonctionnement du combat
             }
         } else {
             if ( mobs[cibleIndex].hp <= 0 ) {
-                logMsg(`${mobs[cibleIndex].nom} est <strong>vaincu(e)</strong>.`);
-                xpGained += 5 + mobs[cibleIndex].niveau * 5;
-                if ( Math.random() < 0.8 ) {
-                    goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cibleIndex].niveau * 6);
-                }
-                let loots = mobs[cibleIndex].lootTable.filter(objet => Math.random() < objet.chance);
-                if (loots.length > 0) {
-                    loots.forEach(objet => {
-                        lootsGained.push(objet.item);
-                    });
-                }
+                deadMob(cibleIndex);
                 mobs.splice(cibleIndex, 1);
             }
         }
-        if ( mobs.length === 0 ) { // tous les mobs sont morts
+        if ( mobs.length === 0 ) {
             document.getElementById("genererMob").addEventListener("click", Mob.popMob);
             document.getElementById("genererMob").removeEventListener("click", Mob.disablePopMob);
             document.getElementById("fightButtons").remove();
