@@ -5,6 +5,7 @@
 
 body {
   margin: 10px;
+  width: calc(100vw - 20px);
   font-family: "MedievalSharp";
   background-color: #121212;
 }
