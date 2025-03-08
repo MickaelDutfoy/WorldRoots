@@ -48,7 +48,15 @@ abbr {
 }
 
 button, input, select {
+  background: linear-gradient(to bottom right, #eee, #ccc);
+  box-shadow: 1px 1px 1px #999;
+  border: 1px solid #777;
+  border-radius: 5px;
   padding: 5px;
+}
+
+button, select {
+  cursor: pointer;
 }
 
 .indexbody {
@@ -173,6 +181,10 @@ td, th {
   border: 1px solid black;
   padding: 5px;
   text-align: center;
+}
+
+#genererMob {
+  margin-bottom: 10px;
 }
 
 #msgLog p {
