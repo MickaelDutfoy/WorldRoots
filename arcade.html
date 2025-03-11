@@ -12,26 +12,51 @@
 </head>
 <body class="arcadebody">
     <div id="titleBanner">
-        <h1><a href="index.html">WorldRoots v0.12</a></h1>
+        <h1><a href="index.html">WorldRoots v0.13a</a></h1>
         <p>RPG old-school minimaliste en JavaScript</p>
     </div>
     <div id="teamWindow">
-        <h2>Fiche de personnage</h2>
-        <label for="nom">Nom :</label>
-        <input type="text" id="nom" placeholder="Entrez un nom">
-        <label for="classe">Classe :</label>
-        <select id="classe">
-            <option value="Guerrier">Guerrier</option>
-            <option value="Mage">Mage</option>
-            <option value="Voleur">Voleur</option>
-            <option value="Paladin">Paladin</option>
-        </select>
-        
-        <button id="creerPerso">Créer un personnage</button>
+        <h2>Fiche d'équipe</h2>
+        <div id="teamSelector">
+            <p>Pour commencer, formez une équipe de trois personnages.</p><br>
+            <label for="classe1">Personnage 1 :</label>
+            <select id="classe1">
+                <option value="Guerrier" selected>Boris, Guerrier (Tank, DPS physique)</option>
+                <option value="Paladin">Matthew, Paladin (Tank, Heal)</option>
+                <option value="Chevalier noir">Yaëlle, Chevalier noir (Tank, DPS magique)</option>
+                <option value="Élémentaliste">Helmi, Élémentaliste (DPS magique)</option>
+                <option value="Chaomancien">Monadh, Chaomancien (DPS magique)</option>
+                <option value="Magelame">Inari, Magelame (DPS physique/magique)</option>
+                <option value="Prêtresse">Kita, Prêtre (DPS magique, Heal)</option>
+                <option value="Barbare">Otnugh, Barbare (DPS physique)</option>
+            </select><br>
+            <label for="classe2">Personnage 2 :</label>
+            <select id="classe2">
+                <option value="Guerrier">Boris, Guerrier (Tank, DPS physique)</option>
+                <option value="Paladin">Matthew, Paladin (Tank, Heal)</option>
+                <option value="Chevalier noir">Gaël, Chevalier noir (Tank, DPS magique)</option>
+                <option value="Élémentaliste" selected>Helmi, Élémentaliste (DPS magique)</option>
+                <option value="Chaomancien">Monadh, Chaomancien (DPS magique)</option>
+                <option value="Magelame">Inari, Magelame (DPS physique/magique)</option>
+                <option value="Prêtresse">Kita, Prêtre (DPS magique, Heal)</option>
+                <option value="Barbare">Otnugh, Barbare (DPS physique)</option>
+            </select><br>
+            <label for="classe3">Personnage 3 :</label>
+            <select id="classe3">
+                <option value="Guerrier">Boris, Guerrier (Tank, DPS physique)</option>
+                <option value="Paladin">Matthew, Paladin (Tank, Heal)</option>
+                <option value="Chevalier noir">Gaël, Chevalier noir (Tank, DPS magique)</option>
+                <option value="Élémentaliste">Helmi, Élémentaliste (DPS magique)</option>
+                <option value="Chaomancien">Monadh, Chaomancien (DPS magique)</option>
+                <option value="Magelame">Inari, Magelame (DPS physique/magique)</option>
+                <option value="Prêtresse" selected>Kita, Prêtre (DPS magique, Heal)</option>
+                <option value="Barbare">Otnugh, Barbare (DPS physique)</option>
+            </select>
+            <br><button id="creerPerso">Créer une équipe</button>
+        </div>
     </div>
     <div id="exploreWindow">
         <h2>Fenêtre d'évènements</h2>
-        <button id="genererMob">Générer une rencontre</button>
     </div>
     <script src="js/item.js"></script>
     <script src="js/spell.js"></script>

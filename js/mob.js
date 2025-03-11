@@ -1,4 +1,4 @@
-class Mob { // fonctionnement des ennemis
+class Mob {
     static mobList = [
         // mobs level 0
         { nom: "Rat", id: "rat", niveau: 0,
@@ -35,8 +35,9 @@ class Mob { // fonctionnement des ennemis
             lootTable: [{ item: Item.getItem("massue"), chance: 0.2 }]},
         { nom: "Liche", id: "liche", niveau: 5,
             stats: { strength: 3, intelligence: 4, agility: 2, vitality: 3, willpower: 5 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("batonArgent"), chance: 0.2 }]},
+            resists: { ice : 0.5, fire : 2},
+            sorts: [Spell.getSpell("blizzard1"), Spell.getSpell("vortex1")],
+            lootTable: [{ item: Item.getItem("baton2"), chance: 0.1 }, { item: Item.getItem("robe2"), chance: 0.1 }]},
         ];
 
     constructor(nom, niveau, stats, sorts, lootTable = []) {
@@ -48,57 +49,68 @@ class Mob { // fonctionnement des ennemis
         this.mp = 5 * stats.intelligence;
         this.lootTable = [...lootTable];
         let potion;
-        if (niveau >= 0 && niveau <= 4) potion = Item.getItem("potionXXS");
-        else if (niveau >= 5 && niveau <= 9) potion = Item.getItem("potionXS");
-        else if (niveau >= 10 && niveau <= 14) potion = Item.getItem("potionS");
-        else if (niveau >= 15 && niveau <= 19) potion = Item.getItem("potionM");
-        else if (niveau >= 20 && niveau <= 24) potion = Item.getItem("potionL");
-        this.lootTable.push({ item: potion, chance: 0.5 });
+        if (niveau >= 0 && niveau <= 9) potion = Item.getItem("potion2");
+        else if (niveau >= 10 && niveau <= 19) potion = Item.getItem("potion3");
+        else if (niveau >= 20 && niveau <= 29) potion = Item.getItem("potion4");
+        else if (niveau >= 30 && niveau <= 39) potion = Item.getItem("potion5");
+        else if (niveau >= 40 && niveau <= 49) potion = Item.getItem("potion6");
+        else if (niveau >= 50 && niveau <= 59) potion = Item.getItem("potion7");
+        else if (niveau >= 60 && niveau <= 69) potion = Item.getItem("potion8");
+        else if (niveau >= 70 && niveau <= 79) potion = Item.getItem("potion9");
+        else if (niveau >= 80 && niveau <= 89) potion = Item.getItem("potion10");
+        else if (niveau >= 90 && niveau <= 99) potion = Item.getItem("potion11");
+        this.lootTable.push({ item: potion, chance: 0.4 });
         let ether;
-        if (niveau >= 0 && niveau <= 4) ether = Item.getItem("etherXXS");
-        else if (niveau >= 5 && niveau <= 9) ether = Item.getItem("etherXS");
-        else if (niveau >= 10 && niveau <= 14) ether = Item.getItem("etherS");
-        else if (niveau >= 15 && niveau <= 19) ether = Item.getItem("etherM");
-        else if (niveau >= 20 && niveau <= 24) ether = Item.getItem("etherL");
+        if (niveau >= 0 && niveau <= 9) ether = Item.getItem("ether2");
+        else if (niveau >= 10 && niveau <= 19) ether = Item.getItem("ether3");
+        else if (niveau >= 20 && niveau <= 29) ether = Item.getItem("ether4");
+        else if (niveau >= 30 && niveau <= 39) ether = Item.getItem("ether5");
+        else if (niveau >= 40 && niveau <= 49) ether = Item.getItem("ether6");
+        else if (niveau >= 50 && niveau <= 59) ether = Item.getItem("ether7");
+        else if (niveau >= 60 && niveau <= 69) ether = Item.getItem("ether8");
+        else if (niveau >= 70 && niveau <= 79) ether = Item.getItem("ether9");
+        else if (niveau >= 80 && niveau <= 89) ether = Item.getItem("ether10");
+        else if (niveau >= 90 && niveau <= 99) ether = Item.getItem("ether11");
         this.lootTable.push({ item: ether, chance: 0.3 });
     }
-    
+
     static getMob(id) {
         return this.mobList.find(item => item.id === id);
     }
 
     static popMob() {
-        if ( char === null || char.hp <= 0 ) {
-            tempoMsg = 0; addMessageToLog("Tu dois d'abord créer un char !");
-            return;
-        } else if ( char.niveau >= 8 ) {
-            tempoMsg = 0; addMessageToLog(`Dans cette version, aucun ennemi n'est disponible pour un personnage de niveau ${char.niveau}. Recommencez un char en actualisant la page ou revenez un autre jour !`);
+        fightLog.innerHTML = "";
+        let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
+        if ( lvlTeam >= 8 ) {
+            tempoMsg = 0; addMessageToLog(`Dans cette version, aucun ennemi n'est disponible pour une équipe de niveau ${lvlTeam}. Recommencez en actualisant la page ou revenez un autre jour !`);
             return;
         }
         mobs = []; msgLog.innerHTML = "";
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
+        // document.getElementById("startBtn").style.display = "none";
         let mobCount = 1 + Math.floor(Math.random() * 3);
         for ( let i = 0 ; i < mobCount ; i++ ) {
             let mobData = Mob.mobList[Math.floor(Math.random() * Mob.mobList.length)];
-            if ( mobData.niveau < char.niveau - 2 || mobData.niveau > char.niveau ) { i--; } else {
+            if ( mobData.niveau < lvlTeam - 2 || mobData.niveau > lvlTeam ) { i--; } else {
                 mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.lootTable));
             }
         }
-        let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets"; let ennemyList = "";
+        let ennemyList = "";
+        let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets";
         for ( let i = 0 ; i < mobs.length ; i++ ) {
             ennemyList += ` ${mobs[i].nom} (niveau ${mobs[i].niveau})`;
             if (i < mobs.length ) ennemyList += ", ";
         }
         if ( mobs.length === 1 ) {
-            ennemyList = `Un(e) ${mobs[0].nom} (niveau ${mobs[0].niveau}) apparaît`;
+            ennemyList = `Un(e) ${mobs[0].nom} (niveau ${mobs[0].niveau}) apparaît dans la salle`;
         } else {
-            ennemyList = `Les ennemis suivants apparaissent :`;
-            for ( let i = 1 ; i <= mobs.length ; i++ ) {
-                ennemyList += ` ${mobs[i-1].nom} (niveau ${mobs[i-1].niveau})`;
-                if (i < mobs.length ) ennemyList += ", ";
+            ennemyList = `Les ennemis suivants apparaissent dans la salle :`;
+            for ( let i = 0 ; i < mobs.length ; i++ ) {
+                ennemyList += ` ${mobs[i].nom} (niveau ${mobs[i].niveau})`;
+                if (i < mobs.length - 1 ) ennemyList += ", ";
             }
         }
-        ennemyList += `. <button id="fightBtn">Combattre</button>`
+        ennemyList += ` ! <button id="fightBtn">Combattre</button>`
         ennemyTargets.innerHTML = ennemyList;
         msgLog.appendChild(ennemyTargets);
         document.getElementById("fightBtn").addEventListener("click", fight);

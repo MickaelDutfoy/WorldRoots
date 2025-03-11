@@ -5,7 +5,7 @@
 
 body {
   margin: 10px;
-  width: calc(100vw - 20px);
+  width: calc(100vw - 40px);
   font-family: "MedievalSharp";
   background-color: #121212;
 }
@@ -43,6 +43,10 @@ p {
   color: orangered;
 }
 
+.grey {
+  color: #777;
+}
+
 abbr {
   text-decoration: none;
   cursor: help;
@@ -74,10 +78,11 @@ button, select {
 
 .arcadebody {
   display: grid;
-  grid-template-columns: 4fr 6fr;
+  grid-template-columns: auto;
   grid-template-areas: 
-    "titleBanner titleBanner"
-    "teamWindow teamExplore";
+    "titleBanner"
+    "teamWindow"
+    "exploreWindow";
   gap: 20px;
 }
 
@@ -121,6 +126,8 @@ body > div {
 #changeLog {
   grid-area: changeLog;
   text-align: justify;
+  overflow-y: auto;
+  max-height: 50vh;
 }
 
 #changeLog ul {
@@ -153,16 +160,29 @@ body > div {
 
 #teamWindow {
   grid-area: teamWindow;
-  min-width: 470px;
 }
 
-#nom {
-  width: 100px;
+#teamWindow p {
+  padding-left: 0;
+}
+
+#creerPerso {
+  margin-top: 5px;
+}
+
+#teamSelector {
+  display: flex;
+  flex-direction: column;
+}
+
+#teamSelector label {
+  font-weight: bold;
 }
 
 #exploreWindow {
-  grid-area: teamExplore;
-  min-width: 470px;
+  opacity: 0;
+  grid-area: exploreWindow;
+  transition: opacity 0.4s ease;
 }
 
 .fight {
@@ -174,8 +194,35 @@ h1, h2 {
 }
 
 table {
+  width: 100%;
   margin-top: 10px;
   border-collapse: collapse;
+}
+
+#inventory {
+  background: linear-gradient(to bottom, #ccc, #eee);
+}
+
+#charSheet > tbody > tr:nth-child(n + 2):nth-child(-n + 6) {
+  background: linear-gradient(to right, #f3e95c, #e7e5c8);
+}
+
+
+#charSheet > tbody > tr:nth-child(n + 7):nth-child(-n + 11) {
+  background: linear-gradient(to right, #a8e6cf, #d4f7dc);
+}
+
+#charSheet > tbody > tr:nth-child(n + 12):nth-child(-n + 16) {
+  background: linear-gradient(to right, #77b7ff, #9af8ff);
+}
+
+.charStats {
+  margin: 0;
+}
+
+.charStats td, .charStats tr {
+  border: none;
+  padding: 0;
 }
 
 td, th {
@@ -184,12 +231,50 @@ td, th {
   text-align: center;
 }
 
-#genererMob {
-  margin-bottom: 10px;
+#HP0, #MP0, #HP1, #MP1, #HP2, #MP2 {
+  font-weight: bolder;
+}
+
+.lvlUp0, .lvlUp1, .lvlUp2 {
+  display: none;
+  font-weight: bold;
+}
+
+#startBtn {
+  margin: 0;
+}
+
+#msgLog {
+  min-height: 40px;
+  border-bottom: 3px solid #121212;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 #msgLog p {
   padding: 0;
+}
+
+#msgLog li {
+  margin-left: 40px;
+}
+
+#fightLog {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+  height: 70vh;
+  overflow-y: hidden;
+}
+
+#fightLog p {
+  padding: 0;
+}
+
+#fightLog button {
+  margin: 2px 0;
+}
+
+#FightMobList {
+  font-weight: bold;
 }
 
 #spawnMsg {
@@ -202,12 +287,22 @@ td, th {
   padding-top: 10px;
 }
 
-@media (max-width: 1024px) {
+.generatedMessage p {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+.generatedMessage p.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+@media (min-width: 1024px) {
   .arcadebody {
-    grid-template-columns: 1fr;
+    grid-template-columns: 5fr 3fr;
     grid-template-areas: 
-      "titleBanner"
-      "teamWindow"
-      "teamExplore";
+      "titleBanner titleBanner"
+      "teamWindow exploreWindow";
   }
 }

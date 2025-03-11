@@ -1,28 +1,94 @@
-function fight() { // fonctionnement du combat
-    if ( char === null || char.hp <= 0 ) {
-        tempoMsg = 0; addMessageToLog("Tu dois d'abord créer un personnage !");
-        return;
+function fight() {
+    document.getElementById("ennemyTargets").remove();
+    let fightMobDiv = document.createElement("div"); msgLog.appendChild(fightMobDiv); fightMobDiv.id = "FightMobList";
+    let fightMobP = document.createElement("p"); fightMobP.innerHTML = "Ennemis présents dans la salle :"; fightMobDiv.appendChild(fightMobP);
+    let fightMobList = document.createElement("ul"); fightMobDiv.appendChild(fightMobList)
+    let xpGained = 0; let lootsGained = []; let goldGained = 0; tempoMsg = 0;
+    onFight = true; exploreWindow.classList.add("fight");
+    const combatActions = document.createElement("div");
+    let targets = document.createElement("div");
+    let initiativeTable = [];
+    chars.forEach((char, index) => {
+        initiativeTable.push({ type: "char", entity: char, index: index, agility: char.stats.agility + char.armure.valeur.agility });
+    });
+    mobs.forEach((mob, index) => {
+        initiativeTable.push({ type: "mob", entity: mob, index: index, agility: mob.stats.agility });
+    });
+    initiativeTable.sort((a, b) => b.agility - a.agility);
+    for (let i = 0; i < initiativeTable.length - 1; i++) {
+        if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
+            if (Math.random() > 0.5) {
+                [initiativeTable[i], initiativeTable[i + 1]] = [initiativeTable[i + 1], initiativeTable[i]];
+            }
+        }
     }
-    document.getElementById("genererMob").removeEventListener("click", Mob.popMob);
-    document.getElementById("genererMob").addEventListener("click", Mob.disablePopMob);
-    document.getElementById("fightBtn").remove();
-    const combatStart = document.createElement("div");
-    combatStart.innerHTML = '<p class="combatMsg">Le combat commence !</p> <div id="fightButtons"><button id="attack">Attaquer</button><button id="spell">Lancer un sort</button><button id="item">Utiliser un objet</button></div>'
-    msgLog.appendChild(combatStart);
-    onFight = true; document.getElementById("exploreWindow").classList.add("fight");
-    let ennemyTargets = document.createElement("div");
-    let xpGained = 0; let lootsGained = []; let goldGained = 0;
-    document.getElementById("attack").addEventListener("click", attack);
-    document.getElementById("spell").addEventListener("click", spell);
-    document.getElementById("item").addEventListener("click", items);
+    let turnIndex = 0; nextTurn();  
 
-    function targetSelect(action, effect = null) {
+    function nextTurn() {
+        refreshMobList();
+        if ( turnIndex >= initiativeTable.length ) { turnIndex = 0; }
+        let fighter = initiativeTable[turnIndex];
+        if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
+            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            let target;
+                do {
+                    target = chars[Math.floor(Math.random() * chars.length)];
+                } while (target.hp <= 0);
+            mobAttack(fighter.entity, target);
+            turnIndex++;
+            nextTurn();
+        } else if ( fighter.type === "char" && fighter.entity.hp > 0 ) {
+            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            setTimeout(() => {
+                let actions = `<div id="fightButtons"><button id="attack">Attaquer</button>`
+                if ( fighter.entity.sorts.length > 0 ) actions += `<button id="spell">Lancer un sort</button>`
+                if ( inventaire.length > 0 ) actions += `<button id="item">Utiliser un objet</button>`
+                actions += `</div>`
+                combatActions.innerHTML = actions;
+                fightLog.insertBefore(combatActions, fightLog.firstChild);
+                document.getElementById("attack").addEventListener("click", () => {
+                    attack(fighter.entity);
+                });
+                if ( document.getElementById("spell") ) {
+                    document.getElementById("spell").addEventListener("click", () => {
+                    spell(fighter.entity);
+                    });
+                }
+                if ( document.getElementById("item") ) {
+                    document.getElementById("item").addEventListener("click", () => {
+                    items(fighter.entity);
+                    });
+                }
+            }, tempoMsg);
+            tempoMsg += 600;
+        } else {
+            turnIndex++;
+            nextTurn();
+        }
+    }
+    
+    function proceed() {
+        combatActions.innerHTML = "";
+        turnIndex++;
+        nextTurn();
+    }
+
+    function refreshMobList() {
+        fightMobList.innerHTML = "";
+        for (let i = 0; i < mobs.length; i++) {
+            let mobToList = document.createElement("li");
+            mobToList.innerHTML = `${mobs[i].nom} (niveau ${mobs[i].niveau})`;
+            fightMobList.appendChild(mobToList);
+        }
+    }
+
+    function targetSelect(char, action, effect = null) {
         let ennemyList = ``;
         for ( let i = 0 ; i < mobs.length ; i++ ) {
             ennemyList += `<button id="target${i}">${mobs[i].nom}</button>`;
         }
-        ennemyTargets.innerHTML = ennemyList; ennemyTargets.id = "TargetBtns";
-        msgLog.appendChild(ennemyTargets);  
+        targets.innerHTML = ennemyList; targets.id = "TargetBtns";
+        fightLog.insertBefore(targets, fightLog.firstChild);  
         for (let i = 0; i < mobs.length; i++) {
             let targetBtn = document.getElementById(`target${i}`);
             let newTargetBtn = targetBtn.cloneNode(true);
@@ -30,70 +96,94 @@ function fight() { // fonctionnement du combat
             newTargetBtn.addEventListener("click", () => { 
                 cibleIndex = i;
                 if ( action === "attack" ) {
-                    attackDmg();
+                    attackDmg(char);
                 } else if ( action === "spell" ) {
-                    spellResolve(effect);
+                    spellResolve(char, effect);
                 } else if ( action === "item" ) {
-                    useItem(effect);
+                    useItem(char, effect);
                 }
             });
         }
-    }  
+    }
 
-    function attack() {
+    function allySelect(char, action, effect = null) {
+        let allyList = ``;
+        for ( let i = 0 ; i < chars.length ; i++ ) {
+            allyList += `<button id="target${i}">${chars[i].nom}</button>`;
+        }
+        targets.innerHTML = allyList; targets.id = "TargetBtns";
+        fightLog.insertBefore(targets, fightLog.firstChild);  
+        for (let i = 0; i < chars.length; i++) {
+            let targetBtn = document.getElementById(`target${i}`);
+            let newTargetBtn = targetBtn.cloneNode(true);
+            targetBtn.parentNode.replaceChild(newTargetBtn, targetBtn);
+            newTargetBtn.addEventListener("click", () => { 
+                cibleIndex = i;
+                if ( action === "spell" ) {
+                    spellResolve(char, effect);
+                } else if ( action === "item" ) {
+                    useItem(char, effect);
+                }
+            });
+        }
+    }
+
+    function attack(char) {
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
-        targetSelect("attack");
+        targetSelect(char, "attack");
     };
 
-    function attackDmg() {
-        ennemyTargets.remove();
+    function attackDmg(char) {
+        targets.remove();
         tempoMsg = 0;
         if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agility, 50) ) {
-            addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
+            addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
         } else {
             let dmg = Math.floor(( 3 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             addMessageToLog(`${char.nom} attaque ${mobs[cibleIndex].nom} avec ${char.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
             mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
             if (isFightOver()) return;
         }
-        mobAttack(char);
+        proceed();
     }
 
-    function spell() {
+    function spell(char) {
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const spellList = document.createElement("div");
         spellList.id = "spellList";
-        msgLog.appendChild(spellList);
+        fightLog.insertBefore(spellList, fightLog.firstChild);
         char.sorts.forEach(sort => {
             let spellBtn = document.createElement("button");
             spellBtn.innerHTML = `${sort.nom}`;
             spellBtn.id = `${sort.id}`;
             spellList.appendChild(spellBtn);
             if ( sort.type === "attack" && sort.cible === 1 ) {
-                spellBtn.onclick = () => targetSelect("spell", sort);
+                spellBtn.onclick = () => targetSelect(char, "spell", sort);
             } else if ( sort.type === "attack" && sort.cible === "all" ) {
-                spellBtn.onclick = () => spellResolve(sort);
-            } else if ( sort.type === "heal" ) {
-                spellBtn.onclick = () => spellResolve(sort);
+                spellBtn.onclick = () => spellResolve(char, sort);
+            } else if ( sort.type === "heal" && sort.cible === 1 ) {
+                spellBtn.onclick = () => allySelect(char, "spell", sort);
+            } else if ( sort.type === "heal" && sort.cible === "all" ) {
+                spellBtn.onclick = () => spellResolve(char, sort);
             }
         });
     };
 
-    function spellResolve(sort) {
+    function spellResolve(char, sort) {
         if ( char.mp < sort.mp ) {
             addMessageToLog(`${char.nom} n'a pas assez de MP !`);
             return;
         }
         document.getElementById("spellList").remove();
-        ennemyTargets.remove();
+        targets.remove();
         char.mp -= sort.mp;
         addMessageToLog(`<span class="purple">${char.nom} perd ${sort.mp} MP</span> et utilise ${sort.nom}.`);
-        char.charSheet();
+        Character.charSheet();
         if ( sort.type === "attack" && sort.cible === 1 ) {
             let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             addMessageToLog(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
@@ -107,88 +197,114 @@ function fight() { // fonctionnement du combat
                 mobs[i].hp = mobs[i].hp - dmg;
             }
             if (isFightOver()) return;
-        } else if ( sort.type === "heal" ) {
-            char.hp += sort.valeur; if ( char.hp > char.maxhp ) { char.hp = char.maxhp };
-            addMessageToLog(`${char.nom} utilise ${sort.nom} ! <span class="green">${char.nom} gagne ${sort.valeur} HP</span>.`);
-
+        } else if ( sort.type === "heal" && sort.cible === 1 ) {
+            if ( chars[cibleIndex].hp > 0 ) {
+                chars[cibleIndex].hp += sort.valeur; if ( chars[cibleIndex].hp > chars[cibleIndex].maxhp ) { chars[cibleIndex].hp = chars[cibleIndex].maxhp };
+                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${sort.valeur} HP</span>.`);
+            } else {
+                addMessageToLog(`${sort.nom} est sans effet sur les personnages inanimés.`)
+            }
+            Character.charSheet();
+        } else if ( sort.type === "heal" && sort.cible === "all" ) {
+            cibleIndex = "all";
+            for (let i = 0; i < chars.length; i++) {
+                if ( chars[i].hp > 0 ) {
+                    chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
+                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
+                } else {
+                    addMessageToLog(`${sort.nom} est sans effet sur les personnages inanimés.`)
+                }
+            }
+            Character.charSheet();
         }
-        mobAttack(char);
+        proceed();
     }
 
-    function items() {
+    function items(char) {
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         tempoMsg = 0;
         const itemList = document.createElement("div");
         itemList.id = "itemList";
-        msgLog.appendChild(itemList);
-        const objetsUtilisables = char.inventaire.filter(i => i.objet.type === "consommable");
+        fightLog.insertBefore(itemList, fightLog.firstChild);
+        const objetsUtilisables = inventaire.filter(i => i.objet.type === "consommable");
         objetsUtilisables.forEach(i => {
             let itemBtn = document.createElement("button");
             itemBtn.innerHTML = `${i.objet.nom} x${i.quantite}`;
             itemBtn.id = i.objet.id;
             itemList.appendChild(itemBtn);
             if ( i.objet.effet === "dégâts" ) {
-                itemBtn.onclick = () => targetSelect("item", i.objet);
+                itemBtn.onclick = () => targetSelect(char, "item", i.objet);
             } else if ( i.objet.effet === "heal" || i.objet.effet === "regen" ) {
-                itemBtn.onclick = () => useItem(i.objet);
+                itemBtn.onclick = () => useItem(char, i.objet);
+            } else if ( i.objet.effet === "resurrect" ) {
+                itemBtn.onclick = () => allySelect(char, "item", i.objet);
             }
         });
     }
 
-    function useItem(item) {
+    function useItem(char, item) {
+        addMessageToLog(`${char.nom} utilise ${item.nom}.`)
         if (item.effet === "heal") {
             char.hp += item.valeur;
             if (char.hp > char.maxhp) char.hp = char.maxhp;
-            addMessageToLog(`${char.nom} utilise ${item.nom}. <span class="green">${char.nom} récupère ${item.valeur} HP</span> !`);
+            addMessageToLog(`<span class="green">${char.nom} récupère ${item.valeur} HP</span> !`);
         } else if (item.effet === "regen") {
             char.mp += item.valeur;
             if (char.mp > char.maxmp) char.mp = char.maxmp;
-            addMessageToLog(`${char.nom} utilise ${item.nom}. <span class="blue">${char.nom} récupère ${item.valeur} MP</span> !`);
-        } else if (item.effet === "dégâts") {
-            let dmg = Math.floor((item.valeur) * (Math.random() * 0.3 + 0.85));
-            addMessageToLog(`${char.nom} lance ${item.nom} sur ${mobs[cibleIndex].nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
-            mob.hp -= dmg;
-            if (isFightOver()) return;
-        }
-        let index = char.inventaire.findIndex(i => i.objet.id === item.id);
-        if (index !== -1) {
-            char.inventaire[index].quantite--;
-            if (char.inventaire[index].quantite <= 0) {
-                char.inventaire.splice(index, 1);
+            addMessageToLog(`<span class="blue">${char.nom} récupère ${item.valeur} MP</span> !`);
+        } else if (item.effet === "resurrect") {
+            if ( chars[cibleIndex].hp <= 0 ) {
+                chars[cibleIndex].hp = chars[cibleIndex].maxhp * item.valeur;
+                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} récupère ${100 * item.valeur}% de ses HP</span> et revient à la vie !`)
+            } else {
+                addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
             }
         }
-        char.charSheet();
+        // else if (item.effet === "dégâts") {
+        //     let dmg = Math.floor((item.valeur) * (Math.random() * 0.3 + 0.85));
+        //     addMessageToLog(`${char.nom} lance ${item.nom} sur ${mobs[cibleIndex].nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
+        //     mob.hp -= dmg;
+        //     if (isFightOver()) return;
+        // }
+        let index = inventaire.findIndex(i => i.objet.id === item.id);
+        if (index !== -1) {
+            inventaire[index].quantite--;
+            if (inventaire[index].quantite <= 0) {
+                inventaire.splice(index, 1);
+            }
+        }
+        Character.charSheet();
         document.getElementById("itemList").remove(); 
-        mobAttack(char);
+        proceed();
     }
 
-    function mobAttack(cible) {
-        for (let i = 0; i < mobs.length; i++) {
-            if ( Math.random() * 100 < Math.min((char.stats.agility + char.arme.valeur.agility), 50) ) {
-                addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mobs[i].nom} !`);
-            } else {
-                let dmg = Math.floor((3 * mobs[i].stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality)) * (Math.random() * 0.3 + 0.85));
-                if (dmg < 0) dmg = 0;
-                addMessageToLog(`${mobs[i].nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
-                cible.hp -= dmg;
-                cible.charSheet();
-                if (cible.hp <= 0) {
+    function mobAttack(mob, cible) {
+        if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility), 50) ) {
+            addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
+        } else {
+            let dmg = Math.floor((3 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality)) * (Math.random() * 0.3 + 0.85));
+            if (dmg < 0) dmg = 0;
+            addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+            cible.hp -= dmg;
+            Character.charSheet();
+            if (cible.hp <= 0) {
+                addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
+                if ( chars[0].hp === 0 && chars[1].hp === 0 && chars[2].hp === 0 ) {
+                    addMessageToLog(`Votre équipe est vaincue !`)
                     document.getElementById("genererMob").addEventListener("click", Mob.popMob);
                     document.getElementById("genererMob").removeEventListener("click", Mob.disablePopMob);
-                    addMessageToLog(`${cible.nom} est <strong>vaincu(e)</strong> !`);
                     onFight = false; document.getElementById("exploreWindow").classList.remove("fight");
                     createBtn.style.display = "inline-block";
                     document.getElementById("fightButtons").remove();
-                    break;
                 }
             }
         }
     }
 
     function deadMob(cible) {
-        addMessageToLog(`${mobs[cible].nom} est <strong>vaincu(e)</strong>.`);
+        addMessageToLog(`${mobs[cible].nom} est <strong>vaincu(e)</strong> !`);
         xpGained += 5 + mobs[cible].niveau * 5;
         if ( Math.random() < 0.8 ) {
             goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 6);
@@ -220,20 +336,27 @@ function fight() { // fonctionnement du combat
             }
         }
         if ( mobs.length === 0 ) {
-            document.getElementById("genererMob").addEventListener("click", Mob.popMob);
-            document.getElementById("genererMob").removeEventListener("click", Mob.disablePopMob);
+            setTimeout(() => {
+                onFight = false;
+                document.getElementById("exploreWindow").classList.remove("fight");
+                Character.charSheet();
+                if ( startBtn.innerHTML !== "Aller dans la salle suivante !" ) startBtn.innerHTML = "Aller dans la salle suivante !"
+                msgLog.appendChild(startBtn);
+            }, 4800);
             document.getElementById("fightButtons").remove();
-            char.gainXP(xpGained);
-            char.or += goldGained;
-            if ( goldGained > 0 ) addMessageToLog(`${char.nom} obtient ${goldGained} pièces d'or.`);
+            fightMobDiv.remove();
+            for ( let i = 0; i <= 2; i++) {
+                if ( chars[i].hp > 0 ) chars[i].gainXP(xpGained);
+            }
+            gold += goldGained;
+            if ( goldGained > 0 ) addMessageToLog(`Vous obtenez ${goldGained} pièces d'or.`);
             if ( lootsGained.length > 0 ) { 
-                addMessageToLog(`${char.nom} trouve : ${lootsGained.map(objet => objet.nom).join(", ")}.`);
+                addMessageToLog(`Vous trouvez : ${lootsGained.map(objet => objet.nom).join(", ")}.`);
                 lootsGained.forEach(objet => {
-                    char.addItem(objet);
+                    Character.addItem(objet);
                 });
             }
-            char.charSheet();
-            onFight = false; document.getElementById("exploreWindow").classList.remove("fight"); return true;
+            return true;
         }
         return false;
     }
