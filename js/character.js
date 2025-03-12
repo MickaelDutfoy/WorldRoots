@@ -13,7 +13,7 @@ class Character {
             armure: Item.getItem("heavyArmor1")},
             "Paladin": { nom: "Matthew",
             stats: {strength: 2, intelligence: 2, agility: 1, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("lightTarget1"), Spell.getSpell("healTarget1")],
+            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1")],
             arme: Item.getItem("sword1"),
             armure: Item.getItem("magicArmor1")},
             "Chevalier noir": { nom: "Yaëlle",
@@ -28,7 +28,7 @@ class Character {
             armure: Item.getItem("robe1")},
             "Chaomancien": { nom: "Monadh",
             stats: {strength: 1, intelligence: 3, agility: 1, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("darkTarget1"), Spell.getSpell("lightAoe1")],
+            sorts: [Spell.getSpell("darkTarget1"), Spell.getSpell("holyAoe1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("robe1")},
             "Magelame": { nom: "Inari",
@@ -38,7 +38,7 @@ class Character {
             armure: Item.getItem("battleRobe1")},
             "Prêtresse": { nom: "Kita",
             stats: {strength: 1, intelligence: 2, agility: 2, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("lightTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("healAoe1")],
+            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("healAoe1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("battleRobe1")},
             "Barbare": { nom: "Otnugh",
@@ -237,7 +237,7 @@ class Character {
         chars.push(new Character(classe2));
         chars.push(new Character(classe3));
         for ( let i = 0; i <=2; i++ ) Character.addItem(Item.getItem("potion1"));
-        Character.addItem(Item.getItem("plumeAnge1"));
+        Character.addItem(Item.getItem("rez1"));
         Character.charSheet();
     };
 
@@ -257,8 +257,8 @@ class Character {
     gainXP(xp) {
         addMessageToLog(`<span class="orange">${this.nom} gagne ${xp} XP</span>.`);
         this.xp += xp;
-        while (this.xp >= 150 * this.niveau) {
-            this.xp -= 150 * this.niveau;
+        while (this.xp >= 100 * this.niveau) {
+            this.xp -= 100 * this.niveau;
             this.hp = this.maxhp;
             this.mp = this.maxmp;
             this.pointsLvlUp += 2;
@@ -389,7 +389,7 @@ class Character {
         document.getElementById("inventory").innerHTML = `Inventaire :<br>${gold} pièces d'or<br>${nomsObjets.join("<br>")}`;
         for ( let i = 0; i <=2; i++ ) {
             document.getElementById("nameClass" + i).innerHTML = `${chars[i].nom}<br>${chars[i].classe}`;
-            document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 150}`;
+            document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 100}`;
             document.getElementById("agi" + i).innerHTML = `<abbr title="Régit la capacité d'esquive et l'initiative.">Agilité</abbr> : ${chars[i].stats.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)})</span>`;
             document.getElementById("for" + i).innerHTML = `<abbr title="Régit les dégâts physiques.">Force</abbr> : ${chars[i].stats.strength} <span class="grey">(${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)})</span>`;
             document.getElementById("int" + i).innerHTML = `<abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${chars[i].stats.intelligence} <span class="grey">(${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)})</span>`;

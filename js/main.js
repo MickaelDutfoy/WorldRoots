@@ -18,7 +18,7 @@ function addSlowMsgToLog(message) {
         msgLog.appendChild(newMsg);
         setTimeout(() => { newMsg.classList.add("show");}, 10);
     }, tempoMsg);
-    tempoMsg += 1800;
+    tempoMsg += 0; // 1800
 }
 
 let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50;

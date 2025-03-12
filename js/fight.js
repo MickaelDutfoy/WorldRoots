@@ -26,6 +26,7 @@ function fight() {
 
     function nextTurn() {
         refreshMobList();
+        if (isGameOver()) return;
         if ( turnIndex >= initiativeTable.length ) { turnIndex = 0; }
         let fighter = initiativeTable[turnIndex];
         if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
@@ -68,6 +69,11 @@ function fight() {
     }
     
     function proceed() {
+        if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
+        if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
+        if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
+        if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
+        if ( targets ) targets.remove();
         combatActions.innerHTML = "";
         turnIndex++;
         nextTurn();
@@ -136,12 +142,12 @@ function fight() {
     };
 
     function attackDmg(char) {
-        targets.remove();
+        
         tempoMsg = 0;
         if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agility, 50) ) {
             addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
         } else {
-            let dmg = Math.floor(( 3 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.floor(( 3 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             addMessageToLog(`${char.nom} attaque ${mobs[cibleIndex].nom} avec ${char.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
             mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
             if (isFightOver()) return;
@@ -179,21 +185,35 @@ function fight() {
             addMessageToLog(`${char.nom} n'a pas assez de MP !`);
             return;
         }
-        document.getElementById("spellList").remove();
-        targets.remove();
         char.mp -= sort.mp;
         addMessageToLog(`<span class="purple">${char.nom} perd ${sort.mp} MP</span> et utilise ${sort.nom}.`);
         Character.charSheet();
         if ( sort.type === "attack" && sort.cible === 1 ) {
-            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-            addMessageToLog(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower / 2 ) * ( Math.random() * 0.3 + 0.85 )) * mobs[cibleIndex].resists[sort.element]; if ( dmg < 0 ) { dmg = 0 };
+            if ( mobs[cibleIndex].resists[sort.element] === 0 ) {
+                addMessageToLog(`<strong>Immunité</strong> ! ${mobs[cibleIndex].nom} perd ${dmg} HP.`);
+            } else if ( mobs[cibleIndex].resists[sort.element] === 0.5 ) {
+                addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            } else if ( mobs[cibleIndex].resists[sort.element] === 2 ) {
+                addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            } else {
+                addMessageToLog(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
+            }
             mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
             if (isFightOver()) return;
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower / 2 ) * ( Math.random() * 0.3 + 0.85 )) * mobs[i].resists[sort.element]; if ( dmg < 0 ) { dmg = 0 };
+                if ( mobs[i].resists[sort.element] === 0 ) {
+                    addMessageToLog(`<strong>Immunité</strong> ! ${mobs[i].nom} perd ${dmg} HP.`);
+                } else if ( mobs[i].resists[sort.element] === 0.5 ) {
+                    addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                } else if ( mobs[i].resists[sort.element] === 2 ) {
+                    addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                } else {
+                    addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                }
                 mobs[i].hp = mobs[i].hp - dmg;
             }
             if (isFightOver()) return;
@@ -208,12 +228,8 @@ function fight() {
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
-                if ( chars[i].hp > 0 ) {
-                    chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
-                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
-                } else {
-                    addMessageToLog(`${sort.nom} est sans effet sur les personnages inanimés.`)
-                }
+                chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
+                addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
             }
             Character.charSheet();
         }
@@ -245,6 +261,7 @@ function fight() {
     }
 
     function useItem(char, item) {
+
         addMessageToLog(`${char.nom} utilise ${item.nom}.`)
         if (item.effet === "heal") {
             char.hp += item.valeur;
@@ -281,26 +298,62 @@ function fight() {
     }
 
     function mobAttack(mob, cible) {
-        if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility), 50) ) {
+        if ( Math.random() < 0.3 && mob.sorts[1] !== undefined ) {
+            addMessageToLog(`${mob.nom} utilise ${mob.sorts[1].nom} !`)
+            mobSpellResolve(mob, mob.sorts[1], cible)
+        } else if ( Math.random() < 0.6 && mob.sorts[0] !== undefined ) {
+            addMessageToLog(`${mob.nom} utilise ${mob.sorts[0].nom} !`)
+            mobSpellResolve(mob, mob.sorts[0], cible)
+        } else if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility), 50) ) {
             addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
         } else {
-            let dmg = Math.floor((3 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality)) * (Math.random() * 0.3 + 0.85));
+            let dmg = Math.floor((3 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality) / 2 ) * (Math.random() * 0.3 + 0.85));
             if (dmg < 0) dmg = 0;
-            addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
             cible.hp -= dmg;
-            Character.charSheet();
-            if (cible.hp <= 0) {
-                addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
-                if ( chars[0].hp === 0 && chars[1].hp === 0 && chars[2].hp === 0 ) {
-                    addMessageToLog(`Votre équipe est vaincue !`)
-                    document.getElementById("genererMob").addEventListener("click", Mob.popMob);
-                    document.getElementById("genererMob").removeEventListener("click", Mob.disablePopMob);
-                    onFight = false; document.getElementById("exploreWindow").classList.remove("fight");
-                    createBtn.style.display = "inline-block";
-                    document.getElementById("fightButtons").remove();
+            addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+        }
+        Character.charSheet();
+        if (cible.hp <= 0) {
+            addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
+        }
+    }
+
+    function mobSpellResolve(mob, sort, cible) {
+        if ( sort.type === "attack" && sort.cible === 1 ) {
+            let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( cible.stats.willpower + cible.armure.valeur.willpower ) / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            cible.hp -= dmg;
+            addMessageToLog(`<span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+        } else if ( sort.type === "attack" && sort.cible === "all" ) {
+            cibleIndex = "all";
+            for (let i = 0; i < chars.length; i++) {
+                if ( chars[i].hp > 0 ) {
+                    let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( chars[i].stats.willpower + chars[i].armure.valeur.willpower ) / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+                    chars[i].hp = chars[i].hp - dmg;
+                    addMessageToLog(`<span class="red">${chars[i].nom} perd ${dmg} HP</span>.`);
                 }
             }
         }
+    }
+
+    function isGameOver() {
+        if ( chars[0].hp === 0 && chars[1].hp === 0 && chars[2].hp === 0 ) {
+            addMessageToLog(`Votre équipe est vaincue !`)
+            addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
+            setTimeout(() => {
+                onFight = false;
+                document.getElementById("exploreWindow").classList.remove("fight");
+                Character.charSheet();
+                if ( startBtn.innerHTML !== "Quitter le donjon..." ) startBtn.innerHTML = "Quitter le donjon..."
+                msgLog.appendChild(startBtn);
+            }, 4800);
+            if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
+            if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
+            if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
+            if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
+            if ( targets ) targets.remove();
+            return true;
+        }
+        return false;
     }
 
     function deadMob(cible) {
@@ -343,7 +396,11 @@ function fight() {
                 if ( startBtn.innerHTML !== "Aller dans la salle suivante !" ) startBtn.innerHTML = "Aller dans la salle suivante !"
                 msgLog.appendChild(startBtn);
             }, 4800);
-            document.getElementById("fightButtons").remove();
+            if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
+            if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
+            if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
+            if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
+            if ( targets ) targets.remove();
             fightMobDiv.remove();
             for ( let i = 0; i <= 2; i++) {
                 if ( chars[i].hp > 0 ) chars[i].gainXP(xpGained);
@@ -355,6 +412,22 @@ function fight() {
                 lootsGained.forEach(objet => {
                     Character.addItem(objet);
                 });
+            }
+            if ( (chars.reduce((sum, char) => sum + char.niveau, 0)/3) >= 36 ) {
+                addMessageToLog(`Vous êtes arrivés au terme du donjon !`)
+                addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
+                setTimeout(() => {
+                    onFight = false;
+                    document.getElementById("exploreWindow").classList.remove("fight");
+                    Character.charSheet();
+                    if ( startBtn.innerHTML !== "Quitter le donjon..." ) startBtn.innerHTML = "Quitter le donjon..."
+                    msgLog.appendChild(startBtn);
+                }, 4800);
+                if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
+                if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
+                if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
+                if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
+                if ( targets ) targets.remove();
             }
             return true;
         }
