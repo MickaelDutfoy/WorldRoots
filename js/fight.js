@@ -141,13 +141,12 @@ function fight() {
         targetSelect(char, "attack");
     };
 
-    function attackDmg(char) {
-        
+    function attackDmg(char) {     
         tempoMsg = 0;
-        if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agility, 50) ) {
+        if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agility - char.stats.agility, 50) ) {
             addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
         } else {
-            let dmg = Math.floor(( 3 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.floor(( 4 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             addMessageToLog(`${char.nom} attaque ${mobs[cibleIndex].nom} avec ${char.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
             mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
             if (isFightOver()) return;
@@ -189,12 +188,14 @@ function fight() {
         addMessageToLog(`<span class="purple">${char.nom} perd ${sort.mp} MP</span> et utilise ${sort.nom}.`);
         Character.charSheet();
         if ( sort.type === "attack" && sort.cible === 1 ) {
-            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower / 2 ) * ( Math.random() * 0.3 + 0.85 )) * mobs[cibleIndex].resists[sort.element]; if ( dmg < 0 ) { dmg = 0 };
-            if ( mobs[cibleIndex].resists[sort.element] === 0 ) {
+            let coeff = 1;
+            if ( mobs[cibleIndex].resists[sort.element] !== undefined ) coeff = mobs[cibleIndex].resists[sort.element];
+            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )) * coeff; if ( dmg < 0 ) { dmg = 0 };
+            if ( coeff === 0 ) {
                 addMessageToLog(`<strong>Immunité</strong> ! ${mobs[cibleIndex].nom} perd ${dmg} HP.`);
-            } else if ( mobs[cibleIndex].resists[sort.element] === 0.5 ) {
+            } else if ( coeff === 0.5 ) {
                 addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
-            } else if ( mobs[cibleIndex].resists[sort.element] === 2 ) {
+            } else if ( coeff === 2 ) {
                 addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
             } else {
                 addMessageToLog(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
@@ -204,12 +205,14 @@ function fight() {
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower / 2 ) * ( Math.random() * 0.3 + 0.85 )) * mobs[i].resists[sort.element]; if ( dmg < 0 ) { dmg = 0 };
-                if ( mobs[i].resists[sort.element] === 0 ) {
+                let coeff = 1;
+                if ( mobs[i].resists[sort.element] !== undefined ) coeff = mobs[i].resists[sort.element];
+                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )) * coeff; if ( dmg < 0 ) { dmg = 0 };
+                if ( coeff === 0 ) {
                     addMessageToLog(`<strong>Immunité</strong> ! ${mobs[i].nom} perd ${dmg} HP.`);
-                } else if ( mobs[i].resists[sort.element] === 0.5 ) {
+                } else if ( coeff === 0.5 ) {
                     addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                } else if ( mobs[i].resists[sort.element] === 2 ) {
+                } else if ( coeff === 2 ) {
                     addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
                 } else {
                     addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
@@ -228,8 +231,10 @@ function fight() {
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
-                chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
-                addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
+                if (chars[i].hp > 0) {
+                    chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
+                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
+                }
             }
             Character.charSheet();
         }
@@ -298,16 +303,16 @@ function fight() {
     }
 
     function mobAttack(mob, cible) {
-        if ( Math.random() < 0.3 && mob.sorts[1] !== undefined ) {
+        if ( Math.random() < 0.3 && mob.sorts[1]?.mp !== undefined && mob.mp >= mob.sorts[1].mp ) {
             addMessageToLog(`${mob.nom} utilise ${mob.sorts[1].nom} !`)
             mobSpellResolve(mob, mob.sorts[1], cible)
-        } else if ( Math.random() < 0.6 && mob.sorts[0] !== undefined ) {
+        } else if ( Math.random() < 0.6 && mob.sorts[0]?.mp !== undefined && mob.mp >= mob.sorts[0].mp ) {
             addMessageToLog(`${mob.nom} utilise ${mob.sorts[0].nom} !`)
             mobSpellResolve(mob, mob.sorts[0], cible)
-        } else if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility), 50) ) {
+        } else if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility - mob.stats.agility), 50) ) {
             addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
         } else {
-            let dmg = Math.floor((3 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality) / 2 ) * (Math.random() * 0.3 + 0.85));
+            let dmg = Math.floor((4 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality) ) * (Math.random() * 0.3 + 0.85));
             if (dmg < 0) dmg = 0;
             cible.hp -= dmg;
             addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
@@ -319,18 +324,30 @@ function fight() {
     }
 
     function mobSpellResolve(mob, sort, cible) {
+        mob.mp -= sort.mp;
         if ( sort.type === "attack" && sort.cible === 1 ) {
-            let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( cible.stats.willpower + cible.armure.valeur.willpower ) / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( cible.stats.willpower + cible.armure.valeur.willpower ) ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             cible.hp -= dmg;
             addMessageToLog(`<span class="red">${cible.nom} perd ${dmg} HP</span>.`);
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
                 if ( chars[i].hp > 0 ) {
-                    let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( chars[i].stats.willpower + chars[i].armure.valeur.willpower ) / 2 ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+                    let dmg = Math.floor((2 * mob.stats.intelligence + sort.valeur - ( chars[i].stats.willpower + chars[i].armure.valeur.willpower ) ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
                     chars[i].hp = chars[i].hp - dmg;
                     addMessageToLog(`<span class="red">${chars[i].nom} perd ${dmg} HP</span>.`);
                 }
+            }
+        } else if ( sort.type === "heal" && sort.cible === 1 ) {
+            let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
+            cible = mobsToHeal[0];
+            cible.hp += sort.valeur; if ( cible.hp > cible.maxhp ) { cible.hp = cible.maxhp };
+            addMessageToLog(`<span class="green">${cible.nom} gagne ${sort.valeur} HP</span>.`);
+        } else if ( sort.type === "heal" && sort.cible === "all" ) {
+            cibleIndex = "all";
+            for (let i = 0; i < mobs.length; i++) {
+                mobs[i].hp += sort.valeur; if ( mobs[i].hp > mobs[i].maxhp ) { mobs[i].hp = mobs[i].maxhp };
+                addMessageToLog(`<span class="green">${mobs[i].nom} gagne ${sort.valeur} HP</span>.`);
             }
         }
     }
@@ -408,12 +425,20 @@ function fight() {
             gold += goldGained;
             if ( goldGained > 0 ) addMessageToLog(`Vous obtenez ${goldGained} pièces d'or.`);
             if ( lootsGained.length > 0 ) { 
-                addMessageToLog(`Vous trouvez : ${lootsGained.map(objet => objet.nom).join(", ")}.`);
+                const itemCounts = lootsGained.reduce((acc, objet) => {
+                    acc[objet.nom] = (acc[objet.nom] || 0) + 1;
+                    return acc;
+                }, {});
+                const lootMessage = Object.entries(itemCounts)
+                    .map(([nom, count]) => count > 1 ? `${nom} x${count}` : nom)
+                    .join(", ");
+            
+                addMessageToLog(`Vous trouvez : ${lootMessage}.`);
                 lootsGained.forEach(objet => {
                     Character.addItem(objet);
                 });
             }
-            if ( (chars.reduce((sum, char) => sum + char.niveau, 0)/3) >= 36 ) {
+            if ( (chars.reduce((sum, char) => sum + char.niveau, 0)/3) >= 37 ) {
                 addMessageToLog(`Vous êtes arrivés au terme du donjon !`)
                 addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
                 setTimeout(() => {

@@ -195,7 +195,7 @@ class Mob {
             niveau: 11,
             stats: { strength: 7, intelligence: 6, agility: 5, vitality: 7, willpower: 5 },
             resists: { fire: 1, ice: 1, lightning: 2, earth: 0, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("earthTarget1"), Spell.getSpell("earthAoe1")],
+            sorts: [Spell.getSpell("earthTarget2"), Spell.getSpell("earthAoe2")],
             lootTable: []
         },
         {
@@ -204,7 +204,7 @@ class Mob {
             niveau: 12,
             stats: { strength: 4, intelligence: 7, agility: 7, vitality: 7, willpower: 7 },
             resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("iceTarget1")],
+            sorts: [Spell.getSpell("iceTarget2")],
             lootTable: [{ item: Item.getItem("battleRobe3"), chance: 0.1 }]
         },
         {
@@ -213,7 +213,7 @@ class Mob {
             niveau: 12,
             stats: { strength: 5, intelligence: 8, agility: 5, vitality: 6, willpower: 8 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkAoe1")],
+            sorts: [Spell.getSpell("darkAoe2")],
             lootTable: [{ item: Item.getItem("baton3"), chance: 0.1 }]
         },
         {
@@ -249,7 +249,7 @@ class Mob {
             niveau: 14,
             stats: { strength: 8, intelligence: 5, agility: 5, vitality: 9, willpower: 9 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkTarget1"), Spell.getSpell("healTarget1")],
+            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("healTarget2")],
             lootTable: [{ item: Item.getItem("sword3"), chance: 0.1 }]
         },
         {
@@ -267,7 +267,7 @@ class Mob {
             niveau: 15,
             stats: { strength: 5, intelligence: 9, agility: 9, vitality: 6, willpower: 9 },
             resists: { fire: 1, ice: 0, lightning: 2, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("lightningTarget1"), Spell.getSpell("LightningAoe1")],
+            sorts: [Spell.getSpell("lightningTarget2"), Spell.getSpell("LightningAoe2")],
             lootTable: [{ item: Item.getItem("magicArmor3"), chance: 0.1 }]
         },
         {
@@ -294,7 +294,7 @@ class Mob {
             niveau: 17,
             stats: { strength: 11, intelligence: 7, agility: 10, vitality: 7, willpower: 7 },
             resists: { fire: 0.5, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 1 },
-            sorts: [Spell.getSpell("fireTarget1")],
+            sorts: [Spell.getSpell("fireTarget2")],
             lootTable: []
         },
         {
@@ -312,7 +312,7 @@ class Mob {
             niveau: 18,
             stats: { strength: 9, intelligence: 9, agility: 8, vitality: 9, willpower: 9 },
             resists: { fire: 0.5, ice: 2, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe1")],
+            sorts: [Spell.getSpell("fireAoe2")],
             lootTable: []
         },
         {
@@ -321,7 +321,7 @@ class Mob {
             niveau: 18,
             stats: { strength: 7, intelligence: 12, agility: 9, vitality: 8, willpower: 8 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("holyAoe1"), Spell.getSpell("healTarget1")],
+            sorts: [Spell.getSpell("holyAoe2"), Spell.getSpell("healTarget2")],
             lootTable: [{ item: Item.getItem("baton3"), chance: 0.1 }]
         },
         {
@@ -339,7 +339,7 @@ class Mob {
             niveau: 19,
             stats: { strength: 8, intelligence: 12, agility: 7, vitality: 7, willpower: 12 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0, holy: 2 },
-            sorts: [Spell.getSpell("darkTarget1"), Spell.getSpell("darkAoe1")],
+            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("darkAoe2")],
             lootTable: []
         },
         {
@@ -375,7 +375,7 @@ class Mob {
             niveau: 21,
             stats: { strength: 7, intelligence: 13, agility: 10, vitality: 7, willpower: 13 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("healTarget2")],
+            sorts: [Spell.getSpell("darkTarget3"), Spell.getSpell("healTarget3")],
             lootTable: [{ item: Item.getItem("robe4"), chance: 0.1 }]
         },
         {
@@ -384,7 +384,7 @@ class Mob {
             niveau: 22,
             stats: { strength: 11, intelligence: 10, agility: 10, vitality: 11, willpower: 10 },
             resists: { fire: 2, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("iceAoe2")],
+            sorts: [Spell.getSpell("iceAoe3")],
             lootTable: []
         },
         {
@@ -402,7 +402,7 @@ class Mob {
             niveau: 23,
             stats: { strength: 10, intelligence: 14, agility: 8, vitality: 8, willpower: 14 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe2"), Spell.getSpell("healAoe2")],
+            sorts: [Spell.getSpell("fireAoe3"), Spell.getSpell("healAoe3")],
             lootTable: [{ item: Item.getItem("baton4"), chance: 0.1 }]
         },
         {
@@ -411,7 +411,7 @@ class Mob {
             niveau: 23,
             stats: { strength: 9, intelligence: 13, agility: 10, vitality: 10, willpower: 12 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 0 },
-            sorts: [Spell.getSpell("holyTarget2"), Spell.getSpell("holyAoe2")],
+            sorts: [Spell.getSpell("holyTarget3"), Spell.getSpell("holyAoe3")],
             lootTable: []
         },
         {
@@ -447,7 +447,7 @@ class Mob {
             niveau: 25,
             stats: { strength: 10, intelligence: 14, agility: 10, vitality: 12, willpower: 12 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireTarget2"), Spell.getSpell("healTarget2")],
+            sorts: [Spell.getSpell("fireTarget3"), Spell.getSpell("healTarget3")],
             lootTable: [{ item: Item.getItem("battleRobe4"), chance: 0.1 }]
         },
         {
@@ -456,7 +456,7 @@ class Mob {
             niveau: 26,
             stats: { strength: 12, intelligence: 12, agility: 12, vitality: 12, willpower: 12 },
             resists: { fire: 1, ice: 1, lightning: 2, earth: 0.5, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("earthAoe2")],
+            sorts: [Spell.getSpell("earthAoe3")],
             lootTable: []
         },
         {
@@ -483,7 +483,7 @@ class Mob {
             niveau: 27,
             stats: { strength: 12, intelligence: 15, agility: 15, vitality: 10, willpower: 10 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("windTarget2"), Spell.getSpell("windAoe2")],
+            sorts: [Spell.getSpell("windTarget3"), Spell.getSpell("windAoe3")],
             lootTable: []
         },
         {
@@ -492,7 +492,7 @@ class Mob {
             niveau: 28,
             stats: { strength: 13, intelligence: 13, agility: 12, vitality: 13, willpower: 13 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkAoe2")],
+            sorts: [Spell.getSpell("darkAoe3")],
             lootTable: [{ item: Item.getItem("magicArmor4"), chance: 0.1 }]
         },
         {
@@ -510,7 +510,7 @@ class Mob {
             niveau: 29,
             stats: { strength: 8, intelligence: 18, agility: 10, vitality: 12, willpower: 18 },
             resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("iceAoe2")],
+            sorts: [Spell.getSpell("iceAoe3")],
             lootTable: [{ item: Item.getItem("baton4"), chance: 0.1 }]
         },
         {
@@ -528,7 +528,7 @@ class Mob {
             niveau: 30,
             stats: { strength: 15, intelligence: 15, agility: 15, vitality: 12, willpower: 11 },
             resists: { fire: 1, ice: 1, lightning: 0.5, earth: 2, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("lightningAoe2")],
+            sorts: [Spell.getSpell("lightningAoe3")],
             lootTable: []
         },
         {
@@ -555,7 +555,7 @@ class Mob {
             niveau: 31,
             stats: { strength: 12, intelligence: 18, agility: 12, vitality: 10, willpower: 18 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("healTarget2"), Spell.getSpell("healAoe2")],
+            sorts: [Spell.getSpell("healTarget4"), Spell.getSpell("healAoe4")],
             lootTable: []
         },
         {
@@ -564,7 +564,7 @@ class Mob {
             niveau: 32,
             stats: { strength: 12, intelligence: 16, agility: 14, vitality: 16, willpower: 14 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 0.5 },
-            sorts: [Spell.getSpell("holyAoe2")],
+            sorts: [Spell.getSpell("holyAoe4")],
             lootTable: [{ item: Item.getItem("baton5"), chance: 0.1 }]
         },
         {
@@ -603,7 +603,9 @@ class Mob {
         this.resists = resists;
         this.sorts = sorts;
         this.hp = 10 * stats.vitality;
-        this.mp = 5 * stats.intelligence;
+        this.maxhp = this.hp;
+        this.mp = 10 * stats.willpower;
+        this.maxmp = this.mp;
         this.lootTable = [...lootTable];
         let potion;
         if (niveau >= 0 && niveau <= 9) potion = Item.getItem("potion2");
@@ -654,22 +656,14 @@ class Mob {
         }
         fightLog.innerHTML = ""; mobs = []; msgLog.innerHTML = "";
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
-        let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length;
-        const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam - 2 && mobData.niveau <= lvlTeam + 2);
-        while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) <= lvlTeam ) {
-            let mobData = eligibleMobs[Math.floor(Math.random() * eligibleMobs.length)];  // Choisir un mob avec ce niveau
-            mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable));
-            if (mobs.length > 4) {  // Par exemple, on limite à 10 mobs pour éviter une boucle infinie
-                break;
-            }
-        }
-        if (mobs.reduce((sum, mob) => sum + mob.niveau, 0) > 2 * chars.length * lvlTeam ) {
-            // Supprimer des mobs trop puissants si la somme des niveaux des mobs est trop élevée
-            mobs.sort((a, b) => a.niveau - b.niveau);
-            while (mobs.reduce((sum, mob) => sum + mob.niveau, 0) > 2 * chars.length * lvlTeam) {
-                mobs.pop();  // Enlever le mob avec le plus haut niveau
-            }
-        }   
+        let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
+        const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3); // On cherche des mobs dans un lvlRange +/- 3 autour du niveau moyen des persos.
+        let mobCount = 1 + Math.floor(Math.random() * 4); // Nombre de mobs à affronter
+        while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) < lvlTeam ) { // Tant que le niveau de la team de mobs est inférieur à celui de la team de persos...
+            let mobData = eligibleMobs[Math.floor(Math.random() * eligibleMobs.length)];
+            mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable)); // ...on ajoute un mob
+            if (mobs.length >= mobCount) break; // On s'arrête quand on a assez de mobs dans la liste.
+        }  
         let ennemyList = "";
         let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets";
         for ( let i = 0 ; i < mobs.length ; i++ ) {

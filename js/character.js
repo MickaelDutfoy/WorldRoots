@@ -67,25 +67,16 @@ class Character {
             tempoMsg = 0; addMessageToLog("Impossible de choisir deux fois le même personnage !");
             return;
         }
-        document.getElementById("teamSelector").style.display = "none";
-        document.getElementById("exploreWindow").style.opacity = "1";
-        addSlowMsgToLog(`Bienvenue dans le Mode Arcade de WorldRoots !`)
-        addSlowMsgToLog(`L'objectif est simple : avancer le plus loin possible.`)
-        addSlowMsgToLog(`La partie se termine si vos trois personnages tombent à 0 HP...`)
-        addSlowMsgToLog(`... ou s'ils atteignent tous le niveau 99 !`)
-        addSlowMsgToLog(`Saurez-vous aller jusqu'au bout du donjon ?`)
-        setTimeout(() => {
-            msgLog.appendChild(startBtn); document.getElementById("startBtn").addEventListener("click", Mob.popMob);
-        }, tempoMsg);
+        initGame();
         charSheet.innerHTML = `
         <tr>
-            <td id="inventory" rowspan="16"></td>
+            <td id="inventory" class="collapsabletd" rowspan="16"></td>
         </tr>
         <tr>
             <td id="nameClass0"></td>
             <td id="lvlXP0"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td>
                 <table class="charStats">
                     <tr>
@@ -121,10 +112,10 @@ class Character {
             </td>
             <td id="spells0"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="weapon0"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="armor0"></td>
         </tr>  
         <tr>
@@ -136,7 +127,7 @@ class Character {
             <td id="nameClass1"></td>
             <td id="lvlXP1"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td>
                 <table class="charStats">
                     <tr>
@@ -172,10 +163,10 @@ class Character {
             </td>
             <td id="spells1"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="weapon1"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="armor1"></td>
         </tr>  
         <tr>
@@ -186,7 +177,7 @@ class Character {
             <td id="nameClass2"></td>
             <td id="lvlXP2"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td>
                 <table class="charStats">
                     <tr>
@@ -222,10 +213,10 @@ class Character {
             </td>
             <td id="spells2"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="weapon2"></td>
         </tr>
-        <tr>
+        <tr class="collapsabletr">
             <td colspan="2" style="text-align:center;" id="armor2"></td>
         </tr>  
         <tr>
@@ -390,19 +381,20 @@ class Character {
         for ( let i = 0; i <=2; i++ ) {
             document.getElementById("nameClass" + i).innerHTML = `${chars[i].nom}<br>${chars[i].classe}`;
             document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 100}`;
-            document.getElementById("agi" + i).innerHTML = `<abbr title="Régit la capacité d'esquive et l'initiative.">Agilité</abbr> : ${chars[i].stats.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)})</span>`;
-            document.getElementById("for" + i).innerHTML = `<abbr title="Régit les dégâts physiques.">Force</abbr> : ${chars[i].stats.strength} <span class="grey">(${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)})</span>`;
-            document.getElementById("int" + i).innerHTML = `<abbr title="Régit les dégâts magiques.">Intelligence</abbr> : ${chars[i].stats.intelligence} <span class="grey">(${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)})</span>`;
-            document.getElementById("vit" + i).innerHTML = `<abbr title="Régit les HP max et la résistance physique.">Vitalité</abbr> : ${chars[i].stats.vitality} <span class="grey">(${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)})</span>`;
-            document.getElementById("vol" + i).innerHTML = `<abbr title="Régit les MP max et la résistance magique.">Volonté</abbr> : ${chars[i].stats.willpower} <span class="grey">(${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)})</span>`;
+            document.getElementById("agi" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit la capacité d'esquive, la précision et l'initiative.">Agilité</span> : ${chars[i].stats.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)} 🛡)</span>`;
+            document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques.">Force</span> : ${chars[i].stats.strength} <span class="grey">(${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)} ⚔)</span>`;
+            document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques.">Intelligence</span> : ${chars[i].stats.intelligence} <span class="grey">(${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)} ⚔)</span>`;
+            document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique.">Vitalité</span> : ${chars[i].stats.vitality} <span class="grey">(${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)} 🛡)</span>`;
+            document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique.">Volonté</span> : ${chars[i].stats.willpower} <span class="grey">(${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)} 🛡)</span>`;
             document.getElementById("agiTemp" + i).innerHTML = `-> ${chars[i].statsTemp.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)})</span>`;
             document.getElementById("forTemp" + i).innerHTML = `-> ${chars[i].statsTemp.strength} <span class="grey">(${chars[i].armure.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)})</span>`;
             document.getElementById("intTemp" + i).innerHTML = `-> ${chars[i].statsTemp.intelligence} <span class="grey">(${chars[i].armure.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)})</span>`;
             document.getElementById("vitTemp" + i).innerHTML = `-> ${chars[i].statsTemp.vitality} <span class="grey">(${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)})</span>`;
             document.getElementById("volTemp" + i).innerHTML = `-> ${chars[i].statsTemp.willpower} <span class="grey">(${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)})</span>`;
             document.getElementById("lvlUpPoints" + i).innerHTML = `Points disponibles : ${chars[i].pointsLvlUp}`;
-            let nomsSorts = chars[i].sorts.map(sort => sort.nom);
-            document.getElementById("spells" + i).innerHTML = `Sorts :<br>${nomsSorts.join("<br>")}`;
+            let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
+            let descSorts = chars[i].sorts.map(sort => `<span class="tooltip" data-tooltip="${sort.type === "attack" ? "Attaque" : "Soin"} ${sort.cible === 1 ? "ciblé(e)" : "de zone"}, Elément : ${elements[sort.element] || "Aucun"}, ${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}, Coût : ${sort.mp} MP">${sort.nom}</span>`);
+            document.getElementById("spells" + i).innerHTML = `Sorts :<br>${descSorts.join("<br>")}`;
             let displayHP = document.getElementById("HP" + i);
             if ( chars[i].hp < 0 ) chars[i].hp = 0;
             displayHP.textContent = `HP : ${chars[i].hp} / ${chars[i].maxhp}`;

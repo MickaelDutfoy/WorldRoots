@@ -160,6 +160,7 @@ body > div {
 
 #teamWindow {
   grid-area: teamWindow;
+  position: relative;
 }
 
 #teamWindow p {
@@ -175,14 +176,32 @@ body > div {
   flex-direction: column;
 }
 
+#collapseBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#classDescription {
+  margin-left: 30px;
+}
+
+#classDescription li {
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+
+#classDescription p {
+  margin-left: -20px;
+  margin-bottom: 10px;
+}
+
 #teamSelector label {
   font-weight: bold;
 }
 
 #exploreWindow {
-  opacity: 0;
   grid-area: exploreWindow;
-  transition: opacity 0.4s ease;
 }
 
 .fight {
@@ -240,13 +259,16 @@ td, th {
   font-weight: bold;
 }
 
+.tooltip {
+  cursor: help;
+}
+
 #startBtn {
   margin: 0;
 }
 
 #msgLog {
   min-height: 40px;
-  border-bottom: 3px solid #121212;
   padding-bottom: 5px;
   margin-bottom: 5px;
 }
@@ -270,7 +292,7 @@ td, th {
 }
 
 #fightLog button {
-  margin: 2px 0;
+  margin-bottom: 5px;
 }
 
 #FightMobList {
@@ -297,10 +319,9 @@ td, th {
   transform: translateY(0);
 }
 
-
 @media (min-width: 1024px) {
   .arcadebody {
-    grid-template-columns: 5fr 3fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas: 
       "titleBanner titleBanner"
       "teamWindow exploreWindow";
