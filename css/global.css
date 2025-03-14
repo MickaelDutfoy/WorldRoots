@@ -140,7 +140,7 @@ body > div {
   grid-area: changeLog;
   text-align: justify;
   overflow-y: auto;
-  max-height: 50vh;
+  max-height: 40vh;
 }
 
 #changeLog ul {
