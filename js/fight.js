@@ -253,8 +253,10 @@ function fight() {
             if (isFightOver()) return;
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             if ( chars[cibleIndex].hp > 0 ) {
-                chars[cibleIndex].hp += sort.valeur; if ( chars[cibleIndex].hp > chars[cibleIndex].maxhp ) { chars[cibleIndex].hp = chars[cibleIndex].maxhp };
-                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${sort.valeur} HP</span>.`);
+                let heal = Math.floor(( char.stats.intelligence + char.arme.valeur.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
+                chars[cibleIndex].hp += heal;
+                if ( chars[cibleIndex].hp > chars[cibleIndex].maxhp ) { chars[cibleIndex].hp = chars[cibleIndex].maxhp };
+                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${heal} HP</span>.`);
             } else {
                 addMessageToLog(`${sort.nom} est sans effet sur les personnages inanimés.`)
             }
@@ -263,8 +265,10 @@ function fight() {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
                 if (chars[i].hp > 0) {
-                    chars[i].hp += sort.valeur; if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
-                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${sort.valeur} HP</span>.`);
+                    let heal = Math.floor(( char.stats.intelligence + char.arme.valeur.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ))
+                    chars[i].hp += heal;
+                    if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
+                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${heal} HP</span>.`);
                 }
             }
             Character.charSheet();
@@ -393,13 +397,17 @@ function fight() {
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
-            cible.hp += sort.valeur; if ( cible.hp > cible.maxhp ) { cible.hp = cible.maxhp };
-            addMessageToLog(`<span class="green">${cible.nom} gagne ${sort.valeur} HP</span>.`);
+            let heal = Math.floor(( mob.stats.intelligence+ sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
+            cible.hp += heal;
+            if ( cible.hp > cible.maxhp ) { cible.hp = cible.maxhp };
+            addMessageToLog(`<span class="green">${cible.nom} gagne ${heal} HP</span>.`);
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                mobs[i].hp += sort.valeur; if ( mobs[i].hp > mobs[i].maxhp ) { mobs[i].hp = mobs[i].maxhp };
-                addMessageToLog(`<span class="green">${mobs[i].nom} gagne ${sort.valeur} HP</span>.`);
+                let heal = Math.floor(( mob.stats.intelligence+ sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
+                mobs[i].hp += heal;
+                if ( mobs[i].hp > mobs[i].maxhp ) { mobs[i].hp = mobs[i].maxhp };
+                addMessageToLog(`<span class="green">${mobs[i].nom} gagne ${heal} HP</span>.`);
             }
         }
     }
