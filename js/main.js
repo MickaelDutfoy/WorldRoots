@@ -139,6 +139,7 @@ function initGame() {
         <td id="HP2"></td>
         <td id="MP2"></td>
     </tr>`;
+    exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
     const collapseBtn = document.createElement("button");
     document.getElementById("teamWindow").appendChild(collapseBtn);
     collapseBtn.id = "collapseBtn";
@@ -297,8 +298,8 @@ if (window.location.pathname.includes("arcade.html")) {
 let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false;
 const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
-const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = ""; exploreWindow.appendChild(msgLog);
-const fightLog = document.createElement("div"); fightLog.id = "fightLog"; fightLog.innerHTML = ""; exploreWindow.appendChild(fightLog);
+const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = "";
+const fightLog = document.createElement("div"); fightLog.id = "fightLog"; fightLog.innerHTML = "";
 const startBtn = document.createElement("button"); startBtn.id = "startBtn"; startBtn.innerHTML = "Entrer dans la première salle !";
 const regenBtn = document.createElement("button"); regenBtn.id = "regenBtn";
 const rezBtn = document.createElement("button"); rezBtn.id = "shopBtn"; 
