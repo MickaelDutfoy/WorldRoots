@@ -47,15 +47,15 @@ p {
   color: #777;
 }
 
-abbr {
-  text-decoration: none;
-  cursor: help;
+h1, h2, h3 {
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 button, input, select {
   background: linear-gradient(to bottom right, #eee, #ccc);
-  box-shadow: 1px 1px 1px #999;
   border: 1px solid #777;
+  box-shadow: 1px 1px 1px #999;
   border-radius: 5px;
   padding: 5px;
 }
@@ -78,7 +78,6 @@ button, select {
 
 .arcadebody {
   display: grid;
-  grid-template-columns: auto;
   grid-template-areas: 
     "titleBanner"
     "teamWindow"
@@ -208,8 +207,65 @@ body > div {
   background: linear-gradient(to bottom right, #fac9b5, #c79682);
 }
 
-h1, h2 {
-  margin-bottom: 10px;
+#startBtn {
+  margin: 0;
+}
+
+#msgLog {
+  min-height: 40px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+#magicShop {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 3px solid rgb(18, 18, 18);
+}
+
+#msgLog p {
+  padding: 0;
+}
+
+#msgLog li {
+  margin-left: 40px;
+}
+
+#msgLog button {
+  display: block;
+}
+
+#fightLog {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
+  height: 50vh;
+  overflow-y: hidden;
+}
+
+#fightLog p {
+  padding: 0;
+}
+
+#fightLog button {
+  margin-bottom: 5px;
+}
+
+#fightLog .selected {
+  background: linear-gradient(to bottom right, #fdd, #dbb);
+  border: 3px solid #966;
+}
+
+#FightMobList {
+  font-weight: bold;
+}
+
+#spawnMsg {
+  padding: 0;
+  display: inline-block;
+}
+
+.combatMsg {
+  display: inline-block;
+  padding-top: 10px;
 }
 
 table {
@@ -261,62 +317,6 @@ td, th {
 
 .tooltip {
   cursor: help;
-}
-
-#startBtn {
-  margin: 0;
-}
-
-#msgLog {
-  min-height: 40px;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-}
-
-#msgLog p {
-  padding: 0;
-}
-
-#msgLog li {
-  margin-left: 40px;
-}
-
-#fightLog {
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 80%);
-  height: 70vh;
-  overflow-y: hidden;
-}
-
-#fightLog p {
-  padding: 0;
-}
-
-#fightLog button {
-  margin-bottom: 5px;
-}
-
-#FightMobList {
-  font-weight: bold;
-}
-
-#spawnMsg {
-  padding: 0;
-  display: inline-block;
-}
-
-.combatMsg {
-  display: inline-block;
-  padding-top: 10px;
-}
-
-.generatedMessage p {
-  opacity: 0;
-  transform: translateY(-100px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-.generatedMessage p.show {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @media (min-width: 1024px) {

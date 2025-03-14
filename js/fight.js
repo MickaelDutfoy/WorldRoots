@@ -135,9 +135,13 @@ function fight() {
     }
 
     function attack(char) {
+        if ( document.getElementById("item") ) document.getElementById("item").classList.remove("selected")
+        if ( document.getElementById("spell") ) document.getElementById("spell").classList.remove("selected")
+        document.getElementById("attack").classList.add("selected")
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
+
         targetSelect(char, "attack");
     };
 
@@ -155,6 +159,9 @@ function fight() {
     }
 
     function spell(char) {
+        document.getElementById("attack").classList.remove("selected")
+        if ( document.getElementById("item") ) document.getElementById("item").classList.remove("selected")
+        document.getElementById("spell").classList.add("selected")
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
@@ -168,13 +175,37 @@ function fight() {
             spellBtn.id = `${sort.id}`;
             spellList.appendChild(spellBtn);
             if ( sort.type === "attack" && sort.cible === 1 ) {
-                spellBtn.onclick = () => targetSelect(char, "spell", sort);
+                spellBtn.onclick = () => {
+                    char.sorts.forEach(sort => {
+                        document.getElementById(`${sort.id}`).classList.remove("selected")
+                    })
+                    spellBtn.classList.add("selected");
+                    targetSelect(char, "spell", sort)
+                };
             } else if ( sort.type === "attack" && sort.cible === "all" ) {
-                spellBtn.onclick = () => spellResolve(char, sort);
+                spellBtn.onclick = () => {
+                    char.sorts.forEach(sort => {
+                        document.getElementById(`${sort.id}`).classList.remove("selected")
+                    })
+                    spellBtn.classList.add("selected");
+                    spellResolve(char, sort)
+                };
             } else if ( sort.type === "heal" && sort.cible === 1 ) {
-                spellBtn.onclick = () => allySelect(char, "spell", sort);
+                spellBtn.onclick = () => {
+                    char.sorts.forEach(sort => {
+                        document.getElementById(`${sort.id}`).classList.remove("selected")
+                    })
+                    spellBtn.classList.add("selected");
+                    allySelect(char, "spell", sort)
+                };
             } else if ( sort.type === "heal" && sort.cible === "all" ) {
-                spellBtn.onclick = () => spellResolve(char, sort);
+                spellBtn.onclick = () => {
+                    char.sorts.forEach(sort => {
+                        document.getElementById(`${sort.id}`).classList.remove("selected")
+                    })
+                    spellBtn.classList.add("selected");
+                    spellResolve(char, sort)
+                };
             }
         });
     };
@@ -190,7 +221,7 @@ function fight() {
         if ( sort.type === "attack" && sort.cible === 1 ) {
             let coeff = 1;
             if ( mobs[cibleIndex].resists[sort.element] !== undefined ) coeff = mobs[cibleIndex].resists[sort.element];
-            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )) * coeff; if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[cibleIndex].stats.willpower ) * ( Math.random() * 0.3 + 0.85 ) * coeff); if ( dmg < 0 ) { dmg = 0 };
             if ( coeff === 0 ) {
                 addMessageToLog(`<strong>Immunité</strong> ! ${mobs[cibleIndex].nom} perd ${dmg} HP.`);
             } else if ( coeff === 0.5 ) {
@@ -207,7 +238,7 @@ function fight() {
             for (let i = 0; i < mobs.length; i++) {
                 let coeff = 1;
                 if ( mobs[i].resists[sort.element] !== undefined ) coeff = mobs[i].resists[sort.element];
-                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )) * coeff; if ( dmg < 0 ) { dmg = 0 };
+                let dmg = Math.floor(( 2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + sort.valeur - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 ) * coeff); if ( dmg < 0 ) { dmg = 0 };
                 if ( coeff === 0 ) {
                     addMessageToLog(`<strong>Immunité</strong> ! ${mobs[i].nom} perd ${dmg} HP.`);
                 } else if ( coeff === 0.5 ) {
@@ -242,6 +273,9 @@ function fight() {
     }
 
     function items(char) {
+        document.getElementById("attack").classList.remove("selected")
+        if ( document.getElementById("spell") ) document.getElementById("spell").classList.remove("selected")
+        document.getElementById("item").classList.add("selected")
         if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
@@ -256,11 +290,29 @@ function fight() {
             itemBtn.id = i.objet.id;
             itemList.appendChild(itemBtn);
             if ( i.objet.effet === "dégâts" ) {
-                itemBtn.onclick = () => targetSelect(char, "item", i.objet);
+                itemBtn.onclick = () => {
+                    objetsUtilisables.forEach(i => {
+                        document.getElementById(i.objet.id).classList.remove("selected")
+                    })
+                    itemBtn.classList.add("selected");
+                    targetSelect(char, "item", i.objet);
+                };
             } else if ( i.objet.effet === "heal" || i.objet.effet === "regen" ) {
-                itemBtn.onclick = () => useItem(char, i.objet);
+                itemBtn.onclick = () => {
+                    objetsUtilisables.forEach(i => {
+                        document.getElementById(i.objet.id).classList.remove("selected")
+                    })
+                    itemBtn.classList.add("selected");
+                    useItem(char, i.objet)
+                };
             } else if ( i.objet.effet === "resurrect" ) {
-                itemBtn.onclick = () => allySelect(char, "item", i.objet);
+                itemBtn.onclick = () => {
+                    objetsUtilisables.forEach(i => {
+                        document.getElementById(i.objet.id).classList.remove("selected")
+                    })
+                    itemBtn.classList.add("selected");
+                    allySelect(char, "item", i.objet)
+                };
             }
         });
     }
@@ -353,7 +405,7 @@ function fight() {
     }
 
     function isGameOver() {
-        if ( chars[0].hp === 0 && chars[1].hp === 0 && chars[2].hp === 0 ) {
+        if ( chars.every(char => char.hp <= 0) ) {
             addMessageToLog(`Votre équipe est vaincue !`)
             addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
             setTimeout(() => {
@@ -368,6 +420,7 @@ function fight() {
             if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
             if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
             if ( targets ) targets.remove();
+            save();
             return true;
         }
         return false;
@@ -375,7 +428,7 @@ function fight() {
 
     function deadMob(cible) {
         addMessageToLog(`${mobs[cible].nom} est <strong>vaincu(e)</strong> !`);
-        xpGained += 5 + mobs[cible].niveau * 5;
+        xpGained += mobs[cible].niveau * 10;
         if ( Math.random() < 0.8 ) {
             goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 6);
         }
@@ -411,7 +464,12 @@ function fight() {
                 document.getElementById("exploreWindow").classList.remove("fight");
                 Character.charSheet();
                 if ( startBtn.innerHTML !== "Aller dans la salle suivante !" ) startBtn.innerHTML = "Aller dans la salle suivante !"
+                regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 15} fragments de magie)`;
+                rezBtn.innerHTML = `Réanimer les personnages K.O. (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 30} fragments de magie)`;
                 msgLog.appendChild(startBtn);
+                msgLog.appendChild(regenBtn);
+                msgLog.appendChild(rezBtn);
+                msgLog.appendChild(shopBtn);
             }, 4800);
             if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
             if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
@@ -419,11 +477,9 @@ function fight() {
             if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
             if ( targets ) targets.remove();
             fightMobDiv.remove();
-            for ( let i = 0; i <= 2; i++) {
-                if ( chars[i].hp > 0 ) chars[i].gainXP(xpGained);
-            }
+            chars.forEach(char => char.gainXP(xpGained))
             gold += goldGained;
-            if ( goldGained > 0 ) addMessageToLog(`Vous obtenez ${goldGained} pièces d'or.`);
+            if ( goldGained > 0 ) addMessageToLog(`Vous obtenez ${goldGained} fragments de magie.`);
             if ( lootsGained.length > 0 ) { 
                 const itemCounts = lootsGained.reduce((acc, objet) => {
                     acc[objet.nom] = (acc[objet.nom] || 0) + 1;
@@ -432,7 +488,6 @@ function fight() {
                 const lootMessage = Object.entries(itemCounts)
                     .map(([nom, count]) => count > 1 ? `${nom} x${count}` : nom)
                     .join(", ");
-            
                 addMessageToLog(`Vous trouvez : ${lootMessage}.`);
                 lootsGained.forEach(objet => {
                     Character.addItem(objet);
@@ -454,6 +509,7 @@ function fight() {
                 if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
                 if ( targets ) targets.remove();
             }
+            save();
             return true;
         }
         return false;

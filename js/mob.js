@@ -650,6 +650,7 @@ class Mob {
     }
 
     static popMob() {
+        if ( document.getElementById("magicShop") ) document.getElementById("magicShop").remove();
         if ( chars[0].hp <= 0 && chars[1].hp <= 0 && chars[2].hp <= 0 ) {
             window.location.href = "index.html";
             return;

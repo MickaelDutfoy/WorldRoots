@@ -12,22 +12,31 @@
 </head>
 <body class="indexbody">
     <div id="titleBanner">
-        <h1><a href="index.html">WorldRoots v0.14</a></h1>
+        <h1><a href="index.html">WorldRoots v0.2</a></h1>
         <p>RPG old-school minimaliste en JavaScript</p>
     </div>
     <div id="disclaimer">
         <p>WorldRoots est un RPG tour par tour à l'ancienne, dans l'héritage des tous premiers Final Fantasy.</p>
         <p>À l'origine, il s'agit d'un projet pour mettre en application JavaScript dans le cadre de ma formation-reconversion en tant que développeur. Toutefois, j'aime à penser qu'il puisse un jour faire le bonheur de quelque aventurier vidéoludique en quête de nostalgie rôlistique.</p>
-        <p>En l'état, les fonctionnalités sont bien sûr très limitées ! Outre le côté old-school un peu broken du jeu, il y a encore énormément de choses à ajouter. Notez en particulier qu'<strong>il n'est pas actuellement possible de sauvegarder une quelconque progression</strong>.</p>
+        <p>En l'état, le jeu n'est pas encore convenablement équilibré ! Je suis bien évidemment intéressé par tout retour sur les problèmes de fonctionnement, les forces et faiblesses de chaque personnage, etc...</p>
+        <p>Notez que <strong>la sauvegarde automatique se fait dans le cache du navigateur</strong>. Cela implique que vous ne pouvez pas retrouver votre progression en changeant d'appareil, et que vider le cache supprime votre partie en cours.</p>
         <p>Je vous souhaite un bon moment par ici !</p>
     </div>
     <div id="changeLog">
+        <p>v0.2 :</p>
+        <ul>
+            <li>WorldRoots dispose désormais d'un système de sauvegarde/chargement automatique dans le cache de votre navigateur.</li>
+            <li>Les ennemis donnent sensiblement plus d'expérience.</li>
+            <li>La montée de niveau ne restaure plus les HP/MP.</li>
+            <li>Vous pouvez désormais dépenser les fragments de magie obtenus en fin de combat pour soigner votre équipe, réanimer les membres K.O. et acheter des sorts.</li>
+            <li>Bien qu'elles soient mentionnées, les capacités spéciales des personnages ne sont pas encore fonctionnelles.</li>
+        </ul>
         <p>v0.14 :</p>
         <ul>
             <li>Léger rework de l'esquive : elle se fait désormais sur la différence entre l'agilité de l'attaquant et celle de la cible.</li>
             <li>Tooltips cliquables sur les caractéristiques de personnage et sur les sorts.</li>
             <li>Les loots s'affichent désormais sous la forme "Potion x3" au lieu de "Potion, Potion, Potion".</li>
-            <li>La fiche d'équipe peut être réduite et ouverte à loisir.</li>
+            <li>La fiche d'équipe peut être expanded/collapsed.</li>
         </ul>
         <p>v0.13b :</p>
         <ul>
