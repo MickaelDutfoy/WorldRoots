@@ -22,7 +22,7 @@ class Character {
             arme: Item.getItem("sword1"),
             armure: Item.getItem("magicArmor1")},
             "Élémentaliste": { nom: "Helmi",
-            stats: {strength: 1, intelligence: 3, agility: 3, vitality: 1, willpower: 2},
+            stats: {strength: 1, intelligence: 3, agility: 2, vitality: 2, willpower: 2},
             sorts: [Spell.getSpell("iceTarget1"), Spell.getSpell("lightningAoe1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("robe1")},
@@ -236,19 +236,14 @@ class Character {
     static charSheet() {
         const nomsObjets = inventaire.map(i => `${i.objet.nom} x${i.quantite}`);
         document.getElementById("inventory").innerHTML = `Inventaire :<br>${gold} fragments de magie<br>${nomsObjets.join("<br>")}`;
-        for ( let i = 0; i <=2; i++ ) {
+        for ( let i = 0; i <= 2; i++ ) {
             document.getElementById("nameClass" + i).innerHTML = `${chars[i].nom}<br>${chars[i].classe}`;
             document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 100}`;
-            document.getElementById("agi" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit la capacité d'esquive, la précision et l'initiative.">Agilité</span> : ${chars[i].stats.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)} 🛡)</span>`;
-            document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques.">Force</span> : ${chars[i].stats.strength} <span class="grey">(${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)} ⚔)</span>`;
-            document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques.">Intelligence</span> : ${chars[i].stats.intelligence} <span class="grey">(${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)} ⚔)</span>`;
-            document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique.">Vitalité</span> : ${chars[i].stats.vitality} <span class="grey">(${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)} 🛡)</span>`;
-            document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique.">Volonté</span> : ${chars[i].stats.willpower} <span class="grey">(${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)} 🛡)</span>`;
-            document.getElementById("agiTemp" + i).innerHTML = `-> ${chars[i].statsTemp.agility} <span class="grey">(${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)})</span>`;
-            document.getElementById("forTemp" + i).innerHTML = `-> ${chars[i].statsTemp.strength} <span class="grey">(${chars[i].armure.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)})</span>`;
-            document.getElementById("intTemp" + i).innerHTML = `-> ${chars[i].statsTemp.intelligence} <span class="grey">(${chars[i].armure.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)})</span>`;
-            document.getElementById("vitTemp" + i).innerHTML = `-> ${chars[i].statsTemp.vitality} <span class="grey">(${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)})</span>`;
-            document.getElementById("volTemp" + i).innerHTML = `-> ${chars[i].statsTemp.willpower} <span class="grey">(${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)})</span>`;
+            document.getElementById("agi" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit la capacité d'esquive, la précision et l'initiative">Agilité</span> : <span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="bluebold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility}</span> (${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)} 🛡)`;
+            document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques">Force</span> : <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="bluebold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength}</span> (${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)} ⚔)`;
+            document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques">Intelligence</span> : <span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence}</span> (${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)} ⚔)`;
+            document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique">Vitalité</span> : <span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality}</span> (${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)} 🛡)`;
+            document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique">Volonté</span> : <span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="bluebold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower}</span> (${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)} 🛡)`;
             document.getElementById("lvlUpPoints" + i).innerHTML = `Points disponibles : ${chars[i].pointsLvlUp}`;
             let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
             let descSorts = chars[i].sorts.map(sort => `<span class="tooltip" data-tooltip="${sort.type === "attack" ? "Attaque" : "Soin"} ${sort.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[sort.element] || "Aucun"}, ${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}, Coût : ${sort.mp} MP">${sort.nom}</span>`);

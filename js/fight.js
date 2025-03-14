@@ -407,7 +407,7 @@ function fight() {
     function isGameOver() {
         if ( chars.every(char => char.hp <= 0) ) {
             addMessageToLog(`Votre équipe est vaincue !`)
-            addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
+            addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}.`)
             setTimeout(() => {
                 onFight = false;
                 document.getElementById("exploreWindow").classList.remove("fight");
@@ -470,6 +470,7 @@ function fight() {
                 msgLog.appendChild(regenBtn);
                 msgLog.appendChild(rezBtn);
                 msgLog.appendChild(shopBtn);
+                msgLog.appendChild(leaveBtn);
             }, 4800);
             if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
             if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }

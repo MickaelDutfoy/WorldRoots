@@ -12,27 +12,22 @@ function initGame() {
             <table class="charStats">
                 <tr>
                     <td id="agi0"></td>
-                    <td class="lvlUp0" id="agiTemp0"></td>
                     <td class="lvlUp0" id="agiLvlUp0"><button id="AgiUp0">+</button><button id="AgiDwn0">-</button></td>
                 </tr>
                 <tr>
                     <td id="for0"></td>
-                    <td class="lvlUp0" id="forTemp0"></td>
                     <td class="lvlUp0" id="forLvlUp0"><button id="ForUp0">+</button><button id="ForDwn0">-</button></td>
                 </tr>
                 <tr>
                     <td id="int0"></td>
-                    <td class="lvlUp0" id="intTemp0"></td>
                     <td class="lvlUp0" id="intLvlUp0"><button id="IntUp0">+</button><button id="IntDwn0">-</button></td>
                 </tr>
                 <tr>
                     <td id="vit0"></td>
-                    <td class="lvlUp0" id="vitTemp0"></td>
                     <td class="lvlUp0" id="vitLvlUp0"><button id="VitUp0">+</button><button id="VitDwn0">-</button></td>
                 </tr>
                 <tr>
                     <td id="vol0"></td>
-                    <td class="lvlUp0" id="volTemp0"></td>
                     <td class="lvlUp0" id="volLvlUp0"><button id="VolUp0">+</button><button id="VolDwn0">-</button></td>
                 </tr>
                 <tr>
@@ -63,27 +58,22 @@ function initGame() {
             <table class="charStats">
                 <tr>
                     <td id="agi1"></td>
-                    <td class="lvlUp1" id="agiTemp1"></td>
                     <td class="lvlUp1" id="agiLvlUp1"><button id="AgiUp1">+</button><button id="AgiDwn1">-</button></td>
                 </tr>
                 <tr>
                     <td id="for1"></td>
-                    <td class="lvlUp1" id="forTemp1"></td>
                     <td class="lvlUp1" id="forLvlUp1"><button id="ForUp1">+</button><button id="ForDwn1">-</button></td>
                 </tr>
                 <tr>
                     <td id="int1"></td>
-                    <td class="lvlUp1" id="intTemp1"></td>
                     <td class="lvlUp1" id="intLvlUp1"><button id="IntUp1">+</button><button id="IntDwn1">-</button></td>
                 </tr>
                 <tr>
                     <td id="vit1"></td>
-                    <td class="lvlUp1" id="vitTemp1"></td>
                     <td class="lvlUp1" id="vitLvlUp1"><button id="VitUp1">+</button><button id="VitDwn1">-</button></td>
                 </tr>
                 <tr>
                     <td id="vol1"></td>
-                    <td class="lvlUp1" id="volTemp1"></td>
                     <td class="lvlUp1" id="volLvlUp1"><button id="VolUp1">+</button><button id="VolDwn1">-</button></td>
                 </tr>
                 <tr>
@@ -113,27 +103,22 @@ function initGame() {
             <table class="charStats">
                 <tr>
                     <td id="agi2"></td>
-                    <td class="lvlUp2" id="agiTemp2"></td>
                     <td class="lvlUp2" id="agiLvlUp2"><button id="AgiUp2">+</button><button id="AgiDwn2">-</button></td>
                 </tr>
                 <tr>
                     <td id="for2"></td>
-                    <td class="lvlUp2" id="forTemp2"></td>
                     <td class="lvlUp2" id="forLvlUp2"><button id="ForUp2">+</button><button id="ForDwn2">-</button></td>
                 </tr>
                 <tr>
                     <td id="int2"></td>
-                    <td class="lvlUp2" id="intTemp2"></td>
                     <td class="lvlUp2" id="intLvlUp2"><button id="IntUp2">+</button><button id="IntDwn2">-</button></td>
                 </tr>
                 <tr>
                     <td id="vit2"></td>
-                    <td class="lvlUp2" id="vitTemp2"></td>
                     <td class="lvlUp2" id="vitLvlUp2"><button id="VitUp2">+</button><button id="VitDwn2">-</button></td>
                 </tr>
                 <tr>
                     <td id="vol2"></td>
-                    <td class="lvlUp2" id="volTemp2"></td>
                     <td class="lvlUp2" id="volLvlUp2"><button id="VolUp2">+</button><button id="VolDwn2">-</button></td>
                 </tr>
                 <tr>
@@ -215,6 +200,7 @@ function load() {
     msgLog.appendChild(regenBtn);
     msgLog.appendChild(rezBtn);
     msgLog.appendChild(shopBtn);
+    msgLog.appendChild(leaveBtn);
     tempoMsg = 0; addMessageToLog("Partie chargée avec succès !");
     Character.charSheet();
     if ( charSheetState === "collapsed" ) {
@@ -224,6 +210,25 @@ function load() {
         collapsabletd.forEach(el => el.style.display = "none");
         collapsabletr.forEach(el => el.style.display = "none");
     }
+}
+
+function quit() {
+    localStorage.removeItem("worldrootsSave");
+    if ( startBtn.innerHTML !== "Quitter le donjon..." ) startBtn.innerHTML = "Quitter le donjon..."
+    regenBtn.remove();
+    rezBtn.remove();
+    shopBtn.remove();
+    leaveBtn.remove();
+    tempoMsg = 0;
+    abandonned = true;
+    addMessageToLog(`Vous abandonnez votre progression.`)
+    addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}.`)
+    setTimeout(() => {
+        onFight = false;
+        document.getElementById("exploreWindow").classList.remove("fight");
+        Character.charSheet();
+        msgLog.appendChild(startBtn);
+    }, 1200);
 }
 
 function addMessageToLog(message) {
@@ -289,7 +294,7 @@ if (window.location.pathname.includes("arcade.html")) {
     });
 }
 
-let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50;
+let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false;
 const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
 const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = ""; exploreWindow.appendChild(msgLog);
@@ -298,7 +303,9 @@ const startBtn = document.createElement("button"); startBtn.id = "startBtn"; sta
 const regenBtn = document.createElement("button"); regenBtn.id = "regenBtn";
 const rezBtn = document.createElement("button"); rezBtn.id = "shopBtn"; 
 const shopBtn = document.createElement("button"); shopBtn.id = "shopBtn"; shopBtn.innerHTML = "Échanger des fragments de magie contre des sorts";
+const leaveBtn = document.createElement("button"); leaveBtn.id = "leaveBtn"; leaveBtn.innerHTML = "Sortir du donjon";
 regenBtn.addEventListener("click", Character.regenChars);
 rezBtn.addEventListener("click", Character.rezChars);
 shopBtn.addEventListener("click", Character.magicShop);
+leaveBtn.addEventListener("click", quit);
 document.getElementById("creerPerso").addEventListener("click", Character.createCharacters);

@@ -651,19 +651,19 @@ class Mob {
 
     static popMob() {
         if ( document.getElementById("magicShop") ) document.getElementById("magicShop").remove();
-        if ( chars[0].hp <= 0 && chars[1].hp <= 0 && chars[2].hp <= 0 ) {
+        if ( (chars[0].hp <= 0 && chars[1].hp <= 0 && chars[2].hp <= 0) || abandonned === true ) {
             window.location.href = "index.html";
             return;
         }
         fightLog.innerHTML = ""; mobs = []; msgLog.innerHTML = "";
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
         let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
-        const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3); // On cherche des mobs dans un lvlRange +/- 3 autour du niveau moyen des persos.
-        let mobCount = 1 + Math.floor(Math.random() * 4); // Nombre de mobs à affronter
-        while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) < lvlTeam ) { // Tant que le niveau de la team de mobs est inférieur à celui de la team de persos...
+        const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3);
+        let mobCount = 1 + Math.floor(Math.random() * 4);
+        while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) < lvlTeam ) {
             let mobData = eligibleMobs[Math.floor(Math.random() * eligibleMobs.length)];
-            mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable)); // ...on ajoute un mob
-            if (mobs.length >= mobCount) break; // On s'arrête quand on a assez de mobs dans la liste.
+            mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable));
+            if (mobs.length >= mobCount) break;
         }  
         let ennemyList = "";
         let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets";
