@@ -244,7 +244,7 @@ function addSlowMsgToLog(message) {
         msgLog.appendChild(newMsg);
         setTimeout(() => { newMsg.classList.add("show");}, 10);
     }, tempoMsg);
-    tempoMsg += 0;
+    tempoMsg += 1800;
 }
 
 function showTooltip(element, text) {
