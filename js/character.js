@@ -349,7 +349,7 @@ class Character {
 
     static regenChars() {
         tempoMsg = 0;
-        let cost = chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10;
+        let cost = Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10);
         if ( gold < cost ) {
             addMessageToLog(`Vous n'avez pas assez de fragments de magie !`);
             return;
@@ -370,7 +370,7 @@ class Character {
 
     static rezChars() {
         tempoMsg = 0;
-        let cost = chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20;
+        let cost = Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20);
         if (chars.every(char => char.hp > 0)) {
             addMessageToLog("Aucun personnage n'est K.O. !");
         } else if (gold < cost) {

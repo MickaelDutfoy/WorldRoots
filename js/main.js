@@ -195,8 +195,8 @@ function load() {
     charSheetState = saveData.charSheetState;
     startBtn.innerHTML = "Aller dans la salle suivante !"
     startBtn.addEventListener("click", Mob.popMob);
-    regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10} fragments de magie)`;
-    rezBtn.innerHTML = `Réanimer les personnages K.O. (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20} fragments de magie)`;
+    regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10)} fragments de magie)`;
+    rezBtn.innerHTML = `Réanimer les personnages K.O. (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20)} fragments de magie)`;
     msgLog.appendChild(startBtn);
     msgLog.appendChild(regenBtn);
     msgLog.appendChild(rezBtn);
