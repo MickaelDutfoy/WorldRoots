@@ -131,7 +131,7 @@ class Mob {
             id: "revenant",
             niveau: 8,
             stats: { strength: 5, intelligence: 3, agility: 3, vitality: 7, willpower: 6 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
             sorts: [],
             lootTable: [{ item: Item.getItem("baton2"), chance: 0.1 }]
         },
@@ -167,7 +167,7 @@ class Mob {
             id: "vampire",
             niveau: 10,
             stats: { strength: 4, intelligence: 7, agility: 3, vitality: 7, willpower: 7 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 2, holy: 1 },
+            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
             sorts: [Spell.getSpell("darkTarget1")],
             lootTable: [{ item: Item.getItem("sword2"), chance: 0.1 }]
         },

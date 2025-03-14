@@ -412,7 +412,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         palaSpellList.appendChild(option);
                     }
                 });
@@ -422,14 +422,14 @@ class Character {
                 const selectedSpellId = palaSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg = 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
                 }
                 gold -= cost;
                 pala.sorts.push(spell);
-                tempoMsg= 0; addMessageToLog(`${pala.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
+                tempoMsg = 0; addMessageToLog(`${pala.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 palaSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
                 if ( palaSpellList.innerHTML === "" ) { palaSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
@@ -459,7 +459,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         darkKnightSpellList.appendChild(option);
                     }
                 });
@@ -469,7 +469,7 @@ class Character {
                 const selectedSpellId = darkKnightSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg = 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
@@ -506,7 +506,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         elemSpellList.appendChild(option);
                     }
                 });
@@ -516,7 +516,7 @@ class Character {
                 const selectedSpellId = elemSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg = 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
@@ -553,7 +553,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         chaoSpellList.appendChild(option);
                     }
                 });
@@ -563,7 +563,7 @@ class Character {
                 const selectedSpellId = chaoSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg = 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
@@ -600,7 +600,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         spellBladeSpellList.appendChild(option);
                     }
                 });
@@ -610,7 +610,7 @@ class Character {
                 const selectedSpellId = spellBladeSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg = 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
@@ -647,7 +647,7 @@ class Character {
                         const option = document.createElement("option");
                         option.value = spellId;
                         let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${100 * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[spell.element] || "Aucun"}) - ${150 * X} fragments`;
                         priestSpellList.appendChild(option);
                     }
                 });
@@ -657,7 +657,7 @@ class Character {
                 const selectedSpellId = priestSpellList.value;
                 if (!selectedSpellId) return;
                 const spell = Spell.getSpell(selectedSpellId);
-                const cost = 100 * X;
+                const cost = 150 * X;
                 if (gold < cost) {
                     tempoMsg= 0; addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
