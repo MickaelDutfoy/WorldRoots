@@ -226,7 +226,7 @@ body > div {
 }
 
 #msgLog {
-  min-height: 40px;
+  min-height: 150px;
   padding-bottom: 5px;
   margin-bottom: 5px;
 }
