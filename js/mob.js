@@ -655,7 +655,7 @@ class Mob {
             window.location.href = "index.html";
             return;
         }
-        fightLog.innerHTML = ""; mobs = []; msgLog.innerHTML = "";
+        mobs = []; msgLog.innerHTML = "";
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
         let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
         const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3);

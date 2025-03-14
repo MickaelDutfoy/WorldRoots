@@ -464,8 +464,8 @@ function fight() {
                 document.getElementById("exploreWindow").classList.remove("fight");
                 Character.charSheet();
                 if ( startBtn.innerHTML !== "Aller dans la salle suivante !" ) startBtn.innerHTML = "Aller dans la salle suivante !"
-                regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 15} fragments de magie)`;
-                rezBtn.innerHTML = `Réanimer les personnages K.O. (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 30} fragments de magie)`;
+                regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10} fragments de magie)`;
+                rezBtn.innerHTML = `Réanimer les personnages K.O. (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20} fragments de magie)`;
                 msgLog.appendChild(startBtn);
                 msgLog.appendChild(regenBtn);
                 msgLog.appendChild(rezBtn);
