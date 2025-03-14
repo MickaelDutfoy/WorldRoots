@@ -217,7 +217,7 @@ function load() {
     msgLog.appendChild(shopBtn);
     tempoMsg = 0; addMessageToLog("Partie chargée avec succès !");
     Character.charSheet();
-    if ( charSheetState = "collapsed" ) {
+    if ( charSheetState === "collapsed" ) {
         let collapsabletd = document.querySelectorAll(".collapsabletd");
         let collapsabletr = document.querySelectorAll(".collapsabletr");
         collapseBtn.innerHTML = "Agrandir la fiche";
