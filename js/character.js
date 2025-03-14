@@ -337,19 +337,19 @@ class Character {
     }
 
     static collapseExpand() {
-        collapseBtn.innerHTML = (collapseBtn.innerHTML === "Réduire la fiche") ? "Agrandir la fiche" : "Réduire la fiche";
         let collapsabletd = document.querySelectorAll(".collapsabletd");
         let collapsabletr = document.querySelectorAll(".collapsabletr");
-        collapsabletd.forEach(el => {
-            // Utilise getComputedStyle pour obtenir le style réel
-            const currentDisplay = window.getComputedStyle(el).display;
-            el.style.display = (currentDisplay === "none" || currentDisplay === "") ? "table-cell" : "none";
-        });
-    
-        collapsabletr.forEach(el => {
-            const currentDisplay = window.getComputedStyle(el).display;
-            el.style.display = (currentDisplay === "none" || currentDisplay === "") ? "table-row" : "none";
-        });
+        if ( charSheetState === "expanded" ) {
+            charSheetState = "collapsed";
+            collapseBtn.innerHTML = "Agrandir la fiche";
+            collapsabletd.forEach(el => el.style.display = "none");
+            collapsabletr.forEach(el => el.style.display = "none");
+        } else {
+            charSheetState = "expanded";
+            collapseBtn.innerHTML = "Réduire la fiche";
+            collapsabletd.forEach(el => el.style.display = "table-cell");
+            collapsabletr.forEach(el => el.style.display = "table-row");
+        }
     }
 
     static regenChars() {

@@ -167,14 +167,14 @@ function initGame() {
 }
 
 function save() {
-    // Vérifie si toute la team est morte
     if (chars.every(char => char.hp === 0)) {
-        localStorage.removeItem("worldrootsSave"); // Supprime la sauvegarde
+        localStorage.removeItem("worldrootsSave");
     } else {
         const saveData = {
-            chars: chars, // Contient déjà tout
-            inventaire: inventaire, // Liste des objets non équipés
-            gold: gold // La thune
+            chars: chars,
+            inventaire: inventaire,
+            gold: gold,
+            charSheetState: charSheetState,
         };
         localStorage.setItem("worldrootsSave", JSON.stringify(saveData));
     }
@@ -182,24 +182,23 @@ function save() {
 
 function load() {
     const saveData = JSON.parse(localStorage.getItem("worldrootsSave"));
-    if (!saveData) return; // Aucune sauvegarde, on laisse le joueur commencer normalement
+    if (!saveData) return;
     initGame();
     chars = saveData.chars.map(charData => {
-        let char = new Character(charData.classe); // On recrée le perso avec sa classe
-        // On restaure toutes ses stats
+        let char = new Character(charData.classe);
         char.nom = charData.nom;
         char.niveau = charData.niveau;
         char.xp = charData.xp;
         char.pointsLvlUp = charData.pointsLvlUp;
         char.sorts = charData.sorts;
         char.stats = charData.stats;
-        char.statsTemp = { ...charData.stats }; // Clone des stats pour les buffs/debuffs
+        char.statsTemp = { ...charData.stats };
         char.hp = charData.hp;
         char.mp = charData.mp;
         char.maxhp = charData.maxhp;
         char.maxmp = charData.maxmp;
-        char.arme = Item.getItem(charData.arme.id); // Restaure l'arme
-        char.armure = Item.getItem(charData.armure.id); // Restaure l'armure
+        char.arme = Item.getItem(charData.arme.id);
+        char.armure = Item.getItem(charData.armure.id);
         return char;
     });
     chars.forEach(char => {
@@ -207,6 +206,7 @@ function load() {
     })
     inventaire = saveData.inventaire;
     gold = saveData.gold;
+    charSheetState = saveData.charSheetState;
     startBtn.innerHTML = "Aller dans la salle suivante !"
     startBtn.addEventListener("click", Mob.popMob);
     regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 15} fragments de magie)`;
@@ -217,6 +217,13 @@ function load() {
     msgLog.appendChild(shopBtn);
     tempoMsg = 0; addMessageToLog("Partie chargée avec succès !");
     Character.charSheet();
+    if ( charSheetState = "collapsed" ) {
+        let collapsabletd = document.querySelectorAll(".collapsabletd");
+        let collapsabletr = document.querySelectorAll(".collapsabletr");
+        collapseBtn.innerHTML = "Agrandir la fiche";
+        collapsabletd.forEach(el => el.style.display = "none");
+        collapsabletr.forEach(el => el.style.display = "none");
+    }
 }
 
 function addMessageToLog(message) {
@@ -283,7 +290,7 @@ if (window.location.pathname.includes("arcade.html")) {
 }
 
 let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50;
-const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = "";
+const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
 const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = ""; exploreWindow.appendChild(msgLog);
 const fightLog = document.createElement("div"); fightLog.id = "fightLog"; fightLog.innerHTML = ""; exploreWindow.appendChild(fightLog);
