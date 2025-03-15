@@ -684,7 +684,7 @@ function fight() {
                 msgLog.appendChild(rezBtn);
                 msgLog.appendChild(shopBtn);
                 msgLog.appendChild(leaveBtn);
-            }, 4800);
+            }, 5600);
             if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }
             if ( document.getElementById("TargetBtns") ) { document.getElementById("TargetBtns").remove(); }
             if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }

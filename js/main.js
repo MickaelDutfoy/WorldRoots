@@ -249,7 +249,7 @@ function addMessageToLog(message) {
         newMsg.innerHTML = message;
         fightLog.insertBefore(newMsg, fightLog.firstChild);
     }, tempoMsg);
-    tempoMsg += 600;
+    tempoMsg += 700;
 }
 
 function addSlowMsgToLog(message) {

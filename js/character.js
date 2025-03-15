@@ -467,7 +467,10 @@ class Character {
                 tempoMsg = 0; addMessageToLog(`${pala.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 palaSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( palaSpellList.innerHTML === "" ) { palaSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (palaSpellList.innerHTML === "") {
+                    palaSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (palaBuy) { palaBuy.style.display = "none"; }
+                }
             });
             palaBox.appendChild(palaLabel);
             palaBox.appendChild(palaSpellList);
@@ -514,7 +517,10 @@ class Character {
                 tempoMsg= 0; addMessageToLog(`${darkKnight.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 darkKnightSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( darkKnightSpellList.innerHTML === "" ) { darkKnightSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (darkKnightSpellList.innerHTML === "") {
+                    darkKnightSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (darkKnightBuy) { darkKnightBuy.style.display = "none"; }
+                }
             });
             darkKnightBox.appendChild(darkKnightLabel);
             darkKnightBox.appendChild(darkKnightSpellList);
@@ -549,7 +555,7 @@ class Character {
             if ( elemSpellList.innerHTML === "" ) { elemSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
             elemBuy.addEventListener("click", () => {
                 const selectedSpellId = elemSpellList.value;
-                if (!selectedSpellId) return;
+                if (!selectedSpellId || elemSpellList.innerHTML === "<option disabled selected>Aucun sort n'est disponible</option>") return;
                 const spell = Spell.getSpell(selectedSpellId);
                 const cost = 150 * X;
                 if (gold < cost) {
@@ -561,7 +567,10 @@ class Character {
                 tempoMsg= 0; addMessageToLog(`${elem.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 elemSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( elemSpellList.innerHTML === "" ) { elemSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (elemSpellList.innerHTML === "") {
+                    elemSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (elemBuy) { elemBuy.style.display = "none"; }
+                }
             });  
             elemBox.appendChild(elemLabel);
             elemBox.appendChild(elemSpellList);
@@ -608,7 +617,10 @@ class Character {
                 tempoMsg= 0; addMessageToLog(`${chao.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 chaoSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( chaoSpellList.innerHTML === "" ) { chaoSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (chaoSpellList.innerHTML === "") {
+                    chaoSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (chaoBuy) { chaoBuy.style.display = "none"; }
+                }
             });
             chaoBox.appendChild(chaoLabel);
             chaoBox.appendChild(chaoSpellList);
@@ -640,7 +652,7 @@ class Character {
                     }
                 });
             });
-            if ( spellBladeSpellList.innerHTML === "" ) { spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (spellBladeSpellList.innerHTML === "") { spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>"; }
             spellBladeBuy.addEventListener("click", () => {
                 const selectedSpellId = spellBladeSpellList.value;
                 if (!selectedSpellId) return;
@@ -655,7 +667,10 @@ class Character {
                 tempoMsg= 0; addMessageToLog(`${spellBlade.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 spellBladeSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( spellBladeSpellList.innerHTML === "" ) { spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (spellBladeSpellList.innerHTML === "") {
+                    spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (spellBladeBuy) { spellBladeBuy.style.display = "none"; }
+                }
             });
             spellBladeBox.appendChild(spellBladeLabel);
             spellBladeBox.appendChild(spellBladeSpellList);
@@ -702,7 +717,10 @@ class Character {
                 tempoMsg= 0; addMessageToLog(`${priest.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 priestSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if ( priestSpellList.innerHTML === "" ) { priestSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+                if (priestSpellList.innerHTML === "") {
+                    priestSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                    if (priestBuy) { priestBuy.style.display = "none"; }
+                }
             });
             priestBox.appendChild(priestLabel);
             priestBox.appendChild(priestSpellList);
