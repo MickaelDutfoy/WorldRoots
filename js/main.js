@@ -164,6 +164,10 @@ function initGame() {
 }
 
 function save() {
+    const highScore = localStorage.getItem("worldrootsHighScore") || 0;
+    if (score > highScore) {
+        localStorage.setItem("worldrootsHighScore", score);
+    }
     if (chars.every(char => char.hp === 0)) {
         localStorage.removeItem("worldrootsSave");
     } else {
@@ -171,6 +175,7 @@ function save() {
             chars: chars,
             inventaire: inventaire,
             gold: gold,
+            score: score,
             charSheetState: charSheetState,
         };
         localStorage.setItem("worldrootsSave", JSON.stringify(saveData));
@@ -203,6 +208,7 @@ function load() {
     })
     inventaire = saveData.inventaire;
     gold = saveData.gold;
+    score = saveData.score;
     charSheetState = saveData.charSheetState;
     startBtn.innerHTML = "Aller dans la salle suivante !"
     startBtn.addEventListener("click", Mob.popMob);
@@ -233,8 +239,9 @@ function quit() {
     leaveBtn.remove();
     tempoMsg = 0;
     abandonned = true;
+    score = 25 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold;
     addMessageToLog(`Vous abandonnez votre progression.`)
-    addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}.`)
+    addMessageToLog(`Votre score : ${score} (Meilleur score : ${localStorage.getItem("worldrootsHighScore") || 0}).`)
     setTimeout(() => {
         onFight = false;
         document.getElementById("exploreWindow").classList.remove("fight");
@@ -306,7 +313,7 @@ if (window.location.pathname.includes("arcade.html")) {
     });
 }
 
-let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false;
+let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false; let score = 0;
 const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
 const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = "";

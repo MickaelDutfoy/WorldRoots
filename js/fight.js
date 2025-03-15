@@ -619,8 +619,9 @@ function fight() {
 
     function isGameOver() {
         if ( chars.every(char => char.hp <= 0) ) {
+            score = 25 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold;
             addMessageToLog(`Votre équipe est vaincue !`)
-            addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}.`)
+            addMessageToLog(`Votre score : ${score} (Meilleur score : ${localStorage.getItem("worldrootsHighScore") || 0}).`)
             setTimeout(() => {
                 onFight = false;
                 document.getElementById("exploreWindow").classList.remove("fight");
@@ -707,9 +708,10 @@ function fight() {
                     Character.addItem(objet);
                 });
             }
+            score = 25 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold;
             if ( (chars.reduce((sum, char) => sum + char.niveau, 0)/3) >= 37 ) {
                 addMessageToLog(`Vous êtes arrivés au terme du donjon !`)
-                addMessageToLog(`Votre score : ${50 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold}`)
+                addMessageToLog(`Votre score : ${score} (Meilleur score : ${localStorage.getItem("worldrootsHighScore") || 0}).`)
                 setTimeout(() => {
                     onFight = false;
                     document.getElementById("exploreWindow").classList.remove("fight");
