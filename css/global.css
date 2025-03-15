@@ -250,7 +250,7 @@ body > div {
 }
 
 #fightLog {
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.3) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
   height: 50vh;
   overflow-y: hidden;
 }
@@ -311,12 +311,37 @@ table {
 }
 
 .charStats {
-  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.charStats td, .charStats tr {
-  border: none;
-  padding: 0;
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap : 5px;
+}
+
+.statName {
+  text-align: right;
+  flex: 2;
+  padding-top: 5px;
+}
+
+.statValue {
+  text-align: left;
+  flex: 1;
+  padding-top: 5px;
+}
+
+.statBtn {
+  text-align: center;
+  flex: 1;
+}
+
+#lvlUpPoints0, #lvlUpPoints1, #lvlUpPoints2 {
+  padding-top: 5px;
 }
 
 td, th {
@@ -325,13 +350,17 @@ td, th {
   text-align: center;
 }
 
-#HP0, #MP0, #HP1, #MP1, #HP2, #MP2 {
+#HP0, #MP0, #HP1, #MP1, #HP2, #MP2, #nameClass0, #nameClass1, #nameClass2 {
   font-weight: bolder;
 }
 
 .lvlUp0, .lvlUp1, .lvlUp2 {
-  display: none;
+  visibility: hidden;
   font-weight: bold;
+}
+
+#lvlUpRow0, #lvlUpRow1, #lvlUpRow2 {
+  display: none;
 }
 
 .tooltip {

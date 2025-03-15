@@ -4,37 +4,45 @@ function initGame() {
         <td id="inventory" class="collapsabletd" rowspan="16"></td>
     </tr>
     <tr>
-        <td id="nameClass0"></td>
-        <td id="lvlXP0"></td>
+        <td id="nameClass0"></td><td id="HP0"></td>
+    </tr>
+    <tr>
+        <td id="lvlXP0"></td><td id="MP0"></td>
     </tr>
     <tr class="collapsabletr">
         <td>
-            <table class="charStats">
-                <tr>
-                    <td id="agi0"></td>
-                    <td class="lvlUp0" id="agiLvlUp0"><button id="AgiUp0">+</button><button id="AgiDwn0">-</button></td>
-                </tr>
-                <tr>
-                    <td id="for0"></td>
-                    <td class="lvlUp0" id="forLvlUp0"><button id="ForUp0">+</button><button id="ForDwn0">-</button></td>
-                </tr>
-                <tr>
-                    <td id="int0"></td>
-                    <td class="lvlUp0" id="intLvlUp0"><button id="IntUp0">+</button><button id="IntDwn0">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vit0"></td>
-                    <td class="lvlUp0" id="vitLvlUp0"><button id="VitUp0">+</button><button id="VitDwn0">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vol0"></td>
-                    <td class="lvlUp0" id="volLvlUp0"><button id="VolUp0">+</button><button id="VolDwn0">-</button></td>
-                </tr>
-                <tr>
-                    <td class="lvlUp0" id="lvlUpPoints0"></td>
-                    <td class="lvlUp0" colspan="2" id="lvlUpBtnWrap0"><button id="LvlUpBtn0">Valider</button></td>
-                </tr>
-            </table>
+            <div class="charStats">
+                <div class="statRow">
+                    <span class="statName" id="agi0"></span>
+                    <span class="statValue" id="agiVal0"></span>
+                    <span class="statBtn lvlUp0" id="agiLvlUp0"><button id="AgiUp0">+</button><button id="AgiDwn0">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="for0"></span>
+                    <span class="statValue" id="forVal0"></span>
+                    <span class="statBtn lvlUp0" id="forLvlUp0"><button id="ForUp0">+</button><button id="ForDwn0">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="int0"></span>
+                    <span class="statValue" id="intVal0"></span>
+                    <span class="statBtn lvlUp0" id="intLvlUp0"><button id="IntUp0">+</button><button id="IntDwn0">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vit0"></span>
+                    <span class="statValue" id="vitVal0"></span>
+                    <span class="statBtn lvlUp0" id="vitLvlUp0"><button id="VitUp0">+</button><button id="VitDwn0">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vol0"></span>
+                    <span class="statValue" id="volVal0"></span>
+                    <span class="statBtn lvlUp0" id="volLvlUp0"><button id="VolUp0">+</button><button id="VolDwn0">-</button></span>
+                </div>
+                <div class="statRow" id="lvlUpRow0">
+                    <span class="statName lvlUp0" id="lvlUpPoints0"></span>
+                    <span class="statValue lvlUp0" id="lvlUpPointsTot0"></span>
+                    <span class="statBtn lvlUp0" id="lvlUpBtnWrap0"><button id="LvlUpBtn0">Valider</button></span>
+                </div>
+            </div>
         </td>
         <td id="spells0"></td>
     </tr>
@@ -43,44 +51,47 @@ function initGame() {
     </tr>
     <tr class="collapsabletr">
         <td colspan="2" style="text-align:center;" id="armor0"></td>
-    </tr>  
-    <tr>
-        <td id="HP0"></td>
-        <td id="MP0"></td>
     </tr>
-    </div>
     <tr>
-        <td id="nameClass1"></td>
-        <td id="lvlXP1"></td>
+        <td id="nameClass1"></td><td id="HP1"></td>
+    </tr>
+    <tr>
+        <td id="lvlXP1"></td><td id="MP1"></td>
     </tr>
     <tr class="collapsabletr">
         <td>
-            <table class="charStats">
-                <tr>
-                    <td id="agi1"></td>
-                    <td class="lvlUp1" id="agiLvlUp1"><button id="AgiUp1">+</button><button id="AgiDwn1">-</button></td>
-                </tr>
-                <tr>
-                    <td id="for1"></td>
-                    <td class="lvlUp1" id="forLvlUp1"><button id="ForUp1">+</button><button id="ForDwn1">-</button></td>
-                </tr>
-                <tr>
-                    <td id="int1"></td>
-                    <td class="lvlUp1" id="intLvlUp1"><button id="IntUp1">+</button><button id="IntDwn1">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vit1"></td>
-                    <td class="lvlUp1" id="vitLvlUp1"><button id="VitUp1">+</button><button id="VitDwn1">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vol1"></td>
-                    <td class="lvlUp1" id="volLvlUp1"><button id="VolUp1">+</button><button id="VolDwn1">-</button></td>
-                </tr>
-                <tr>
-                    <td class="lvlUp1" id="lvlUpPoints1"></td>
-                    <td class="lvlUp1" colspan="2" id="lvlUpBtnWrap1"><button id="LvlUpBtn1">Valider</button></td>
-                </tr>
-            </table>
+            <div class="charStats">
+                <div class="statRow">
+                    <span class="statName" id="agi1"></span>
+                    <span class="statValue" id="agiVal1"></span>
+                    <span class="statBtn lvlUp1" id="agiLvlUp1"><button id="AgiUp1">+</button><button id="AgiDwn1">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="for1"></span>
+                    <span class="statValue" id="forVal1"></span>
+                    <span class="statBtn lvlUp1" id="forLvlUp1"><button id="ForUp1">+</button><button id="ForDwn1">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="int1"></span>
+                    <span class="statValue" id="intVal1"></span>
+                    <span class="statBtn lvlUp1" id="intLvlUp1"><button id="IntUp1">+</button><button id="IntDwn1">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vit1"></span>
+                    <span class="statValue" id="vitVal1"></span>
+                    <span class="statBtn lvlUp1" id="vitLvlUp1"><button id="VitUp1">+</button><button id="VitDwn1">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vol1"></span>
+                    <span class="statValue" id="volVal1"></span>
+                    <span class="statBtn lvlUp1" id="volLvlUp1"><button id="VolUp1">+</button><button id="VolDwn1">-</button></span>
+                </div>
+                <div class="statRow" id="lvlUpRow1">
+                    <span class="statName lvlUp1" id="lvlUpPoints1"></span>
+                    <span class="statValue lvlUp1" id="lvlUpPointsTot1"></span>
+                    <span class="statBtn lvlUp1" id="lvlUpBtnWrap1"><button id="LvlUpBtn1">Valider</button></span>
+                </div>
+            </div>
         </td>
         <td id="spells1"></td>
     </tr>
@@ -91,41 +102,45 @@ function initGame() {
         <td colspan="2" style="text-align:center;" id="armor1"></td>
     </tr>  
     <tr>
-        <td id="HP1"></td>
-        <td id="MP1"></td>
+        <td id="nameClass2"></td><td id="HP2"></td>
     </tr>
     <tr>
-        <td id="nameClass2"></td>
-        <td id="lvlXP2"></td>
+        <td id="lvlXP2"></td><td id="MP2"></td>
     </tr>
     <tr class="collapsabletr">
         <td>
-            <table class="charStats">
-                <tr>
-                    <td id="agi2"></td>
-                    <td class="lvlUp2" id="agiLvlUp2"><button id="AgiUp2">+</button><button id="AgiDwn2">-</button></td>
-                </tr>
-                <tr>
-                    <td id="for2"></td>
-                    <td class="lvlUp2" id="forLvlUp2"><button id="ForUp2">+</button><button id="ForDwn2">-</button></td>
-                </tr>
-                <tr>
-                    <td id="int2"></td>
-                    <td class="lvlUp2" id="intLvlUp2"><button id="IntUp2">+</button><button id="IntDwn2">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vit2"></td>
-                    <td class="lvlUp2" id="vitLvlUp2"><button id="VitUp2">+</button><button id="VitDwn2">-</button></td>
-                </tr>
-                <tr>
-                    <td id="vol2"></td>
-                    <td class="lvlUp2" id="volLvlUp2"><button id="VolUp2">+</button><button id="VolDwn2">-</button></td>
-                </tr>
-                <tr>
-                    <td class="lvlUp2" id="lvlUpPoints2"></td>
-                    <td class="lvlUp2" colspan="2" id="lvlUpBtnWrap2"><button id="LvlUpBtn2">Valider</button></td>
-                </tr>
-            </table>
+            <div class="charStats">
+                <div class="statRow">
+                    <span class="statName" id="agi2"></span>
+                    <span class="statValue" id="agiVal2"></span>
+                    <span class="statBtn lvlUp2" id="agiLvlUp2"><button id="AgiUp2">+</button><button id="AgiDwn2">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="for2"></span>
+                    <span class="statValue" id="forVal2"></span>
+                    <span class="statBtn lvlUp2" id="forLvlUp2"><button id="ForUp2">+</button><button id="ForDwn2">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="int2"></span>
+                    <span class="statValue" id="intVal2"></span>
+                    <span class="statBtn lvlUp2" id="intLvlUp2"><button id="IntUp2">+</button><button id="IntDwn2">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vit2"></span>
+                    <span class="statValue" id="vitVal2"></span>
+                    <span class="statBtn lvlUp2" id="vitLvlUp2"><button id="VitUp2">+</button><button id="VitDwn2">-</button></span>
+                </div>
+                <div class="statRow">
+                    <span class="statName" id="vol2"></span>
+                    <span class="statValue" id="volVal2"></span>
+                    <span class="statBtn lvlUp2" id="volLvlUp2"><button id="VolUp2">+</button><button id="VolDwn2">-</button></span>
+                </div>
+                <div class="statRow" id="lvlUpRow2">
+                    <span class="statName lvlUp2" id="lvlUpPoints2"></span>
+                    <span class="statValue lvlUp2" id="lvlUpPointsTot2"></span>
+                    <span class="statBtn lvlUp2" id="lvlUpBtnWrap2"><button id="LvlUpBtn2">Valider</button></span>
+                </div>
+            </div>
         </td>
         <td id="spells2"></td>
     </tr>
@@ -134,10 +149,6 @@ function initGame() {
     </tr>
     <tr class="collapsabletr">
         <td colspan="2" style="text-align:center;" id="armor2"></td>
-    </tr>  
-    <tr>
-        <td id="HP2"></td>
-        <td id="MP2"></td>
     </tr>`;
     exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
     const collapseBtn = document.createElement("button");
@@ -195,8 +206,8 @@ function load() {
     charSheetState = saveData.charSheetState;
     startBtn.innerHTML = "Aller dans la salle suivante !"
     startBtn.addEventListener("click", Mob.popMob);
-    regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10)} fragments de magie)`;
-    rezBtn.innerHTML = `Réanimer les personnages K.O. (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20)} fragments de magie)`;
+    regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10)} fragments)`;
+    rezBtn.innerHTML = `Réanimer les personnages morts (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20)} fragments)`;
     msgLog.appendChild(startBtn);
     msgLog.appendChild(regenBtn);
     msgLog.appendChild(rezBtn);
@@ -304,7 +315,7 @@ const startBtn = document.createElement("button"); startBtn.id = "startBtn"; sta
 const regenBtn = document.createElement("button"); regenBtn.id = "regenBtn";
 const rezBtn = document.createElement("button"); rezBtn.id = "shopBtn"; 
 const shopBtn = document.createElement("button"); shopBtn.id = "shopBtn"; shopBtn.innerHTML = "Échanger des fragments de magie contre des sorts";
-const leaveBtn = document.createElement("button"); leaveBtn.id = "leaveBtn"; leaveBtn.innerHTML = "Sortir du donjon";
+const leaveBtn = document.createElement("button"); leaveBtn.id = "leaveBtn"; leaveBtn.innerHTML = "Sortir du donjon (abandonner la progression en cours)";
 regenBtn.addEventListener("click", Character.regenChars);
 rezBtn.addEventListener("click", Character.rezChars);
 shopBtn.addEventListener("click", Character.magicShop);

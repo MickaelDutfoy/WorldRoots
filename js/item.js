@@ -132,16 +132,16 @@ class Item {
         ether10: new Item("Ether 3XL", "ether10", "consommable", "regen", 1060),
         ether11: new Item("Ether 4XL", "ether11", "consommable", "regen", 1280),
 
-        rez1 : new Item("Plume d'ange", "rez1", "consommable", "resurrect", 0.1),
-        rez2 : new Item("Plume d'ange", "rez2", "consommable", "resurrect", 0.2),
-        rez3 : new Item("Plume d'ange", "rez3", "consommable", "resurrect", 0.3),
-        rez4 : new Item("Plume d'ange", "rez4", "consommable", "resurrect", 0.4),
-        rez5 : new Item("Plume d'ange", "rez5", "consommable", "resurrect", 0.5),
-        rez6 : new Item("Plume d'ange", "rez6", "consommable", "resurrect", 0.6),
-        rez7 : new Item("Plume d'ange", "rez7", "consommable", "resurrect", 0.7),
-        rez8 : new Item("Plume d'ange", "rez8", "consommable", "resurrect", 0.8),
-        rez9 : new Item("Plume d'ange", "rez9", "consommable", "resurrect", 0.9),
-        rez10 : new Item("Plume d'ange", "rez10", "consommable", "resurrect", 10),
+        rez1 : new Item("Plume d'ange 3XS", "rez1", "consommable", "resurrect", 0.1),
+        rez2 : new Item("Plume d'ange XXS", "rez2", "consommable", "resurrect", 0.2),
+        rez3 : new Item("Plume d'ange XS", "rez3", "consommable", "resurrect", 0.3),
+        rez4 : new Item("Plume d'ange S", "rez4", "consommable", "resurrect", 0.4),
+        rez5 : new Item("Plume d'ange M", "rez5", "consommable", "resurrect", 0.5),
+        rez6 : new Item("Plume d'ange L", "rez6", "consommable", "resurrect", 0.6),
+        rez7 : new Item("Plume d'ange XL", "rez7", "consommable", "resurrect", 0.7),
+        rez8 : new Item("Plume d'ange XXL", "rez8", "consommable", "resurrect", 0.8),
+        rez9 : new Item("Plume d'ange 3XL", "rez9", "consommable", "resurrect", 0.9),
+        rez10 : new Item("Plume d'ange 4XL", "rez10", "consommable", "resurrect", 10),
     
         grenade: new Item("Grenade", "grenade", "consommable", "dégâts", 25)
     };

@@ -651,8 +651,16 @@ class Mob {
 
     static popMob() {
         if ( document.getElementById("magicShop") ) document.getElementById("magicShop").remove();
-        if ( (chars[0].hp <= 0 && chars[1].hp <= 0 && chars[2].hp <= 0) || abandonned === true ) {
+        if ( chars.every(char => char.hp <= 0) || abandonned === true ) {
             window.location.href = "index.html";
+            return;
+        }
+        const statsDifferentes = chars.some(char => 
+            JSON.stringify(char.stats) !== JSON.stringify(char.statsTemp)
+        );
+        if (statsDifferentes) {
+            tempoMsg = 0;
+            addMessageToLog("Veuillez terminer l'attribution des points en cours ou l'abandonner avant de continuer.");
             return;
         }
         mobs = []; msgLog.innerHTML = "";
