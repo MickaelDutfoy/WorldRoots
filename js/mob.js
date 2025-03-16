@@ -4,8 +4,8 @@ class Mob {
             nom: "Rat",
             id: "rat",
             niveau: 1,
-            stats: { strength: 1, intelligence: 3, agility: 3, vitality: 2, willpower: 1 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 2, intelligence: 4, agility: 4, vitality: 2, willpower: 2 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -13,8 +13,8 @@ class Mob {
             nom: "Pillard gobelin",
             id: "pillardGobelin",
             niveau: 1,
-            stats: { strength: 2, intelligence: 2, agility: 2, vitality: 2, willpower: 2 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 3, intelligence: 3, agility: 3, vitality: 2, willpower: 3 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: [{item: Item.getItem("lightArmor2"), chance: 0.1}]
         },
@@ -22,8 +22,8 @@ class Mob {
             nom: "Zombie",
             id: "zombie",
             niveau: 2,
-            stats: { strength: 3, intelligence: 2, agility: 1, vitality: 3, willpower: 3 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            stats: { strength: 4, intelligence: 2, agility: 1, vitality: 5, willpower: 4 },
+            resists: { fire: 0, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
             sorts: [],
             lootTable: []
         },
@@ -31,8 +31,8 @@ class Mob {
             nom: "Bandit",
             id: "bandit",
             niveau: 2,
-            stats: { strength: 3, intelligence: 2, agility: 2, vitality: 3, willpower: 2 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 4, intelligence: 2, agility: 3, vitality: 4, willpower: 3 },
+            resists: { fire: 2, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: [{item: Item.getItem("sword2"), chance: 0.1}]
         },
@@ -40,8 +40,8 @@ class Mob {
             nom: "Araignée géante",
             id: "araigneeGeante",
             niveau: 3,
-            stats: { strength: 2, intelligence: 2, agility: 4, vitality: 3, willpower: 3 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 3, intelligence: 2, agility: 5, vitality: 4, willpower: 4 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -49,7 +49,7 @@ class Mob {
             nom: "Élémentaire de feu",
             id: "elementaireFeu",
             niveau: 3,
-            stats: { strength: 3, intelligence: 3, agility: 2, vitality: 3, willpower: 3 },
+            stats: { strength: 4, intelligence: 5, agility: 2, vitality: 3, willpower: 4 },
             resists: { fire: 0, ice: 2, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [Spell.getSpell("fireTarget1"), Spell.getSpell("fireAoe1")],
             lootTable: [{item: Item.getItem("robe2"), chance: 0.1}]
@@ -58,8 +58,8 @@ class Mob {
             nom: "Squelette",
             id: "squelette",
             niveau: 4,
-            stats: { strength: 3, intelligence: 3, agility: 2, vitality: 4, willpower: 4 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            stats: { strength: 5, intelligence: 3, agility: 2, vitality: 5, willpower: 5 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 2 },
             sorts: [],
             lootTable: [{item: Item.getItem("mediumArmor2"), chance: 0.1}]
         },
@@ -67,8 +67,8 @@ class Mob {
             nom: "Maraudeur",
             id: "maraudeur",
             niveau: 4,
-            stats: { strength: 4, intelligence: 3, agility: 2, vitality: 4, willpower: 3 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 6, intelligence: 3, agility: 3, vitality: 5, willpower: 3 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
             sorts: [],
             lootTable: [{item: Item.getItem("baton2"), chance: 0.1}]
         },
@@ -76,8 +76,8 @@ class Mob {
             nom: "Scorpion géant",
             id: "scorpionGeant",
             niveau: 5,
-            stats: { strength: 4, intelligence: 3, agility: 4, vitality: 3, willpower: 4 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 5, intelligence: 4, agility: 4, vitality: 4, willpower: 5 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -85,8 +85,8 @@ class Mob {
             nom: "Guerrier orc",
             id: "guerrierOrc",
             niveau: 5,
-            stats: { strength: 5, intelligence: 3, agility: 2, vitality: 5, willpower: 3 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 6, intelligence: 3, agility: 3, vitality: 6, willpower: 4 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: [{item: Item.getItem("hache2"), chance: 0.1}]
         },
@@ -94,26 +94,26 @@ class Mob {
             nom: "Goule",
             id: "goule",
             niveau: 6,
-            stats: { strength: 4, intelligence: 3, agility: 2, vitality: 6, willpower: 5 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [],
-            lootTable: []
+            stats: { strength: 5, intelligence: 4, agility: 2, vitality: 7, willpower: 6 },
+            resists: { fire: 0, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            sorts: [Spell.getSpell("debuffVit1")],
+            lootTable: [{item: Item.getItem("sword2"), chance: 0.1}]
         },
         {
             nom: "Mercenaire",
             id: "mercenaire",
             niveau: 6,
-            stats: { strength: 5, intelligence: 3, agility: 4, vitality: 5, willpower: 3 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 6, intelligence: 3, agility: 5, vitality: 6, willpower: 4 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: [{ item: Item.getItem("heavyArmor2"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("heavyArmor2"), chance: 0.1}]
         },
         {
             nom: "Sanglier",
             id: "sanglier",
             niveau: 7,
-            stats: { strength: 6, intelligence: 3, agility: 3, vitality: 6, willpower: 4 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 8, intelligence: 3, agility: 3, vitality: 7, willpower: 5 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -121,35 +121,35 @@ class Mob {
             nom: "Élémentaire de glace",
             id: "elementaireGlace",
             niveau: 7,
-            stats: { strength: 4, intelligence: 5, agility: 4, vitality: 5, willpower: 4 },
+            stats: { strength: 5, intelligence: 7, agility: 4, vitality: 5, willpower: 5 },
             resists: { fire: 2, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [Spell.getSpell("iceTarget1"), Spell.getSpell("iceAoe1")],
-            lootTable: [{ item: Item.getItem("battleRobe2"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("battleRobe2"), chance: 0.1}]
         },
         {
             nom: "Revenant",
             id: "revenant",
             niveau: 8,
-            stats: { strength: 5, intelligence: 3, agility: 3, vitality: 7, willpower: 6 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("baton2"), chance: 0.1 }]
+            stats: { strength: 7, intelligence: 3, agility: 3, vitality: 8, willpower: 7 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            sorts: [Spell.getSpell("debuffAgi1")],
+            lootTable: [{item: Item.getItem("baton2"), chance: 0.1}]
         },
         {
             nom: "Barbare",
             id: "barbare",
             niveau: 8,
-            stats: { strength: 7, intelligence: 4, agility: 3, vitality: 6, willpower: 4 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("hache2"), chance: 0.1 }]
+            stats: { strength: 9, intelligence: 4, agility: 5, vitality: 6, willpower: 4 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
+            sorts: [Spell.getSpell("buffStr1")],
+            lootTable: [{item: Item.getItem("hache2"), chance: 0.1}]
         },
         {
             nom: "Loup",
             id: "loup",
             niveau: 9,
-            stats: { strength: 6, intelligence: 5, agility: 7, vitality: 4, willpower: 4 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 7, intelligence: 5, agility: 8, vitality: 5, willpower: 5 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -157,35 +157,35 @@ class Mob {
             nom: "Hobgobelin",
             id: "hobgobelin",
             niveau: 9,
-            stats: { strength: 5, intelligence: 4, agility: 6, vitality: 6, willpower: 5 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 6, intelligence: 5, agility: 7, vitality: 6, willpower: 6 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: [{ item: Item.getItem("magicArmor2"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("magicArmor2"), chance: 0.1}]
         },
         {
             nom: "Vampire",
             id: "vampire",
             niveau: 10,
-            stats: { strength: 4, intelligence: 7, agility: 3, vitality: 7, willpower: 7 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("darkTarget1")],
-            lootTable: [{ item: Item.getItem("sword2"), chance: 0.1 }]
+            stats: { strength: 6, intelligence: 9, agility: 4, vitality: 8, willpower: 9 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 0.5, holy: 1 },
+            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("debuffWil2")],
+            lootTable: []
         },
         {
             nom: "Assassin",
             id: "assassin",
             niveau: 10,
-            stats: { strength: 5, intelligence: 6, agility: 7, vitality: 5, willpower: 5 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("lightArmor3"), chance: 0.1 }]
+            stats: { strength: 8, intelligence: 6, agility: 9, vitality: 6, willpower: 7 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            sorts: [Spell.getSpell("buffAgi2")],
+            lootTable: [{item: Item.getItem("lightArmor3"), chance: 0.1}]
         },
         {
             nom: "Ours",
             id: "ours",
             niveau: 11,
-            stats: { strength: 8, intelligence: 4, agility: 4, vitality: 8, willpower: 6 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
+            stats: { strength: 11, intelligence: 5, agility: 6, vitality: 9, willpower: 7 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -193,8 +193,8 @@ class Mob {
             nom: "Élémentaire de terre",
             id: "elementaireTerre",
             niveau: 11,
-            stats: { strength: 7, intelligence: 6, agility: 5, vitality: 7, willpower: 5 },
-            resists: { fire: 1, ice: 1, lightning: 2, earth: 0, dark: 1, holy: 1 },
+            stats: { strength: 9, intelligence: 8, agility: 6, vitality: 9, willpower: 6 },
+            resists: { fire: 0, ice: 0, lightning: 2, earth: 0, dark: 1, holy: 1 },
             sorts: [Spell.getSpell("earthTarget2"), Spell.getSpell("earthAoe2")],
             lootTable: []
         },
@@ -202,26 +202,26 @@ class Mob {
             nom: "Spectre",
             id: "spectre",
             niveau: 12,
-            stats: { strength: 4, intelligence: 7, agility: 7, vitality: 7, willpower: 7 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("iceTarget2")],
-            lootTable: [{ item: Item.getItem("battleRobe3"), chance: 0.1 }]
+            stats: { strength: 4, intelligence: 9, agility: 9, vitality: 9, willpower: 9 },
+            resists: { fire: 0, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            sorts: [Spell.getSpell("iceTarget2"), Spell.getSpell("debuffStr2")],
+            lootTable: [{item: Item.getItem("battleRobe3"), chance: 0.1}]
         },
         {
             nom: "Nécromancien",
             id: "necromancien",
             niveau: 12,
-            stats: { strength: 5, intelligence: 8, agility: 5, vitality: 6, willpower: 8 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkAoe2")],
-            lootTable: [{ item: Item.getItem("baton3"), chance: 0.1 }]
+            stats: { strength: 6, intelligence: 9, agility: 6, vitality: 8, willpower: 11 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            sorts: [Spell.getSpell("darkAoe2"), Spell.getSpell("debuffVit2")],
+            lootTable: [{item: Item.getItem("baton3"), chance: 0.1}]
         },
         {
             nom: "Basilic",
             id: "basilic",
             niveau: 13,
-            stats: { strength: 6, intelligence: 5, agility: 5, vitality: 9, willpower: 9 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 9, intelligence: 6, agility: 6, vitality: 11, willpower: 10 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
             sorts: [],
             lootTable: []
         },
@@ -229,88 +229,88 @@ class Mob {
             nom: "Troll",
             id: "troll",
             niveau: 13,
-            stats: { strength: 9, intelligence: 4, agility: 6, vitality: 9, willpower: 6 },
-            resists: { fire: 2, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 12, intelligence: 5, agility: 7, vitality: 11, willpower: 7 },
+            resists: { fire: 2, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: [{ item: Item.getItem("heavyArmor3"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("heavyArmor3"), chance: 0.1}]
         },
         {
             nom: "Momie",
             id: "momie",
             niveau: 14,
-            stats: { strength: 8, intelligence: 6, agility: 4, vitality: 9, willpower: 9 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 2, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("robe3"), chance: 0.1 }]
+            stats: { strength: 10, intelligence: 7, agility: 5, vitality: 11, willpower: 11 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 2 },
+            sorts: [Spell.getSpell("debuffInt2")],
+            lootTable: [{item: Item.getItem("robe3"), chance: 0.1}]
         },
         {
-            nom: "Chevalier noir",
-            id: "chevalierNoir",
+            nom: "Templier noir",
+            id: "templierNoir",
             niveau: 14,
-            stats: { strength: 8, intelligence: 5, agility: 5, vitality: 9, willpower: 9 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("healTarget2")],
-            lootTable: [{ item: Item.getItem("sword3"), chance: 0.1 }]
+            stats: { strength: 10, intelligence: 7, agility: 6, vitality: 11, willpower: 10 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 0.5, holy: 1 },
+            sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("buffVit2")],
+            lootTable: [{item: Item.getItem("sword3"), chance: 0.1}]
         },
         {
             nom: "Manticore",
             id: "manticore",
             niveau: 15,
-            stats: { strength: 10, intelligence: 6, agility: 6, vitality: 10, willpower: 6 },
-            resists: { fire: 0.5, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 1 },
-            sorts: [],
+            stats: { strength: 13, intelligence: 8, agility: 7, vitality: 11, willpower: 7 },
+            resists: { fire: 0.5, ice: 2, lightning: 0.5, earth: 1, dark: 1, holy: 1 },
+            sorts: [Spell.getSpell("fireAoe2")],
             lootTable: []
         },
         {
             nom: "Élémentaire de foudre",
             id: "elementaireFoudre",
             niveau: 15,
-            stats: { strength: 5, intelligence: 9, agility: 9, vitality: 6, willpower: 9 },
-            resists: { fire: 1, ice: 0, lightning: 2, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 8, intelligence: 10, agility: 9, vitality: 8, willpower: 11 },
+            resists: { fire: 0, ice: 0, lightning: 0, earth: 2, dark: 1, holy: 1 },
             sorts: [Spell.getSpell("lightningTarget2"), Spell.getSpell("LightningAoe2")],
-            lootTable: [{ item: Item.getItem("magicArmor3"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("magicArmor3"), chance: 0.1}]
         },
         {
             nom: "Crocodile",
             id: "crocodile",
             niveau: 16,
-            stats: { strength: 8, intelligence: 5, agility: 5, vitality: 12, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 11, intelligence: 6, agility: 6, vitality: 13, willpower: 12 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: [{ item: Item.getItem("mediumArmor3"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("mediumArmor3"), chance: 0.1}]
         },
         {
             nom: "Berserker",
             id: "berserker",
             niveau: 16,
-            stats: { strength: 11, intelligence: 5, agility: 6, vitality: 11, willpower: 7 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("hache3"), chance: 0.1 }]
+            stats: { strength: 14, intelligence: 6, agility: 8, vitality: 12, willpower: 8 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
+            sorts: [Spell.getSpell("buffStr2")],
+            lootTable: [{item: Item.getItem("hache3"), chance: 0.1}]
         },
         {
             nom: "Chimère",
             id: "chimere",
             niveau: 17,
-            stats: { strength: 11, intelligence: 7, agility: 10, vitality: 7, willpower: 7 },
-            resists: { fire: 0.5, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 1 },
-            sorts: [Spell.getSpell("fireTarget2")],
+            stats: { strength: 13, intelligence: 8, agility: 11, vitality: 9, willpower: 9 },
+            resists: { fire: 0.5, ice: 2, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            sorts: [Spell.getSpell("fireTarget2"), Spell.getSpell("buffVol2")],
             lootTable: []
         },
         {
             nom: "Géant",
             id: "geant",
             niveau: 17,
-            stats: { strength: 12, intelligence: 5, agility: 5, vitality: 12, willpower: 8 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 15, intelligence: 6, agility: 5, vitality: 15, willpower: 9 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 2, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: [{ item: Item.getItem("hache3"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("hache3"), chance: 0.1}]
         },
         {
             nom: "Dragonnet rouge",
             id: "dragonnetRouge",
             niveau: 18,
-            stats: { strength: 9, intelligence: 9, agility: 8, vitality: 9, willpower: 9 },
+            stats: { strength: 11, intelligence: 11, agility: 9, vitality: 11, willpower: 10 },
             resists: { fire: 0.5, ice: 2, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [Spell.getSpell("fireAoe2")],
             lootTable: []
@@ -319,280 +319,28 @@ class Mob {
             nom: "Apôtre maudit",
             id: "apotreMaudit",
             niveau: 18,
-            stats: { strength: 7, intelligence: 12, agility: 9, vitality: 8, willpower: 8 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 9, intelligence: 13, agility: 10, vitality: 10, willpower: 10 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 2, holy: 0.5 },
             sorts: [Spell.getSpell("holyAoe2"), Spell.getSpell("healTarget2")],
-            lootTable: [{ item: Item.getItem("baton3"), chance: 0.1 }]
+            lootTable: [{item: Item.getItem("baton3"), chance: 0.1}]
         },
         {
             nom: "Griffon",
             id: "griffon",
             niveau: 19,
-            stats: { strength: 12, intelligence: 7, agility: 12, vitality: 8, willpower: 7 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
+            stats: { strength: 14, intelligence: 9, agility: 14, vitality: 9, willpower: 8 },
+            resists: { fire: 0.5, ice: 0, lightning: 1, earth: 1, dark: 1, holy: 1 },
             sorts: [],
-            lootTable: []
+            lootTable: [{item: Item.getItem("sword3"), chance: 0.1}]
         },
         {
             nom: "Élémentaire de ténèbres",
             id: "elementaireTenebres",
             niveau: 19,
-            stats: { strength: 8, intelligence: 12, agility: 7, vitality: 7, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0, holy: 2 },
+            stats: { strength: 10, intelligence: 14, agility: 8, vitality: 9, willpower: 13 },
+            resists: { fire: 0, ice: 0, lightning: 1, earth: 1, dark: 0, holy: 2 },
             sorts: [Spell.getSpell("darkTarget2"), Spell.getSpell("darkAoe2")],
             lootTable: []
-        },
-        {
-            nom: "Centaure",
-            id: "centaure",
-            niveau: 20,
-            stats: { strength: 12, intelligence: 8, agility: 8, vitality: 12, willpower: 8 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("sword3"), chance: 0.1 }]
-        },
-        {
-            nom: "Avatar martial",
-            id: "avatarMartial",
-            niveau: 20,
-            stats: { strength: 12, intelligence: 6, agility: 10, vitality: 10, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Wyverne",
-            id: "wyverne",
-            niveau: 21,
-            stats: { strength: 10, intelligence: 10, agility: 10, vitality: 10, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Chaman gobelin",
-            id: "chamanGobelin",
-            niveau: 21,
-            stats: { strength: 7, intelligence: 13, agility: 10, vitality: 7, willpower: 13 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("darkTarget3"), Spell.getSpell("healTarget3")],
-            lootTable: [{ item: Item.getItem("robe4"), chance: 0.1 }]
-        },
-        {
-            nom: "Dragonnet blanc",
-            id: "dragonnetBlanc",
-            niveau: 22,
-            stats: { strength: 11, intelligence: 10, agility: 10, vitality: 11, willpower: 10 },
-            resists: { fire: 2, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("iceAoe3")],
-            lootTable: []
-        },
-        {
-            nom: "Titan délabré",
-            id: "titanDelabre",
-            niveau: 22,
-            stats: { strength: 13, intelligence: 8, agility: 8, vitality: 13, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("heavyArmor4"), chance: 0.1 }]
-        },
-        {
-            nom: "Sphinx",
-            id: "sphinx",
-            niveau: 23,
-            stats: { strength: 10, intelligence: 14, agility: 8, vitality: 8, willpower: 14 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe3"), Spell.getSpell("healAoe3")],
-            lootTable: [{ item: Item.getItem("baton4"), chance: 0.1 }]
-        },
-        {
-            nom: "Élémentaire de lumière",
-            id: "elementaireLumiere",
-            niveau: 23,
-            stats: { strength: 9, intelligence: 13, agility: 10, vitality: 10, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 0 },
-            sorts: [Spell.getSpell("holyTarget3"), Spell.getSpell("holyAoe3")],
-            lootTable: []
-        },
-        {
-            nom: "Diablotin",
-            id: "diablotin",
-            niveau: 24,
-            stats: { strength: 8, intelligence: 14, agility: 14, vitality: 10, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("sword4"), chance: 0.1 }]
-        },
-        {
-            nom: "Golem de pierre",
-            id: "golemPierre",
-            niveau: 24,
-            stats: { strength: 15, intelligence: 8, agility: 8, vitality: 15, willpower: 10 },
-            resists: { fire: 1, ice: 2, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Naga",
-            id: "naga",
-            niveau: 25,
-            stats: { strength: 13, intelligence: 15, agility: 13, vitality: 7, willpower: 10 },
-            resists: { fire: 1, ice: 0.5, lightning: 2, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("mediumArmor4"), chance: 0.1 }]
-        },
-        {
-            nom: "Chaman orc",
-            id: "chamanOrc",
-            niveau: 25,
-            stats: { strength: 10, intelligence: 14, agility: 10, vitality: 12, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireTarget3"), Spell.getSpell("healTarget3")],
-            lootTable: [{ item: Item.getItem("battleRobe4"), chance: 0.1 }]
-        },
-        {
-            nom: "Dragonnet vert",
-            id: "dragonnetVert",
-            niveau: 26,
-            stats: { strength: 12, intelligence: 12, agility: 12, vitality: 12, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 2, earth: 0.5, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("earthAoe3")],
-            lootTable: []
-        },
-        {
-            nom: "Cultiste",
-            id: "cultiste",
-            niveau: 26,
-            stats: { strength: 10, intelligence: 15, agility: 14, vitality: 12, willpower: 9 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("sword4"), chance: 0.1 }]
-        },
-        {
-            nom: "Hippogriffe",
-            id: "hippogriffe",
-            niveau: 27,
-            stats: { strength: 13, intelligence: 12, agility: 12, vitality: 13, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("lightArmor4"), chance: 0.1 }]
-        },
-        {
-            nom: "Élémentaire de vent",
-            id: "elementaireVent",
-            niveau: 27,
-            stats: { strength: 12, intelligence: 15, agility: 15, vitality: 10, willpower: 10 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("windTarget3"), Spell.getSpell("windAoe3")],
-            lootTable: []
-        },
-        {
-            nom: "Démon mineur",
-            id: "demonMineur",
-            niveau: 28,
-            stats: { strength: 13, intelligence: 13, agility: 12, vitality: 13, willpower: 13 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 0.5, holy: 2 },
-            sorts: [Spell.getSpell("darkAoe3")],
-            lootTable: [{ item: Item.getItem("magicArmor4"), chance: 0.1 }]
-        },
-        {
-            nom: "Golem de fer",
-            id: "golemFer",
-            niveau: 28,
-            stats: { strength: 16, intelligence: 11, agility: 9, vitality: 17, willpower: 11 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Liche",
-            id: "liche",
-            niveau: 29,
-            stats: { strength: 8, intelligence: 18, agility: 10, vitality: 12, willpower: 18 },
-            resists: { fire: 1, ice: 0.5, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("iceAoe3")],
-            lootTable: [{ item: Item.getItem("baton4"), chance: 0.1 }]
-        },
-        {
-            nom: "Ogre",
-            id: "ogre",
-            niveau: 29,
-            stats: { strength: 19, intelligence: 9, agility: 9, vitality: 17, willpower: 12 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("hache4"), chance: 0.1 }]
-        },
-        {
-            nom: "Dragonnet bleu",
-            id: "dragonnetBleu",
-            niveau: 30,
-            stats: { strength: 15, intelligence: 15, agility: 15, vitality: 12, willpower: 11 },
-            resists: { fire: 1, ice: 1, lightning: 0.5, earth: 2, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("lightningAoe3")],
-            lootTable: []
-        },
-        {
-            nom: "Zélote",
-            id: "zelote",
-            niveau: 30,
-            stats: { strength: 14, intelligence: 14, agility: 14, vitality: 13, willpower: 13 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Béhémoth",
-            id: "behemoth",
-            niveau: 31,
-            stats: { strength: 18, intelligence: 14, agility: 12, vitality: 14, willpower: 12 },
-            resists: { fire: 2, ice: 1, lightning: 1, earth: 0.5, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Élémentaire d'eau",
-            id: "elementaireEau",
-            niveau: 31,
-            stats: { strength: 12, intelligence: 18, agility: 12, vitality: 10, willpower: 18 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("healTarget4"), Spell.getSpell("healAoe4")],
-            lootTable: []
-        },
-        {
-            nom: "Ange déchu",
-            id: "angeDechu",
-            niveau: 32,
-            stats: { strength: 12, intelligence: 16, agility: 14, vitality: 16, willpower: 14 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 0.5 },
-            sorts: [Spell.getSpell("holyAoe4")],
-            lootTable: [{ item: Item.getItem("baton5"), chance: 0.1 }]
-        },
-        {
-            nom: "Golem de chair",
-            id: "golemChair",
-            niveau: 32,
-            stats: { strength: 16, intelligence: 10, agility: 10, vitality: 20, willpower: 16 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: []
-        },
-        {
-            nom: "Satyr",
-            id: "satyr",
-            niveau: 33,
-            stats: { strength: 14, intelligence: 20, agility: 16, vitality: 12, willpower: 12 },
-            resists: { fire: 0.5, ice: 1, lightning: 1, earth: 1, dark: 2, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("hache5"), chance: 0.1 }]
-        },
-        {
-            nom: "Colosse",
-            id: "colosse",
-            niveau: 33,
-            stats: { strength: 20, intelligence: 10, agility: 10, vitality: 20, willpower: 14 },
-            resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 1 },
-            sorts: [],
-            lootTable: [{ item: Item.getItem("sword5"), chance: 0.1 }]
         }
     ];
 
@@ -667,7 +415,7 @@ class Mob {
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
         let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
         const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3);
-        let mobCount = 1 + Math.floor(Math.random() * 5);
+        let mobCount = 1 + Math.floor(Math.random() * 4);
         while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) < lvlTeam ) {
             let mobData = eligibleMobs[Math.floor(Math.random() * eligibleMobs.length)];
             mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable));
