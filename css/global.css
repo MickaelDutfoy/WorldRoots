@@ -272,7 +272,7 @@ body > div {
   font-weight: bold;
 }
 
-#fightButtons {
+#fightLog button {
   margin-bottom: 3px;
 }
 
@@ -325,7 +325,7 @@ table {
 
 .statName {
   text-align: right;
-  flex: 2;
+  flex: 3;
   padding-top: 5px;
 }
 

@@ -257,20 +257,20 @@ class Character {
             document.getElementById("nameClass" + i).innerHTML = `${chars[i].nom}<br>${chars[i].classe}`;
             document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 100}`;
             document.getElementById("agi" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit la capacité d'esquive, la précision et l'initiative">Agilité</span> :`;
-            document.getElementById("agiVal" + i).innerHTML = `<span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="bluebold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility}</span> (${chars[i].armure.valeur.agility < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.agility)})`;
+            document.getElementById("agiVal" + i).innerHTML = `<span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="bluebold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility + chars[i].armure.valeur.agility}</span>`;
             document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques">Force</span> :`;
-            document.getElementById("forVal" + i).innerHTML = ` <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="bluebold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength}</span> (${chars[i].arme.valeur.strength < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.strength)})`
+            document.getElementById("forVal" + i).innerHTML = ` <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="bluebold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength + chars[i].arme.valeur.strength}</span>`
             document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques et l'efficacité des sorts de soin">Intelligence</span> :`;
-            document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence}</span> (${chars[i].arme.valeur.intelligence < 0 ? '-' : '+'}${Math.abs(chars[i].arme.valeur.intelligence)})`;
+            document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence + chars[i].arme.valeur.intelligence}</span>`;
             document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique">Vitalité</span> :`;
-            document.getElementById("vitVal" + i).innerHTML = ` <span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality}</span> (${chars[i].armure.valeur.vitality < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.vitality)})`;
+            document.getElementById("vitVal" + i).innerHTML = ` <span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
             document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique">Volonté</span> :`;
-            document.getElementById("volVal" + i).innerHTML = `<span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="bluebold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower}</span> (${chars[i].armure.valeur.willpower < 0 ? '-' : '+'}${Math.abs(chars[i].armure.valeur.willpower)})`;
+            document.getElementById("volVal" + i).innerHTML = `<span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="bluebold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower + chars[i].armure.valeur.willpower}</span>`;
             document.getElementById("lvlUpPoints" + i).innerHTML = `Disponibles :`;
             document.getElementById("lvlUpPointsTot" + i).innerHTML = ` ${chars[i].pointsLvlUp}`;
             let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
             let descSorts = chars[i].sorts.map(sort => `<span class="tooltip" data-tooltip="${sort.type === "attack" ? "Attaque" : "Soin"} ${sort.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[sort.element] || "Aucun"}, ${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}, Coût : ${sort.mp} MP">${sort.nom}</span>`);
-            document.getElementById("spells" + i).innerHTML = `Sorts :<br>${descSorts.join("<br>")}`;
+            document.getElementById("spells" + i).innerHTML = `<strong>Sorts</strong> :<br>${descSorts.join("<br>")}`;
             let displayHP = document.getElementById("HP" + i);
             if ( chars[i].hp < 0 ) chars[i].hp = 0;
             displayHP.textContent = `HP : ${chars[i].hp} / ${chars[i].maxhp}`;
@@ -452,7 +452,10 @@ class Character {
                     }
                 });
             });
-            if ( palaSpellList.innerHTML === "" ) { palaSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (palaSpellList.innerHTML === "") {
+                palaSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (palaBuy) { palaBuy.style.display = "none"; }
+            }
             palaBuy.addEventListener("click", () => {
                 const selectedSpellId = palaSpellList.value;
                 if (!selectedSpellId) return;
@@ -502,7 +505,10 @@ class Character {
                     }
                 });
             });
-            if ( darkKnightSpellList.innerHTML === "" ) { darkKnightSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (darkKnightSpellList.innerHTML === "") {
+                darkKnightSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (darkKnightBuy) { darkKnightBuy.style.display = "none"; }
+            }
             darkKnightBuy.addEventListener("click", () => {
                 const selectedSpellId = darkKnightSpellList.value;
                 if (!selectedSpellId) return;
@@ -552,7 +558,10 @@ class Character {
                     }
                 });
             });
-            if ( elemSpellList.innerHTML === "" ) { elemSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (elemSpellList.innerHTML === "") {
+                elemSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (elemBuy) { elemBuy.style.display = "none"; }
+            }
             elemBuy.addEventListener("click", () => {
                 const selectedSpellId = elemSpellList.value;
                 if (!selectedSpellId || elemSpellList.innerHTML === "<option disabled selected>Aucun sort n'est disponible</option>") return;
@@ -602,7 +611,10 @@ class Character {
                     }
                 });
             });
-            if ( chaoSpellList.innerHTML === "" ) { chaoSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (chaoSpellList.innerHTML === "") {
+                chaoSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (chaoBuy) { chaoBuy.style.display = "none"; }
+            }
             chaoBuy.addEventListener("click", () => {
                 const selectedSpellId = chaoSpellList.value;
                 if (!selectedSpellId) return;
@@ -652,7 +664,10 @@ class Character {
                     }
                 });
             });
-            if (spellBladeSpellList.innerHTML === "") { spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>"; }
+            if (spellBladeSpellList.innerHTML === "") {
+                spellBladeSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (spellBladeBuy) { spellBladeBuy.style.display = "none"; }
+            }
             spellBladeBuy.addEventListener("click", () => {
                 const selectedSpellId = spellBladeSpellList.value;
                 if (!selectedSpellId) return;
@@ -702,7 +717,10 @@ class Character {
                     }
                 });
             });
-            if ( priestSpellList.innerHTML === "" ) { priestSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>" }
+            if (priestSpellList.innerHTML === "") {
+                priestSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";                
+                if (priestBuy) { priestBuy.style.display = "none"; }
+            }
             priestBuy.addEventListener("click", () => {
                 const selectedSpellId = priestSpellList.value;
                 if (!selectedSpellId) return;

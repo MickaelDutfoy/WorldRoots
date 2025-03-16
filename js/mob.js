@@ -667,12 +667,13 @@ class Mob {
         if ( document.getElementById("ennemyTargets") ) { document.getElementById("ennemyTargets").remove() };
         let lvlTeam = chars.reduce((sum, char) => sum + char.niveau, 0);
         const eligibleMobs = Mob.mobList.filter(mobData => mobData.niveau >= lvlTeam / chars.length - 3 && mobData.niveau <= lvlTeam / chars.length + 3);
-        let mobCount = 1 + Math.floor(Math.random() * 4);
+        let mobCount = 1 + Math.floor(Math.random() * 5);
         while ( mobs.reduce((sum, mob) => sum + mob.niveau, 0) < lvlTeam ) {
             let mobData = eligibleMobs[Math.floor(Math.random() * eligibleMobs.length)];
             mobs.push(new Mob(mobData.nom, mobData.niveau, mobData.stats, mobData.resists, mobData.sorts, mobData.lootTable));
             if (mobs.length >= mobCount) break;
-        }  
+        }
+        mobs.sort((a, b) => a.nom.localeCompare(b.nom));
         let ennemyList = "";
         let ennemyTargets = document.createElement("div"); ennemyTargets.id = "ennemyTargets";
         for ( let i = 0 ; i < mobs.length ; i++ ) {

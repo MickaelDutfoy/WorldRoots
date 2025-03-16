@@ -35,7 +35,7 @@ function fight() {
                 do {
                     target = chars[Math.floor(Math.random() * chars.length)];
                 } while (target.hp <= 0);
-                if ( taunt === true ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
+                if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
             mobAttack(fighter.entity, target);
             turnIndex++;
             nextTurn();
@@ -49,7 +49,7 @@ function fight() {
             else if (fighter.entity.skill === "Élémantra") {mpSkill = Math.max(fighter.entity.mp, 1)}
             else if (fighter.entity.skill === "Discorde") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Don de mana") {mpSkill = 4 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Fraternité") {
@@ -101,6 +101,7 @@ function fight() {
 
     function refreshMobList() {
         fightMobList.innerHTML = "";
+        mobs.sort((a, b) => a.nom.localeCompare(b.nom));
         for (let i = 0; i < mobs.length; i++) {
             let mobToList = document.createElement("li");
             mobToList.innerHTML = `${mobs[i].nom} (niveau ${mobs[i].niveau})`;
@@ -169,7 +170,7 @@ function fight() {
         if ( Math.random() * 100 < Math.min(mobs[cibleIndex].stats.agility - char.stats.agility, 50) ) {
             addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
         } else {
-            let dmg = Math.floor(( 3 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.floor(( 3.5 * ( char.stats.strength + char.arme.valeur.strength ) - mobs[cibleIndex].stats.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
             addMessageToLog(`${char.nom} attaque ${mobs[cibleIndex].nom} avec ${char.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
             mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
             if (isFightOver()) return;
@@ -308,15 +309,15 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Don de mana") {
-            if ( char.mp < char.niveau * 4 ) {
+            if ( char.mp < char.niveau * 3 ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                char.mp -= char.niveau * 4;
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 4} MP</span> et utilise ${char.skill}.`);
+                char.mp -= char.niveau * 3;
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
                 for (let i = 0; i < chars.length; i++) {
                     if (chars[i].nom !== char.nom) {
-                        chars[i].mp += char.niveau * 4; if ( chars[i].mp > chars[i].maxmp ) chars[i].mp = chars[i].maxmp;
-                        addMessageToLog(`<span class="blue">${chars[i].nom} récupère ${char.niveau * 4} MP</span> !`);
+                        chars[i].mp += char.niveau * 3; if ( chars[i].mp > chars[i].maxmp ) chars[i].mp = chars[i].maxmp;
+                        addMessageToLog(`<span class="blue">${chars[i].nom} récupère ${char.niveau * 3} MP</span> !`);
                     }
                 }
             }
@@ -545,12 +546,6 @@ function fight() {
                 addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
             }
         }
-        // else if (item.effet === "dégâts") {
-        //     let dmg = Math.floor((item.valeur) * (Math.random() * 0.3 + 0.85));
-        //     addMessageToLog(`${char.nom} lance ${item.nom} sur ${mobs[cibleIndex].nom} ! <span class="red">${mob.nom} perd ${dmg} HP</span>.`);
-        //     mob.hp -= dmg;
-        //     if (isFightOver()) return;
-        // }
         let index = inventaire.findIndex(i => i.objet.id === item.id);
         if (index !== -1) {
             inventaire[index].quantite--;
@@ -573,7 +568,7 @@ function fight() {
         } else if ( Math.random() * 100 < Math.min((cible.stats.agility + cible.arme.valeur.agility - mob.stats.agility), 50) ) {
             addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
         } else {
-            let dmg = Math.floor((3 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality) ) * (Math.random() * 0.3 + 0.85));
+            let dmg = Math.floor((3.5 * mob.stats.strength - (cible.stats.vitality + cible.armure.valeur.vitality) ) * (Math.random() * 0.3 + 0.85));
             if (dmg < 0) dmg = 0;
             cible.hp -= dmg;
             addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
@@ -599,6 +594,14 @@ function fight() {
                     addMessageToLog(`<span class="red">${chars[i].nom} perd ${dmg} HP</span>.`);
                 }
             }
+        } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
+            console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`)
+            let target;
+            do {
+                target = chars[Math.floor(Math.random() * chars.length)];
+            } while (target.hp <= 0);
+            if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
+            mobAttack(mob, target);
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
@@ -644,7 +647,7 @@ function fight() {
         addMessageToLog(`${mobs[cible].nom} est <strong>vaincu(e)</strong> !`);
         xpGained += mobs[cible].niveau * 10;
         if ( Math.random() < 0.8 ) {
-            goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 5);
+            goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 3);
         }
         let loots = mobs[cible].lootTable.filter(objet => Math.random() < objet.chance);
         if (loots.length > 0) {
