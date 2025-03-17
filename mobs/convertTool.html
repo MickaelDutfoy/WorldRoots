@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSV → JSON</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; }
+    #drop-zone { border: 2px dashed #007bff; padding: 20px; margin: 20px; cursor: pointer; }
+    #output { white-space: pre-wrap; text-align: left; background: #f4f4f4; padding: 10px; margin: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Convertisseur CSV → JSON</h1>
+  <div id="drop-zone">Glissez-déposez votre fichier CSV ici</div>
+  <button id="download-btn" style="display: none;">Télécharger JSON</button>
+  <pre id="output"></pre>
+  
+  <script>
+    // Fonction de conversion CSV -> JSON (formaté en code JS littéral)
+    function csvToJson(csvText) {
+      // Détecte le séparateur (tabulation ou virgule)
+      const separator = csvText.includes("\t") ? "\t" : ",";
+      // Découpe le CSV en lignes et colonnes
+      const lines = csvText
+        .trim()
+        .split("\n")
+        .map(line => line.replace("\r", "").split(separator));
+      
+      // Retire l'en-tête (la 1ère ligne)
+      lines.shift();
+      
+      // Transformation de chaque ligne en objet formaté
+      const result = lines.map(row => {
+        const nom = row[0].trim();
+        const id = row[1].trim();
+        const niveau = parseInt(row[2], 10);
+        const stats = {
+          strength: parseInt(row[3], 10),
+          intelligence: parseInt(row[4], 10),
+          agility: parseInt(row[5], 10),
+          vitality: parseInt(row[6], 10),
+          willpower: parseInt(row[7], 10)
+        };
+        const resists = {
+          fire: parseFloat(row[8] || "1"),
+          ice: parseFloat(row[9] || "1"),
+          lightning: parseFloat(row[10] || "1"),
+          earth: parseFloat(row[11] || "1"),
+          dark: parseFloat(row[12] || "1"),
+          holy: parseFloat(row[13] || "1")
+        };
+
+        // Récupère les sorts (colonne 14 et 15)
+        const sorts = [];
+        if (row[14] && row[14].trim() !== "") {
+          sorts.push(`Spell.getSpell("${row[14].trim()}")`);
+        }
+        if (row[15] && row[15].trim() !== "") {
+          sorts.push(`Spell.getSpell("${row[15].trim()}")`);
+        }
+        
+        // Récupère le loot (colonne 16)
+        const lootTable = [];
+        if (row[16] && row[16].trim() !== "") {
+          lootTable.push(`{item: Item.getItem("${row[16].trim()}"), chance: 0.1}`);
+        }
+        
+        // Retourne le string formaté tel que voulu
+        return `{
+    nom: "${nom}",
+    id: "${id}",
+    niveau: ${niveau},
+    stats: { strength: ${stats.strength}, intelligence: ${stats.intelligence}, agility: ${stats.agility}, vitality: ${stats.vitality}, willpower: ${stats.willpower} },
+    resists: { fire: ${resists.fire}, ice: ${resists.ice}, lightning: ${resists.lightning}, earth: ${resists.earth}, dark: ${resists.dark}, holy: ${resists.holy} },
+    sorts: [${sorts.join(", ")}],
+    lootTable: [${lootTable.join(", ")}]
+}`;
+      });
+      
+      // Retourne les objets séparés par des virgules (comme dans ton exemple)
+      return result.join(",\n");
+    }
+
+    // Gestion du drag & drop
+    const dropZone = document.getElementById("drop-zone");
+    const output = document.getElementById("output");
+    const downloadBtn = document.getElementById("download-btn");
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = "#0056b3";
+    });
+    
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.style.borderColor = "#007bff";
+    });
+    
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.style.borderColor = "#007bff";
+    
+      let file = e.dataTransfer.files[0];
+      if (file && file.type === "text/csv") {
+        let reader = new FileReader();
+        reader.onload = function (event) {
+          let csvText = event.target.result;
+          let jsonResult = csvToJson(csvText);
+          // Affiche directement la chaîne formatée, sans JSON.stringify
+          output.textContent = jsonResult;
+    
+          downloadBtn.style.display = "block";
+          downloadBtn.onclick = function () {
+            let blob = new Blob([jsonResult], { type: "application/json" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "data.json";
+            a.click();
+          };
+        };
+        reader.readAsText(file);
+      } else {
+        output.textContent = "Format non supporté. Merci d'utiliser un fichier CSV.";
+      }
+    });
+  </script>
+</body>
+</html>

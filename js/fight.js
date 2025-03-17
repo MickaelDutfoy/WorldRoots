@@ -48,9 +48,10 @@ function fight() {
             else if (fighter.entity.skill === "Siphon vital") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Élémantra") {mpSkill = Math.max(fighter.entity.mp, 1)}
             else if (fighter.entity.skill === "Discorde") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Manamnesis") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Manamnesis") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Analyse") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Fraternité") {
                 // insérer ici coût capacité Rôdeur
@@ -104,7 +105,7 @@ function fight() {
         mobs.sort((a, b) => a.nom.localeCompare(b.nom));
         for (let i = 0; i < mobs.length; i++) {
             let mobToList = document.createElement("li");
-            mobToList.innerHTML = `${mobs[i].nom} (niveau ${mobs[i].niveau})`;
+            mobToList.innerHTML = `${mobs[i].nom}`;
             fightMobList.appendChild(mobToList);
         }
     }
@@ -272,7 +273,7 @@ function fight() {
                             let dmg = Math.floor((2 * attaquant.stats.intelligence + sortChoisi.valeur - cible.stats.willpower) * (Math.random() * 0.3 + 0.85) * coeff);
                             if (dmg < 0) dmg = 0;
                             cible.hp -= dmg;
-                            addMessageToLog(`${attaquant.nom} lance ${sortChoisi.nom} !`);
+                            addMessageToLog(`${attaquant.nom} utilise ${sortChoisi.nom} !`);
                             if ( coeff === 0 ) {
                                 addMessageToLog(`<strong>Immunité</strong> ! ${cible.nom} perd ${dmg} HP.`);
                             } else if ( coeff === 0.5 ) {
@@ -293,19 +294,19 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Manamnesis") {
-            if ( char.mp < char.niveau * 2 ) {
+            if ( char.mp < char.niveau * 3 ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let mpDmg = Math.floor((2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + char.niveau * 2 - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
+                    let mpDmg = Math.floor((2 * ( char.stats.intelligence + char.arme.valeur.intelligence ) + char.niveau * 3 - mobs[i].stats.willpower ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
                     if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
                     mobs[i].mp -= mpDmg;
                     mobs[i].hp -= dmg;
                     addMessageToLog(`<span class="purple">${mobs[i].nom} perd ${mpDmg} MP</span>. <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
                 }
-                char.mp -= char.niveau * 2;
+                char.mp -= char.niveau * 3;
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Don de mana") {
@@ -335,6 +336,41 @@ function fight() {
                 char.mp -= char.niveau * 2;
                 if (isFightOver()) return;
             }
+        } else if (char.skill === "Analyse") {
+            if ( char.mp < char.niveau * 2 ) {
+                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            } else {
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                cibleIndex = "all";
+                for (let i = 0; i < mobs.length; i++) {
+                    const elements = {
+                        fire: "Feu",
+                        earth: "Terre",
+                        ice: "Glace",
+                        lightning: "Foudre",
+                        dark: "Ténèbres",
+                        holy: "Sacré"
+                    };             
+                    const immunes = [];
+                    const resists = [];
+                    const weaknesses = [];
+                    for (const [element, value] of Object.entries(mobs[i].resists)) {
+                        const elementFR = elements[element];
+                        if (value === 0) {
+                            immunes.push(elementFR);
+                        } else if (value === 0.5) {
+                            resists.push(elementFR);
+                        } else if (value === 2) {
+                            weaknesses.push(elementFR);
+                        }
+                    }
+                    const immuneText = immunes.length > 0 ? `Immunisé à : ${immunes.join(', ')}. ` : "";
+                    const resistText = resists.length > 0 ? `Résiste à : ${resists.join(', ')}. ` : "";
+                    const weaknessText = weaknesses.length > 0 ? `Faible face à : ${weaknesses.join(', ')}.` : "";
+                    addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
+                }
+                char.mp -= char.niveau * 2;
+            }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
@@ -348,7 +384,12 @@ function fight() {
                 }
                 let loot = cible.lootTable[Math.floor(Math.random() * cible.lootTable.length)];
                 if (Math.random() < loot.chance * 3) {
-                    inventaire.push({objet: loot.item, quantite: 1});
+                    const itemIndex = inventaire.findIndex(entry => entry.objet === loot.item);
+                    if (itemIndex !== -1) {
+                        inventaire[itemIndex].quantite += 1;
+                    } else {
+                        inventaire.push({objet: loot.item, quantite: 1});
+                    }
                     const index = cible.lootTable.indexOf(loot);
                     if (index !== -1) cible.lootTable.splice(index, 1);
                     addMessageToLog(`${char.nom} vole ${loot.item.nom} à ${cible.nom} !`);
