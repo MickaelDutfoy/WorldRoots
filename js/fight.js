@@ -43,6 +43,9 @@ function fight() {
             nextTurn();
         } else if ( fighter.type === "char" && fighter.entity.hp > 0 ) {
             addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            let mobsAlive = 0; mobs.forEach(mob => {
+                if (mob.hp > 0) mobsAlive++;
+            })
             if ( fighter.entity.skill === "Provocation" && taunt === true ) taunt = false;
             let mpSkill = 0;
             if (fighter.entity.skill === "Provocation") {mpSkill = fighter.entity.niveau}
@@ -53,7 +56,7 @@ function fight() {
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Analyse") {mpSkill = mobs.length * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Analyse") {mpSkill = mobsAlive * fighter.entity.niveau}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Fraternité") {
                 // insérer ici coût capacité Rôdeur
@@ -343,10 +346,13 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Analyse") {
-            if ( char.mp < char.niveau * mobs.length ) {
+            let mobsAlive = 0; mobs.forEach(mob => {
+                if (mob.hp > 0) mobsAlive++;
+            })
+            if ( char.mp < char.niveau * mobsAlive ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * mobs.length} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * mobsAlive} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
                     const elements = {
@@ -375,7 +381,7 @@ function fight() {
                     const weaknessText = weaknesses.length > 0 ? `Faible face à : ${weaknesses.join(', ')}.` : "";
                     addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                 }
-                char.mp -= char.niveau * mobs.length;
+                char.mp -= char.niveau * mobsAlive;
             }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
@@ -685,7 +691,7 @@ function fight() {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
                     ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
-                } else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau || ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 2) {
+                } else if ((ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) || (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns > 1)) {
                     console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
                     mobChangeAction (mob);
                 }
@@ -716,7 +722,7 @@ function fight() {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
-                } else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau || perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
+                } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
                     console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
                     mobChangeAction (mob);
                 }
@@ -741,6 +747,7 @@ function fight() {
     }
 
     function physicalDmg(attacker, target, bonus = 0) {
+        if (target.hp < 0) return;
         let arme = 0; let armure = 0; let dodge = 0;
         if (attacker.arme) arme = attacker.arme.valeur.strength;
         if (target.armure) { armure = target.armure.valeur.vitality; armure = target.armure.valeur.agility; }
@@ -755,6 +762,7 @@ function fight() {
     }
 
     function magicalDmg(attacker, target, bonus, element = "none") {
+        if (target.hp < 0) {let dmg = 0; return dmg};
         let arme = 0; let armure = 0;
         if (attacker.arme) arme = attacker.arme.valeur.intelligence;
         if (target.armure) armure = target.armure.valeur.willpower;
