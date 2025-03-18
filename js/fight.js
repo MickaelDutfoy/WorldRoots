@@ -773,7 +773,7 @@ function fight() {
 
     function heal(caster, target, bonus) {
         let arme = 0;
-        if (attacker.arme) arme = caster.arme.valeur.intelligence;
+        if (caster.arme) arme = caster.arme.valeur.intelligence;
         let heal = Math.floor(( caster.statsTemp.intelligence + arme + bonus ) * ( Math.random() * 0.3 + 0.85 ));
         target.hp = Math.min(target.hp + heal, target.maxhp);
         addMessageToLog(`<span class="green">${target.nom} gagne ${heal} HP</span>.`);
