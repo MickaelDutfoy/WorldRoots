@@ -27,6 +27,7 @@ function fight() {
                 }
             }
         }
+        console.log(initiativeTable);
     }
 
     function nextTurn() {
