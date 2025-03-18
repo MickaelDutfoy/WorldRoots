@@ -339,7 +339,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    physicalDmg(char, mob[i]);
+                    physicalDmg(char, mobs[i]);
                 }
                 char.mp -= char.niveau * 2;
                 if (isFightOver()) return;
