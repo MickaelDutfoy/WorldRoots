@@ -546,6 +546,7 @@ function fight() {
             let displayStat = statNames[stat]
             let debuffType = `${type}${stat}`;  
             mobs.forEach(mob => {
+                if (mob.hp <= 0) return;
                 if (mob.statusEffects[debuffType] && mob.statusEffects[debuffType].lvl < niveau ) {
                     mob.statsTemp[stat] += 3 * mob.statusEffects[debuffType].lvl;
                     mob.statsTemp[stat] -= sort.valeur; mob.statusEffects[debuffType] = {lvl: niveau, caster: char, turns: 3};
@@ -651,9 +652,6 @@ function fight() {
             physicalDmg(mob, cible);
         }
         Character.charSheet();
-        if (cible.hp <= 0) {
-            addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
-        }
     }
 
     function mobSpellResolve(mob, sort, cible) {
@@ -695,6 +693,7 @@ function fight() {
             let displayStat = statNames[stat]
             let buffType = `${type}${stat}`;
             mobs.forEach(ennemi => {
+                if (ennemi.hp <= 0) return;
                 if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl < niveau ) {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
                     ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
@@ -758,6 +757,11 @@ function fight() {
             target.hp -= dmg;
             addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
         }
+        if (target.classe && target.hp <= 0) {
+            addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
+        } else if (target.hp <= 0) {
+            addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
+        }
     }
 
     function magicalDmg(attacker, target, bonus, element = "none") {
@@ -780,6 +784,11 @@ function fight() {
             addMessageToLog(`<strong>Faiblesse</strong> ! ` + dmgMsg);
         } else {
             addMessageToLog(dmgMsg);
+        }
+        if (target.classe && target.hp <= 0) {
+            addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
+        } else if (target.hp <= 0) {
+            addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
         }
         return dmg;
     }
@@ -820,7 +829,6 @@ function fight() {
     }
 
     function deadMob(cible) {
-        addMessageToLog(`${mobs[cible].nom} est <strong>vaincu(e)</strong> !`);
         xpGained += mobs[cible].niveau * 10;
         if ( Math.random() < 0.8 ) {
             goldGained += Math.floor((Math.random() * 0.2 + 0.4 ) * mobs[cible].niveau * 3);
