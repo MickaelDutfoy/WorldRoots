@@ -167,7 +167,10 @@ function fight() {
             newTargetBtn.addEventListener("click", () => { 
                 cibleIndex = i;
                 if ( action === "attack" ) {
-                    attackDmg(char);
+                    tempoMsg = 0;
+                    physicalDmg(char, mobs[cibleIndex]);
+                    if (isFightOver()) return;
+                    proceed();
                 } else if ( action === "spell" ) {
                     spellResolve(char, effect);
                 } else if ( action === "item" ) {
@@ -207,17 +210,6 @@ function fight() {
         if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
         if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
         targetSelect(char, "attack");
-    };
-
-    function attackDmg(char) {     
-        tempoMsg = 0;
-        if ( Math.random() * 100 < Math.min(mobs[cibleIndex].statsTemp.agility - (char.statsTemp.agility + char.arme.valeur.agility), 50) ) {
-            addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
-        } else {
-            physicalDmg(char, mobs[cibleIndex]);
-            if (isFightOver()) return;
-        }
-        proceed();
     };
 
     function skill(char) {
@@ -635,8 +627,6 @@ function fight() {
         } else if ( Math.random() < 0.6 && mob.sorts[0]?.mp !== undefined && mob.mp >= mob.sorts[0].mp ) {
             addMessageToLog(`${mob.nom} utilise ${mob.sorts[0].nom} !`)
             mobSpellResolve(mob, mob.sorts[0], cible)
-        } else if ( Math.random() * 100 < Math.min((cible.statsTemp.agility + cible.arme.valeur.agility - mob.statsTemp.agility), 50) ) {
-            addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
         } else {
             physicalDmg(mob, cible);
         }
@@ -739,13 +729,17 @@ function fight() {
     }
 
     function physicalDmg(attacker, target, bonus = 0) {
-        let arme = 0; let armure = 0;
+        let arme = 0; let armure = 0; let dodge = 0;
         if (attacker.arme) arme = attacker.arme.valeur.strength;
-        if (target.armure) armure = target.armure.valeur.vitality;
-        let dmg = Math.floor(( 2 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 ));
-        if ( dmg < 0 ) { dmg = 0 };
-        target.hp -= dmg;
-        addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
+        if (target.armure) { armure = target.armure.valeur.vitality; armure = target.armure.valeur.agility; }
+        if ( Math.random() * 100 < Math.min(50, 2 * (target.statsTemp.agility + dodge - attacker.statsTemp.agility)) ) {
+            addMessageToLog(`${target.nom} <strong>esquive</strong> l'attaque de ${attacker.nom} !`);
+        } else {
+            let dmg = Math.floor(( 2 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 ));
+            if ( dmg < 0 ) { dmg = 0 };
+            target.hp -= dmg;
+            addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
+        }
     }
 
     function magicalDmg(attacker, target, bonus, element = "none") {

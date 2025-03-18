@@ -280,16 +280,28 @@ class Character {
             document.getElementById("lvlUpPointsTot" + i).innerHTML = ` ${chars[i].pointsLvlUp}`;
             let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
             let descSorts = chars[i].sorts.map(sort => {
+                const statNames = {
+                    Strength: "Force", 
+                    Agility: "Agilité", 
+                    Intelligence: "Intelligence", 
+                    Vitality: "Vitalité", 
+                    Willpower: "Volonté" 
+                };
+                let match = sort.id.match(/(buff|debuff)([A-Za-z]+)(\d+)/);
+                let [_, type, stat] = match || [];
                 let typeText = sort.type === "attack" ? "Attaque" 
                              : sort.type === "heal" ? "Soin" 
                              : sort.type === "buff" ? "Bénédiction" 
-                             : "Malédiction"; // Par défaut, ça sera "debuff"
-                
-                let elementText = elements[sort.element] ? `, Élément : ${elements[sort.element]}` : ""; // Affiche l'élément sauf si "none"
-                
+                             : "Malédiction";
+                let statText = (sort.type === "buff" || sort.type === "debuff") && statNames[stat] 
+                             ? ` (${statNames[stat]})` 
+                             : "";
+                let elementText = elements[sort.element] ? `, Élément : ${elements[sort.element]}` : "";
                 let intensityText = `${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}`;
-                
-                return `<span class="tooltip" data-tooltip="${typeText} ${sort.cible === 1 ? "sur cible" : "de zone"}${elementText}, ${intensityText}, Coût : ${sort.mp} MP">${sort.nom}</span>`;
+                let cibleText = (sort.type === "attack" || sort.type === "heal") 
+                              ? (sort.cible === 1 ? " sur cible" : " de zone") 
+                              : "";
+                return `<span class="tooltip" data-tooltip="${typeText}${statText}${cibleText}${elementText}, ${intensityText}, Coût : ${sort.mp} MP">${sort.nom}</span>`;
             });
             document.getElementById("spells" + i).innerHTML = `<strong>Sorts</strong> :<br>${descSorts.join("<br>")}`;            
             let displayHP = document.getElementById("HP" + i);
@@ -468,11 +480,45 @@ class Character {
                     if (spell && !char.sorts.some(sort => sort.id === spellId)) {
                         const option = document.createElement("option");
                         option.value = spellId;
+                    
                         let elements = { fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré" };
+                        const statNames = {
+                            Strength: "Force", 
+                            Agility: "Agilité", 
+                            Intelligence: "Intelligence", 
+                            Vitality: "Vitalité", 
+                            Willpower: "Volonté" 
+                        };
+                    
+                        // Extraction du type et de la stat si buff/debuff
+                        let match = spell.id.match(/(buff|debuff)([A-Za-z]+)(\d+)/);
+                        let [_, type, stat] = match || [];
+                    
+                        // Détermine le type d'action
+                        let typeText = spell.type === "attack" ? "Attaque" 
+                                     : spell.type === "heal" ? "Soin" 
+                                     : spell.type === "buff" ? "Bénédiction" 
+                                     : "Malédiction"; // Par défaut, c'est "debuff"
+                    
+                        // Convertit la stat en français si applicable
+                        let statText = (spell.type === "buff" || spell.type === "debuff") && statNames[stat] 
+                                     ? ` (${statNames[stat]})` 
+                                     : "";
+                    
+                        // Gère l'affichage de l'élément
                         let elementText = elements[spell.element] ? `, Élément : ${elements[spell.element]}` : "";
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}${elementText}) - ${costMultiplier * X} fragments`;
+                    
+                        // Ajoute "sur cible" sauf si c'est un buff/debuff (toujours de zone)
+                        let cibleText = (spell.type === "attack" || spell.type === "heal") 
+                                      ? (spell.cible === 1 ? " sur cible" : " de zone") 
+                                      : "";
+                    
+                        // Génération de l'option
+                        option.textContent = `${spell.nom} (${typeText}${statText}${cibleText}${elementText}) - ${costMultiplier * X} fragments`;
+                        
                         charSpellList.appendChild(option);
                     }
+                    
                 });
             });
         
