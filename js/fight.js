@@ -692,7 +692,9 @@ function fight() {
             };
             let displayStat = statNames[stat]
             let buffType = `${type}${stat}`;
+            let breakLoop = false;
             mobs.forEach(ennemi => {
+                if (breakLoop) return;
                 if (ennemi.hp <= 0) return;
                 if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl < niveau ) {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
@@ -700,7 +702,7 @@ function fight() {
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) || (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns > 1)) {
                     console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
-                    physicalDmg(mob, cible);
+                    physicalDmg(mob, cible); breakLoop = true;
                 }
                  else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 1) {
                     ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
@@ -723,15 +725,17 @@ function fight() {
                 willpower: "Volonté"
             };
             let displayStat = statNames[stat]
-            let debuffType = `${type}${stat}`;  
+            let debuffType = `${type}${stat}`;
+            let breakLoop = false;
             chars.forEach(perso => {
+                if (breakLoop) return;
                 if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl < niveau ) {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
                     console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
-                    physicalDmg(mob, cible);
+                    physicalDmg(mob, cible); breakLoop = true;
                 }
                  else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
