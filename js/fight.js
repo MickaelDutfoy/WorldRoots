@@ -53,7 +53,7 @@ function fight() {
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Analyse") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Analyse") {mpSkill = mobs.length * fighter.entity.niveau}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Fraternité") {
                 // insérer ici coût capacité Rôdeur
@@ -345,10 +345,10 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Analyse") {
-            if ( char.mp < char.niveau * 2 ) {
+            if ( char.mp < char.niveau * mobs.length ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * mobs.length} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
                     const elements = {
@@ -377,7 +377,7 @@ function fight() {
                     const weaknessText = weaknesses.length > 0 ? `Faible face à : ${weaknesses.join(', ')}.` : "";
                     addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                 }
-                char.mp -= char.niveau * 2;
+                char.mp -= char.niveau * mobs.length;
             }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
