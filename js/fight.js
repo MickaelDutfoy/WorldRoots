@@ -29,9 +29,10 @@ function fight() {
         if (isGameOver()) return;
         if ( turnIndex >= initiativeTable.length ) { turnIndex = 0; round++ }
         let fighter = initiativeTable[turnIndex];
+        decrementStatusEffects(fighter.entity);
         if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
             addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
-            decrementStatusEffects(fighter.entity);
+
             let target;
                 do {
                     target = chars[Math.floor(Math.random() * chars.length)];
@@ -42,7 +43,6 @@ function fight() {
             nextTurn();
         } else if ( fighter.type === "char" && fighter.entity.hp > 0 ) {
             addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
-            decrementStatusEffects(fighter.entity);
             if ( fighter.entity.skill === "Provocation" && taunt === true ) taunt = false;
             let mpSkill = 0;
             if (fighter.entity.skill === "Provocation") {mpSkill = fighter.entity.niveau}
@@ -147,36 +147,42 @@ function fight() {
         fightMobList.innerHTML = "";
         mobs.sort((a, b) => a.nom.localeCompare(b.nom));
         for (let i = 0; i < mobs.length; i++) {
-            let mobToList = document.createElement("li");
-            mobToList.innerHTML = `${mobs[i].nom}`;
-            fightMobList.appendChild(mobToList);
+            if (mobs[i].hp > 0) {
+                let mobToList = document.createElement("li");
+                mobToList.innerHTML = `${mobs[i].nom}`;
+                fightMobList.appendChild(mobToList);
+            }
         }
     }
 
     function targetSelect(char, action, effect = null) {
         let ennemyList = ``;
         for ( let i = 0 ; i < mobs.length ; i++ ) {
-            ennemyList += `<button id="target${i}">${mobs[i].nom}</button>`;
+            if (mobs[i].hp > 0) {
+                ennemyList += `<button id="target${i}">${mobs[i].nom}</button>`;
+            }
         }
         targets.innerHTML = ennemyList; targets.id = "TargetBtns";
         fightLog.insertBefore(targets, fightLog.firstChild);  
         for (let i = 0; i < mobs.length; i++) {
-            let targetBtn = document.getElementById(`target${i}`);
-            let newTargetBtn = targetBtn.cloneNode(true);
-            targetBtn.parentNode.replaceChild(newTargetBtn, targetBtn);
-            newTargetBtn.addEventListener("click", () => { 
-                cibleIndex = i;
-                if ( action === "attack" ) {
-                    tempoMsg = 0;
-                    physicalDmg(char, mobs[cibleIndex]);
-                    if (isFightOver()) return;
-                    proceed();
-                } else if ( action === "spell" ) {
-                    spellResolve(char, effect);
-                } else if ( action === "item" ) {
-                    useItem(char, effect);
-                }
-            });
+            if (mobs[i].hp > 0) {
+                let targetBtn = document.getElementById(`target${i}`);
+                let newTargetBtn = targetBtn.cloneNode(true);
+                targetBtn.parentNode.replaceChild(newTargetBtn, targetBtn);
+                newTargetBtn.addEventListener("click", () => { 
+                    cibleIndex = i;
+                    if ( action === "attack" ) {
+                        tempoMsg = 0;
+                        physicalDmg(char, mobs[cibleIndex]);
+                        if (isFightOver()) return;
+                        proceed();
+                    } else if ( action === "spell" ) {
+                        spellResolve(char, effect);
+                    } else if ( action === "item" ) {
+                        useItem(char, effect);
+                    }
+                });
+            }
         }
     }
 
@@ -649,12 +655,7 @@ function fight() {
             }
         } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
             console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`)
-            let target;
-            do {
-                target = chars[Math.floor(Math.random() * chars.length)];
-            } while (target.hp <= 0);
-            if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
-            mobAttack(mob, target);
+            mobChangeAction (mob);
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
@@ -684,10 +685,11 @@ function fight() {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
                     ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
-                } else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) {
-                    addMessageToLog(`${sort.nom} est sans effet sur ${ennemi.nom}.`);
+                } else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau || ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 2) {
+                    console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
+                    mobChangeAction (mob);
                 }
-                 else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau) {
+                 else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 1) {
                     ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${ennemi.nom} a déjà un bonus de +${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
                 } else {
@@ -714,10 +716,11 @@ function fight() {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
-                } else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) {
-                    addMessageToLog(`${sort.nom} est sans effet sur ${perso.nom}.`);
+                } else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau || perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
+                    console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
+                    mobChangeAction (mob);
                 }
-                 else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau) {
+                 else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${perso.nom} a déjà un malus de -${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
                 } else {
@@ -726,6 +729,15 @@ function fight() {
                 }
             })
         }
+    }
+
+    function mobChangeAction(mob) {
+        let target;
+        do {
+            target = chars[Math.floor(Math.random() * chars.length)];
+        } while (target.hp <= 0);
+        if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
+        mobAttack(mob, target);
     }
 
     function physicalDmg(attacker, target, bonus = 0) {
@@ -816,23 +828,18 @@ function fight() {
 
     function isFightOver() {
         if ( cibleIndex === "all" ) {
-            let indicesToRemove = [];
             for (let i = 0; i < mobs.length; i++) {
                 if ( mobs[i].hp <= 0 ) {
                     deadMob(i);
-                    indicesToRemove.push(i);
                 }
-            }
-            for (let i = indicesToRemove.length - 1; i >= 0; i--) {
-                mobs.splice(indicesToRemove[i], 1);
             }
         } else {
             if ( mobs[cibleIndex].hp <= 0 ) {
                 deadMob(cibleIndex);
-                mobs.splice(cibleIndex, 1);
             }
         }
-        if ( mobs.length === 0 ) {
+        if ( mobs.every(mob => mob.hp <= 0 ) ) {
+            mobs.length = 0;
             chars.forEach(char => {
                 char.statsTemp = { ...char.stats };
                 char.statusEffects = {};
