@@ -118,7 +118,6 @@ function fight() {
         effects.forEach(effect => {
             mobs.forEach(mob => {
                 if (mob.statusEffects[effect] && mob.statusEffects[effect].caster === fighter) {
-                    console.log(`Found a buff/debuff for ${mob.nom} that was cast by ${fighter.nom}`)
                     mob.statusEffects[effect].turns--;
                     if (mob.statusEffects[effect].turns === 0) {
                         let match = effect.match(/(buff|debuff)([A-Za-z]+)/);
@@ -135,7 +134,6 @@ function fight() {
             })
             chars.forEach(char => {
                 if (char.statusEffects[effect] && char.statusEffects[effect].caster === fighter) {
-                    console.log(`Found a buff/debuff for ${char.nom} that was cast by ${fighter.nom}`)
                     char.statusEffects[effect].turns--;
                     if (char.statusEffects[effect].turns === 0) {
                         let match = effect.match(/(buff|debuff)([A-Za-z]+)/);
