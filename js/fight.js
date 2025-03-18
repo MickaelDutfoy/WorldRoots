@@ -8,27 +8,31 @@ function fight() {
     const combatActions = document.createElement("div");
     let targets = document.createElement("div");
     let initiativeTable = []; let round = 1; let taunt = false;
-    chars.forEach((char, index) => {
-        initiativeTable.push({ type: "char", entity: char, index: index, agility: char.stats.agility + char.armure.valeur.agility });
-    });
-    mobs.forEach((mob, index) => {
-        initiativeTable.push({ type: "mob", entity: mob, index: index, agility: mob.stats.agility });
-    });
-    initiativeTable.sort((a, b) => b.agility - a.agility);
-    for (let i = 0; i < initiativeTable.length - 1; i++) {
-        if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
-            if (Math.random() > 0.5) {
-                [initiativeTable[i], initiativeTable[i + 1]] = [initiativeTable[i + 1], initiativeTable[i]];
+
+    let turnIndex = 0; setInitiativeTable(); nextTurn();
+
+    function setInitiativeTable() {
+        chars.forEach((char, index) => {
+            initiativeTable.push({ type: "char", entity: char, index: index, agility: char.statsTemp.agility + char.armure.valeur.agility });
+        });
+        mobs.forEach((mob, index) => {
+            initiativeTable.push({ type: "mob", entity: mob, index: index, agility: mob.statsTemp.agility });
+        });
+        initiativeTable.sort((a, b) => b.agility - a.agility);
+        for (let i = 0; i < initiativeTable.length - 1; i++) {
+            if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
+                if (Math.random() > 0.5) {
+                    [initiativeTable[i], initiativeTable[i + 1]] = [initiativeTable[i + 1], initiativeTable[i]];
+                }
             }
         }
     }
-    let turnIndex = 0; nextTurn();  
 
     function nextTurn() {
         refreshMobList();
         if (isGameOver()) return;
         if ( turnIndex >= initiativeTable.length ) { 
-            initiativeTable.sort((a, b) => b.agility - a.agility);
+            setInitiativeTable();
             turnIndex = 0; round++ }
         let fighter = initiativeTable[turnIndex];
         decrementStatusEffects(fighter.entity);
