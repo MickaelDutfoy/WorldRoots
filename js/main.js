@@ -250,6 +250,18 @@ function quit() {
     }, 1200);
 }
 
+// function updateClassDescriptions() {
+//     let selectedClasses = [
+//         document.getElementById("classe1").value,
+//         document.getElementById("classe2").value,
+//         document.getElementById("classe3").value
+//     ];
+
+//     document.querySelectorAll("#classDescription li").forEach(li => {
+//         li.style.display = selectedClasses.includes(li.id) ? "list-item" : "none";
+//     });
+// }
+
 function addMessageToLog(message) {
     setTimeout(() => {
         let newMsg = document.createElement("p");
@@ -313,6 +325,7 @@ if (window.location.pathname.includes("arcade.html")) {
     });
 }
 
+// updateClassDescriptions();
 let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false; let score = 0;
 const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
@@ -328,3 +341,6 @@ rezBtn.addEventListener("click", Character.rezChars);
 shopBtn.addEventListener("click", Character.magicShop);
 leaveBtn.addEventListener("click", quit);
 document.getElementById("creerPerso").addEventListener("click", Character.createCharacters);
+// document.querySelectorAll("#classe1, #classe2, #classe3").forEach(select => {
+//     select.addEventListener("change", updateClassDescriptions);
+// });

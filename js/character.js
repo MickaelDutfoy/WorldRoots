@@ -279,8 +279,19 @@ class Character {
             document.getElementById("lvlUpPoints" + i).innerHTML = `Disponibles :`;
             document.getElementById("lvlUpPointsTot" + i).innerHTML = ` ${chars[i].pointsLvlUp}`;
             let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
-            let descSorts = chars[i].sorts.map(sort => `<span class="tooltip" data-tooltip="${sort.type === "attack" ? "Attaque" : "Soin"} ${sort.cible === 1 ? "sur cible" : "de zone"}, Elément : ${elements[sort.element] || "Aucun"}, ${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}, Coût : ${sort.mp} MP">${sort.nom}</span>`);
-            document.getElementById("spells" + i).innerHTML = `<strong>Sorts</strong> :<br>${descSorts.join("<br>")}`;
+            let descSorts = chars[i].sorts.map(sort => {
+                let typeText = sort.type === "attack" ? "Attaque" 
+                             : sort.type === "heal" ? "Soin" 
+                             : sort.type === "buff" ? "Bénédiction" 
+                             : "Malédiction"; // Par défaut, ça sera "debuff"
+                
+                let elementText = elements[sort.element] ? `, Élément : ${elements[sort.element]}` : ""; // Affiche l'élément sauf si "none"
+                
+                let intensityText = `${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}`;
+                
+                return `<span class="tooltip" data-tooltip="${typeText} ${sort.cible === 1 ? "sur cible" : "de zone"}${elementText}, ${intensityText}, Coût : ${sort.mp} MP">${sort.nom}</span>`;
+            });
+            document.getElementById("spells" + i).innerHTML = `<strong>Sorts</strong> :<br>${descSorts.join("<br>")}`;            
             let displayHP = document.getElementById("HP" + i);
             if ( chars[i].hp < 0 ) chars[i].hp = 0;
             displayHP.textContent = `HP : ${chars[i].hp} / ${chars[i].maxhp}`;

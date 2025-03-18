@@ -214,9 +214,7 @@ function fight() {
         if ( Math.random() * 100 < Math.min(mobs[cibleIndex].statsTemp.agility - (char.statsTemp.agility + char.arme.valeur.agility), 50) ) {
             addMessageToLog(`${mobs[cibleIndex].nom} <strong>esquive</strong> l'attaque de ${char.nom} !`);
         } else {
-            let dmg = Math.floor(( 2 * ( char.statsTemp.strength + char.arme.valeur.strength ) - mobs[cibleIndex].statsTemp.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-            addMessageToLog(`${char.nom} attaque ${mobs[cibleIndex].nom} avec ${char.arme.nom} ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
-            mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
+            physicalDmg(char, mobs[cibleIndex]);
             if (isFightOver()) return;
         }
         proceed();
@@ -242,8 +240,7 @@ function fight() {
                 for (let i = 0; i < chars.length; i++) {
                     if (chars[i].hp === 0) { addMessageToLog(`${chars[i].nom} revient à la vie !`) }
                     let heal = Math.floor(ratio * chars[i].maxhp);
-                    chars[i].hp += heal;
-                    if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
+                    chars[i].hp = Math.min(chars[i].hp + heal, chars[i].maxhp);
                     addMessageToLog(`<span class="green">${chars[i].nom} gagne ${heal} HP</span>.`);
                 }
                 char.mp = 0;
@@ -252,26 +249,15 @@ function fight() {
             if ( char.mp < char.niveau * 2 ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                char.mp -= char.niveau * 2;
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 let heal = 0;
                 for (let i = 0; i < mobs.length; i++) {
-                    coeff = mobs[i].resists.dark;
-                    let dmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2 - mobs[i].statsTemp.willpower ) * ( Math.random() * 0.3 + 0.85 ) * coeff); if ( dmg < 0 ) { dmg = 0 };
-                    if ( coeff === 0 ) {
-                        addMessageToLog(`<strong>Immunité</strong> ! ${mobs[i].nom} perd ${dmg} HP.`);
-                    } else if ( coeff === 0.5 ) {
-                        addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                    } else if ( coeff === 2 ) {
-                        addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                    } else {
-                        addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                    }
+                    magicalDmg(char, mobs[i], char.niveau * 2, "dark")
                     heal += dmg;
-                    mobs[i].hp = mobs[i].hp - dmg;
                 }
-                char.hp += heal; if (char.hp > char.maxhp) char.hp = char.maxhp;
+                char.mp -= char.niveau * 2;
+                char.hp = Math.min(char.hp + heal, char.maxhp);
                 addMessageToLog(`<span class="green">${char.nom} gagne ${heal} HP</span>.`);
                 if (isFightOver()) return;
             }
@@ -282,9 +268,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.mp} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let dmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.mp * 2 - mobs[i].statsTemp.willpower ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                    mobs[i].hp -= dmg;
-                    addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                    magicalDmg(char, mobs[i], char.mp * 2);
                 }
                 char.mp = 0;
                 if (isFightOver()) return;
@@ -311,26 +295,9 @@ function fight() {
                         if (spellsPossibles.length > 0 && Math.random() < 0.6) {
                             let sortChoisi = spellsPossibles[Math.floor(Math.random() * spellsPossibles.length)];
                             attaquant.mp -= sortChoisi.mp;
-                            let coeff = 1;
-                            if ( cible.resists[sortChoisi.element] !== undefined ) coeff = cible.resists[sortChoisi.element];
-                            let dmg = Math.floor((attaquant.statsTemp.intelligence + sortChoisi.valeur - cible.statsTemp.willpower) * (Math.random() * 0.3 + 0.85) * coeff);
-                            if (dmg < 0) dmg = 0;
-                            cible.hp -= dmg;
-                            addMessageToLog(`${attaquant.nom} utilise ${sortChoisi.nom} !`);
-                            if ( coeff === 0 ) {
-                                addMessageToLog(`<strong>Immunité</strong> ! ${cible.nom} perd ${dmg} HP.`);
-                            } else if ( coeff === 0.5 ) {
-                                addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
-                            } else if ( coeff === 2 ) {
-                                addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
-                            } else {
-                                addMessageToLog(`<span class="red">${cible.nom} perd ${dmg} HP</span>.`);
-                            }
+                            magicalDmg(attaquant, cible, sortChoisi.valeur, sort.Choisi.element);
                         } else {
-                            let dmg = Math.floor((2 * attaquant.statsTemp.strength - cible.statsTemp.vitality) * (Math.random() * 0.3 + 0.85));
-                            if (dmg < 0) dmg = 0;
-                            cible.hp -= dmg;
-                            addMessageToLog(`${attaquant.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+                            physicalDmg(attaquant, cible);
                         }
                     })
                 }
@@ -343,7 +310,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 3 - mobs[i].statsTemp.willpower ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
+                    let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 3 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
                     if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
                     mobs[i].mp -= mpDmg;
                     mobs[i].hp -= dmg;
@@ -360,7 +327,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
                 for (let i = 0; i < chars.length; i++) {
                     if (chars[i].nom !== char.nom) {
-                        chars[i].mp += char.niveau * 3; if ( chars[i].mp > chars[i].maxmp ) chars[i].mp = chars[i].maxmp;
+                        chars[i].mp = Math.min(chars[i].mp + char.niveau * 3, chars[i].maxmp);
                         addMessageToLog(`<span class="blue">${chars[i].nom} récupère ${char.niveau * 3} MP</span> !`);
                     }
                 }
@@ -372,9 +339,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let dmg = Math.floor(( 2 * ( char.statsTemp.strength + char.arme.valeur.strength ) - mobs[i].statsTemp.vitality ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                    addMessageToLog(`${char.nom} attaque ${mobs[i].nom} avec ${char.arme.nom} ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                    mobs[i].hp = mobs[i].hp - dmg;
+                    physicalDmg(char, mob[i]);
                 }
                 char.mp -= char.niveau * 2;
                 if (isFightOver()) return;
@@ -502,44 +467,17 @@ function fight() {
         addMessageToLog(`<span class="purple">${char.nom} perd ${sort.mp} MP</span> et utilise ${sort.nom}.`);
         Character.charSheet();
         if ( sort.type === "attack" && sort.cible === 1 ) {
-            let coeff = 1;
-            if ( mobs[cibleIndex].resists[sort.element] !== undefined ) coeff = mobs[cibleIndex].resists[sort.element];
-            let dmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + sort.valeur - mobs[cibleIndex].statsTemp.willpower ) * ( Math.random() * 0.3 + 0.85 ) * coeff); if ( dmg < 0 ) { dmg = 0 };
-            if ( coeff === 0 ) {
-                addMessageToLog(`<strong>Immunité</strong> ! ${mobs[cibleIndex].nom} perd ${dmg} HP.`);
-            } else if ( coeff === 0.5 ) {
-                addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
-            } else if ( coeff === 2 ) {
-                addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
-            } else {
-                addMessageToLog(`<span class="red">${mobs[cibleIndex].nom} perd ${dmg} HP</span>.`);
-            }
-            mobs[cibleIndex].hp = mobs[cibleIndex].hp - dmg;
+            magicalDmg(char, mobs[cibleIndex], sort.valeur, sort.element)
             if (isFightOver()) return;
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                let coeff = 1;
-                if ( mobs[i].resists[sort.element] !== undefined ) coeff = mobs[i].resists[sort.element];
-                let dmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + sort.valeur - mobs[i].statsTemp.willpower ) * ( Math.random() * 0.3 + 0.85 ) * coeff); if ( dmg < 0 ) { dmg = 0 };
-                if ( coeff === 0 ) {
-                    addMessageToLog(`<strong>Immunité</strong> ! ${mobs[i].nom} perd ${dmg} HP.`);
-                } else if ( coeff === 0.5 ) {
-                    addMessageToLog(`<strong>Résistance</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                } else if ( coeff === 2 ) {
-                    addMessageToLog(`<strong>Faiblesse</strong> ! <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                } else {
-                    addMessageToLog(`<span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
-                }
-                mobs[i].hp = mobs[i].hp - dmg;
+                magicalDmg(char, mobs[i], sort.valeur, sort.element)
             }
             if (isFightOver()) return;
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             if ( chars[cibleIndex].hp > 0 ) {
-                let heal = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
-                chars[cibleIndex].hp += heal;
-                if ( chars[cibleIndex].hp > chars[cibleIndex].maxhp ) { chars[cibleIndex].hp = chars[cibleIndex].maxhp };
-                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${heal} HP</span>.`);
+                heal(char, chars[cibleIndex], sort.valeur);
             } else {
                 addMessageToLog(`${sort.nom} est sans effet sur les personnages morts.`)
             }
@@ -548,10 +486,7 @@ function fight() {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
                 if (chars[i].hp > 0) {
-                    let heal = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ))
-                    chars[i].hp += heal;
-                    if ( chars[i].hp > chars[i].maxhp ) { chars[i].hp = chars[i].maxhp };
-                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${heal} HP</span>.`);
+                    heal(char, chars[i], sort.valeur);
                 }
             }
             Character.charSheet();
@@ -703,10 +638,7 @@ function fight() {
         } else if ( Math.random() * 100 < Math.min((cible.statsTemp.agility + cible.arme.valeur.agility - mob.statsTemp.agility), 50) ) {
             addMessageToLog(`${cible.nom} <strong>esquive</strong> l'attaque de ${mob.nom} !`);
         } else {
-            let dmg = Math.floor((2 * mob.statsTemp.strength - (cible.statsTemp.vitality + cible.armure.valeur.vitality) ) * (Math.random() * 0.3 + 0.85));
-            if (dmg < 0) dmg = 0;
-            cible.hp -= dmg;
-            addMessageToLog(`${mob.nom} attaque ! <span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+            physicalDmg(mob, cible);
         }
         Character.charSheet();
         if (cible.hp <= 0) {
@@ -717,16 +649,12 @@ function fight() {
     function mobSpellResolve(mob, sort, cible) {
         mob.mp -= sort.mp;
         if ( sort.type === "attack" && sort.cible === 1 ) {
-            let dmg = Math.floor(( mob.statsTemp.intelligence + sort.valeur - ( cible.statsTemp.willpower + cible.armure.valeur.willpower ) ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-            cible.hp -= dmg;
-            addMessageToLog(`<span class="red">${cible.nom} perd ${dmg} HP</span>.`);
+            magicalDmg(mob, cible, sort.valeur, sort.element)
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < chars.length; i++) {
                 if ( chars[i].hp > 0 ) {
-                    let dmg = Math.floor(( mob.statsTemp.intelligence + sort.valeur - ( chars[i].statsTemp.willpower + chars[i].armure.valeur.willpower ) ) * ( Math.random() * 0.3 + 0.85 )); if ( dmg < 0 ) { dmg = 0 };
-                    chars[i].hp = chars[i].hp - dmg;
-                    addMessageToLog(`<span class="red">${chars[i].nom} perd ${dmg} HP</span>.`);
+                    magicalDmg(mob, chars[i], sort.valeur, sort.element)
                 }
             }
         } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
@@ -740,17 +668,13 @@ function fight() {
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
-            let heal = Math.floor(( mob.statsTemp.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
-            cible.hp += heal;
-            if ( cible.hp > cible.maxhp ) { cible.hp = cible.maxhp };
-            addMessageToLog(`<span class="green">${cible.nom} gagne ${heal} HP</span>.`);
+            heal(mob, cible, sort.valeur);
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                let heal = Math.floor(( mob.statsTemp.intelligence + sort.valeur ) * ( Math.random() * 0.3 + 0.85 ));
-                mobs[i].hp += heal;
-                if ( mobs[i].hp > mobs[i].maxhp ) { mobs[i].hp = mobs[i].maxhp };
-                addMessageToLog(`<span class="green">${mobs[i].nom} gagne ${heal} HP</span>.`);
+                if (mobs[i].hp > 0) {
+                    heal(char, chars[i], sort.valeur);
+                }
             }
         } else if (sort.type === "buff") {
             let match = sort.id.match(/(buff|debuff)([A-Za-z]+)(\d+)/);
@@ -768,7 +692,7 @@ function fight() {
             mobs.forEach(ennemi => {
                 if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl < niveau ) {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
-                    ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: char, turns: 3};
+                    ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) {
                     addMessageToLog(`${sort.nom} est sans effet sur ${ennemi.nom}.`);
@@ -804,7 +728,7 @@ function fight() {
                     addMessageToLog(`${sort.nom} est sans effet sur ${perso.nom}.`);
                 }
                  else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau) {
-                    perso.statusEffects[debuffType] = {lvl: niveau, caster: char, turns: 3};
+                    perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     addMessageToLog(`${perso.nom} a déjà un malus de -${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
                 } else {
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
@@ -812,6 +736,47 @@ function fight() {
                 }
             })
         }
+    }
+
+    function physicalDmg(attacker, target, bonus = 0) {
+        let arme = 0; let armure = 0;
+        if (attacker.arme) arme = attacker.arme.valeur.strength;
+        if (target.armure) armure = target.armure.valeur.vitality;
+        let dmg = Math.floor(( 2 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 ));
+        if ( dmg < 0 ) { dmg = 0 };
+        target.hp -= dmg;
+        addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
+    }
+
+    function magicalDmg(attacker, target, bonus, element = "none") {
+        let arme = 0; let armure = 0;
+        if (attacker.arme) arme = attacker.arme.valeur.intelligence;
+        if (target.armure) armure = target.armure.valeur.willpower;
+        let coeff = 1;
+        if (element !== "none" && target.resists) coeff = target.resists[element];
+
+        let dmg = Math.floor(( attacker.statsTemp.intelligence + arme + bonus - ( target.statsTemp.willpower + armure ) ) * coeff * ( Math.random() * 0.3 + 0.85 ));
+        if ( dmg < 0 ) { dmg = 0 };
+        target.hp -= dmg;
+        let dmgMsg = `<span class="red">${target.nom} perd ${dmg} HP</span>.`
+        if ( coeff === 0 ) {
+            addMessageToLog(`<strong>Immunité</strong> ! ${target.nom} perd ${dmg} HP.`);
+        } else if ( coeff > 0 && coeff < 1 ) {
+            addMessageToLog(`<strong>Résistance</strong> ! ` + dmgMsg);
+        } else if ( coeff > 1 ) {
+            addMessageToLog(`<strong>Faiblesse</strong> ! ` + dmgMsg);
+        } else {
+            addMessageToLog(dmgMsg);
+        }
+        return dmg;
+    }
+
+    function heal(caster, target, bonus) {
+        let arme = 0;
+        if (attacker.arme) arme = caster.arme.valeur.intelligence;
+        let heal = Math.floor(( caster.statsTemp.intelligence + arme + bonus ) * ( Math.random() * 0.3 + 0.85 ));
+        target.hp = Math.min(target.hp + heal, target.maxhp);
+        addMessageToLog(`<span class="green">${target.nom} gagne ${heal} HP</span>.`);
     }
 
     function isGameOver() {
