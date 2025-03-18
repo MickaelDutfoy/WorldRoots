@@ -879,7 +879,7 @@ function fight() {
                 });
             }
             score = 25 * chars.reduce((sum, char) => sum + char.niveau, 0) + gold;
-            if ( (chars.reduce((sum, char) => sum + char.niveau, 0)/3) >= 37 ) {
+            if (chars.every(char => char.niveau === 99) ) {
                 addMessageToLog(`Vous êtes arrivés au terme du donjon !`)
                 addMessageToLog(`Votre score : ${score} (Meilleur score : ${localStorage.getItem("worldrootsHighScore") || 0}).`)
                 setTimeout(() => {

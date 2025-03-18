@@ -170,6 +170,8 @@ function save() {
     }
     if (chars.every(char => char.hp === 0)) {
         localStorage.removeItem("worldrootsSave");
+    } else if (chars.every(char => char.niveau === 99)) {
+        localStorage.removeItem("worldrootsSave");
     } else {
         const saveData = {
             chars: chars,
