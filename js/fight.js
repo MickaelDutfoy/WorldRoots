@@ -12,6 +12,7 @@ function fight() {
     let turnIndex = 0; setInitiativeTable(); nextTurn();
 
     function setInitiativeTable() {
+        initiativeTable.length = 0;
         chars.forEach((char, index) => {
             initiativeTable.push({ type: "char", entity: char, index: index, agility: char.statsTemp.agility + char.armure.valeur.agility });
         });
