@@ -260,7 +260,7 @@ function fight() {
                 cibleIndex = "all";
                 let heal = 0;
                 for (let i = 0; i < mobs.length; i++) {
-                    magicalDmg(char, mobs[i], char.niveau * 2, "dark")
+                    let dmg = magicalDmg(char, mobs[i], char.niveau * 2, "dark");
                     heal += dmg;
                 }
                 char.mp -= char.niveau * 2;
