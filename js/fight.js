@@ -800,7 +800,7 @@ function fight() {
             addMessageToLog(dmgMsg);
         }
         if (target.classe && target.hp <= 0) {
-            addMessageToLog(`${cible.nom} <strong>s'effondre</strong>...`);
+            addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
         } else if (target.hp <= 0) {
             addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
         }
