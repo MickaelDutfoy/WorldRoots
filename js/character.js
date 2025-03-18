@@ -542,13 +542,15 @@ class Character {
             
                 gold -= cost;
             
-                // Extraction du niveau du sort acheté
-                const spellLevel = parseInt(selectedSpellId.match(/\d+$/)[0]);
+                // Extraction du type et du niveau du sort acheté
+                const spellMatch = selectedSpellId.match(/([a-zA-Z]+)(\d+)$/);
+                const spellBase = spellMatch[1]; // Ex: "windAoe"
+                const spellLevel = parseInt(spellMatch[2]);
             
-                // Suppression des sorts de niveau inférieur
+                // Suppression des anciennes versions du même sort
                 char.sorts = char.sorts.filter(s => {
-                    const sLevel = parseInt(s.id.match(/\d+$/)[0]);
-                    return sLevel >= spellLevel; // On garde seulement les sorts de niveau supérieur ou égal
+                    const sMatch = s.id.match(/([a-zA-Z]+)(\d+)$/);
+                    return !(sMatch && sMatch[1] === spellBase && parseInt(sMatch[2]) < spellLevel);
                 });
             
                 char.sorts.push(spell);
@@ -562,6 +564,7 @@ class Character {
                     charBuy.style.display = "none";
                 }
             });
+            
             charBox.appendChild(charLabel);
             charBox.appendChild(charSpellList);
             charBox.appendChild(charBuy);
