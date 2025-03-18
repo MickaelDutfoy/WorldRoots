@@ -27,7 +27,15 @@ function fight() {
     function nextTurn() {
         refreshMobList();
         if (isGameOver()) return;
-        if ( turnIndex >= initiativeTable.length ) { turnIndex = 0; round++ }
+        if ( turnIndex >= initiativeTable.length ) { 
+            for (let i = 0; i < initiativeTable.length - 1; i++) {
+                if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
+                    if (Math.random() > 0.5) {
+                        [initiativeTable[i], initiativeTable[i + 1]] = [initiativeTable[i + 1], initiativeTable[i]];
+                    }
+                }
+            }
+            turnIndex = 0; round++ }
         let fighter = initiativeTable[turnIndex];
         decrementStatusEffects(fighter.entity);
         if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
@@ -661,7 +669,7 @@ function fight() {
             }
         } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
             console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`)
-            mobChangeAction (mob);
+            physicalDmg(mob, cible);
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
@@ -693,7 +701,7 @@ function fight() {
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) || (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns > 1)) {
                     console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
-                    mobChangeAction (mob);
+                    physicalDmg(mob, cible);
                 }
                  else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 1) {
                     ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
@@ -724,7 +732,7 @@ function fight() {
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
                     console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
-                    mobChangeAction (mob);
+                    physicalDmg(mob, cible);
                 }
                  else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
@@ -735,15 +743,6 @@ function fight() {
                 }
             })
         }
-    }
-
-    function mobChangeAction(mob) {
-        let target;
-        do {
-            target = chars[Math.floor(Math.random() * chars.length)];
-        } while (target.hp <= 0);
-        if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
-        mobAttack(mob, target);
     }
 
     function physicalDmg(attacker, target, bonus = 0) {
