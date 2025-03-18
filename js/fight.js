@@ -643,10 +643,8 @@ function fight() {
 
     function mobAttack(mob, cible) {
         if ( Math.random() < 0.3 && mob.sorts[1]?.mp !== undefined && mob.mp >= mob.sorts[1].mp ) {
-            addMessageToLog(`${mob.nom} utilise ${mob.sorts[1].nom} !`)
             mobSpellResolve(mob, mob.sorts[1], cible)
         } else if ( Math.random() < 0.6 && mob.sorts[0]?.mp !== undefined && mob.mp >= mob.sorts[0].mp ) {
-            addMessageToLog(`${mob.nom} utilise ${mob.sorts[0].nom} !`)
             mobSpellResolve(mob, mob.sorts[0], cible)
         } else {
             physicalDmg(mob, cible);
@@ -657,9 +655,11 @@ function fight() {
     function mobSpellResolve(mob, sort, cible) {
         mob.mp -= sort.mp;
         if ( sort.type === "attack" && sort.cible === 1 ) {
+            addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
             magicalDmg(mob, cible, sort.valeur, sort.element)
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
+            addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
             for (let i = 0; i < chars.length; i++) {
                 if ( chars[i].hp > 0 ) {
                     magicalDmg(mob, chars[i], sort.valeur, sort.element)
@@ -671,9 +671,11 @@ function fight() {
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
             let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
             cible = mobsToHeal[0];
+            addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
             heal(mob, cible, sort.valeur);
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
+            addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
             for (let i = 0; i < mobs.length; i++) {
                 if (mobs[i].hp > 0) {
                     heal(char, chars[i], sort.valeur);
@@ -693,12 +695,14 @@ function fight() {
             let displayStat = statNames[stat]
             let buffType = `${type}${stat}`;
             let breakLoop = false;
+            let msgCast = false;
             mobs.forEach(ennemi => {
                 if (breakLoop) return;
                 if (ennemi.hp <= 0) return;
                 if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl < niveau ) {
                     ennemi.statsTemp[stat] -= 3 * ennemi.statusEffects[buffType].lvl
                     ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) || (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns > 1)) {
                     console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
@@ -706,9 +710,11 @@ function fight() {
                 }
                  else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 1) {
                     ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${ennemi.nom} a déjà un bonus de +${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
                 } else {
                     ennemi.statsTemp[stat] += sort.valeur; ennemi.statusEffects[buffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 }
             });
@@ -727,11 +733,13 @@ function fight() {
             let displayStat = statNames[stat]
             let debuffType = `${type}${stat}`;
             let breakLoop = false;
+            let msgCast = false;
             chars.forEach(perso => {
                 if (breakLoop) return;
                 if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl < niveau ) {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
                     console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
@@ -739,9 +747,11 @@ function fight() {
                 }
                  else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} a déjà un malus de -${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
                 } else {
                     perso.statsTemp[stat] -= sort.valeur; perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
+                    if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire -${sort.valeur} ${displayStat}.`);
                 }
             })
