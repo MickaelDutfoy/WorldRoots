@@ -530,29 +530,38 @@ class Character {
             charBuy.addEventListener("click", () => {
                 const selectedSpellId = charSpellList.value;
                 if (!selectedSpellId) return;
-        
+            
                 const spell = Spell.getSpell(selectedSpellId);
                 const cost = costMultiplier * X;
-        
+            
                 if (gold < cost) {
                     tempoMsg = 0; 
                     addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
                 }
-        
+            
                 gold -= cost;
+            
+                // Extraction du niveau du sort acheté
+                const spellLevel = parseInt(selectedSpellId.match(/\d+$/)[0]);
+            
+                // Suppression des sorts de niveau inférieur
+                char.sorts = char.sorts.filter(s => {
+                    const sLevel = parseInt(s.id.match(/\d+$/)[0]);
+                    return sLevel >= spellLevel; // On garde seulement les sorts de niveau supérieur ou égal
+                });
+            
                 char.sorts.push(spell);
                 tempoMsg = 0;
                 addMessageToLog(`${char.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
                 charSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-        
+            
                 if (charSpellList.innerHTML === "") {
                     charSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
                     charBuy.style.display = "none";
                 }
             });
-        
             charBox.appendChild(charLabel);
             charBox.appendChild(charSpellList);
             charBox.appendChild(charBuy);
