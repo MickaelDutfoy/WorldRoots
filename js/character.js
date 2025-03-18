@@ -470,7 +470,7 @@ class Character {
                         option.value = spellId;
                         let elements = { fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré" };
                         let elementText = elements[spell.element] ? `, Élément : ${elements[sort.element]}` : "";
-                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}${elementText}}) - ${costMultiplier * X} fragments`;
+                        option.textContent = `${spell.nom} (${spell.type === "attack" ? "Attaque" : "Soin"} ${spell.cible === 1 ? "sur cible" : "de zone"}${elementText}) - ${costMultiplier * X} fragments`;
                         charSpellList.appendChild(option);
                     }
                 });
