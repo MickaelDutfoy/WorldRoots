@@ -28,13 +28,7 @@ function fight() {
         refreshMobList();
         if (isGameOver()) return;
         if ( turnIndex >= initiativeTable.length ) { 
-            for (let i = 0; i < initiativeTable.length - 1; i++) {
-                if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
-                    if (Math.random() > 0.5) {
-                        [initiativeTable[i], initiativeTable[i + 1]] = [initiativeTable[i + 1], initiativeTable[i]];
-                    }
-                }
-            }
+            initiativeTable.sort((a, b) => b.agility - a.agility);
             turnIndex = 0; round++ }
         let fighter = initiativeTable[turnIndex];
         decrementStatusEffects(fighter.entity);
@@ -361,31 +355,33 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * mobsAlive} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    const elements = {
-                        fire: "Feu",
-                        earth: "Terre",
-                        ice: "Glace",
-                        lightning: "Foudre",
-                        dark: "Ténèbres",
-                        holy: "Sacré"
-                    };             
-                    const immunes = [];
-                    const resists = [];
-                    const weaknesses = [];
-                    for (const [element, value] of Object.entries(mobs[i].resists)) {
-                        const elementFR = elements[element];
-                        if (value === 0) {
-                            immunes.push(elementFR);
-                        } else if (value === 0.5) {
-                            resists.push(elementFR);
-                        } else if (value === 2) {
-                            weaknesses.push(elementFR);
+                    if (mobs[i].hp > 0) {
+                        const elements = {
+                            fire: "Feu",
+                            earth: "Terre",
+                            ice: "Glace",
+                            lightning: "Foudre",
+                            dark: "Ténèbres",
+                            holy: "Sacré"
+                        };             
+                        const immunes = [];
+                        const resists = [];
+                        const weaknesses = [];
+                        for (const [element, value] of Object.entries(mobs[i].resists)) {
+                            const elementFR = elements[element];
+                            if (value === 0) {
+                                immunes.push(elementFR);
+                            } else if (value === 0.5) {
+                                resists.push(elementFR);
+                            } else if (value === 2) {
+                                weaknesses.push(elementFR);
+                            }
                         }
+                        const immuneText = immunes.length > 0 ? `Immunisé à : ${immunes.join(', ')}. ` : "";
+                        const resistText = resists.length > 0 ? `Résiste à : ${resists.join(', ')}. ` : "";
+                        const weaknessText = weaknesses.length > 0 ? `Faible face à : ${weaknesses.join(', ')}.` : "";
+                        addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                     }
-                    const immuneText = immunes.length > 0 ? `Immunisé à : ${immunes.join(', ')}. ` : "";
-                    const resistText = resists.length > 0 ? `Résiste à : ${resists.join(', ')}. ` : "";
-                    const weaknessText = weaknesses.length > 0 ? `Faible face à : ${weaknesses.join(', ')}.` : "";
-                    addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                 }
                 char.mp -= char.niveau * mobsAlive;
             }
