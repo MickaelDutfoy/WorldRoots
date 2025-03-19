@@ -176,17 +176,32 @@ body > div {
   position: relative;
 }
 
+#teamSelector {
+  width: 100%;
+}
+
+#teamSelector > div {
+  border: 1px dotted black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 2px;
+}
+
 #teamWindow p {
   padding-left: 0;
+  text-align: justify;
+  margin-bottom: 5px;
+}
+
+.classDescription {
+  line-height: 1.50;
 }
 
 #creerPerso {
-  margin-top: 5px;
-}
-
-#teamSelector {
-  display: flex;
-  flex-direction: column;
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  font-size: 1.1rem;
 }
 
 #collapseBtn {
@@ -195,26 +210,14 @@ body > div {
   right: 10px;
 }
 
-#classDescription {
-  margin-left: 30px;
-}
-
-#classDescription li {
-  line-height: 1.25;
-  margin-bottom: 10px;
-}
-
-#classDescription p {
-  margin-left: -20px;
-  margin-bottom: 10px;
-}
-
 #teamSelector label {
   font-weight: bold;
 }
 
 #exploreWindow {
   grid-area: exploreWindow;
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 
 .fight {
@@ -226,15 +229,26 @@ body > div {
 }
 
 #msgLog {
-  min-height: 150px;
-  padding-bottom: 5px;
-  margin-bottom: 5px;
-}
-
-#magicShop {
+  min-height: 180px;
   padding-bottom: 5px;
   margin-bottom: 5px;
   border-bottom: 3px solid rgb(18, 18, 18);
+}
+
+#magicShop, #sellShop {
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 3px solid rgb(18, 18, 18);
+}
+
+#sellShop tr, #sellShop td, #sellShop th {
+  padding: 0;
+  border: none;
+}
+
+#magicShop tr, #magicShop td, #magicShop th {
+  padding: 0;
+  border: none;
 }
 
 #msgLog p {

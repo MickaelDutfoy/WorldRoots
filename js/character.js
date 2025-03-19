@@ -9,7 +9,6 @@ class Character {
         const classes = {
             "Guerrier": { nom: "Boris", skill: "Provocation",
             stats: {strength: 3, intelligence: 1, agility: 2, vitality: 3, willpower: 1},
-            sorts: [Spell.getSpell("buffVitality1")],
             arme: Item.getItem("hache1"),
             armure: Item.getItem("heavyArmor1")},
             "Paladin": { nom: "Matthew", skill: "Action divine",
@@ -24,12 +23,12 @@ class Character {
             armure: Item.getItem("magicArmor1")},
             "Aéromancienne": { nom: "Helmi", skill: "Manamnesis",
             stats: {strength: 1, intelligence: 3, agility: 1, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("iceTarget1"), Spell.getSpell("lightningAoe1")],
+            sorts: [Spell.getSpell("iceTarget1"), Spell.getSpell("lightningAoe1"), Spell.getSpell("debuffAgility1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("robe1")},
             "Géomancienne": { nom: "Tilkka", skill: "Élémantra",
             stats: {strength: 1, intelligence: 3, agility: 1, vitality: 3, willpower: 2},
-            sorts: [Spell.getSpell("earthTarget1"), Spell.getSpell("fireAoe1")],
+            sorts: [Spell.getSpell("earthTarget1"), Spell.getSpell("fireAoe1"), Spell.getSpell("buffVitality1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("robe1")},
             "Chaomancien": { nom: "Monadh", skill: "Discorde",
@@ -59,12 +58,12 @@ class Character {
             armure: Item.getItem("lightArmor1")},
             "Rôdeur": { nom: "Électra", skill: "Fraternité",
             stats: {strength: 2, intelligence: 1, agility: 3, vitality: 2, willpower: 2},
-            sorts: [Spell.getSpell("debuffAgility1")],
+            sorts: [Spell.getSpell("debuffVitality1")],
             arme: Item.getItem("hache1"),
             armure: Item.getItem("lightArmor1")},
             "Invocateur": { nom: "Kairos", skill: "Portail",
             stats: {strength: 1, intelligence: 3, agility: 1, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("darkAoe1"), Spell.getSpell("debuffStrength1")],
+            sorts: [Spell.getSpell("darkAoe1"), Spell.getSpell("healTarget1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("battleRobe1")},
         };
@@ -97,12 +96,8 @@ class Character {
         for ( let i = 0; i <=2; i++ ) Character.addItem(Item.getItem("potion1"));
         for ( let i = 0; i <=1; i++ ) Character.addItem(Item.getItem("ether1"));
         Character.addItem(Item.getItem("rez1"));
-        setTimeout(() => {
-            let classDescription = document.getElementById("classDescription");
-            classDescription.style.transition = "opacity 0.5s";
-            classDescription.style.opacity = 0;
-        }, tempoMsg);
         initGame();
+        tempoMsg = 1500;
         addSlowMsgToLog(`Bienvenue dans le Mode Arcade de WorldRoots !`)
         addSlowMsgToLog(`L'objectif est simple : avancer le plus loin possible.`)
         addSlowMsgToLog(`La partie se termine si vos trois personnages tombent à 0 HP...`)
@@ -455,134 +450,190 @@ class Character {
     }
 
     static magicShop() {
-        if ( document.getElementById("magicShop") ) return;
+        if (document.getElementById("magicShop")) return;
         const magicShop = document.createElement("div");
         magicShop.id = "magicShop";
         document.getElementById("exploreWindow").insertBefore(magicShop, fightLog);
+        const table = document.createElement("table");
+        table.style.width = "100%";
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+        ["Personnage", "Sorts disponibles", "Acheter"].forEach(text => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            th.style.textAlign = "center";
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        const tbody = document.createElement("tbody");
 
         function generateSpellShop(char, spellPrefixes, spellTypes, costMultiplier = 150) {
-            const charBox = document.createElement("div");
-            magicShop.appendChild(charBox);
-        
             const X = Math.floor(char.niveau / 10) + 1;
-            const charLabel = document.createElement("span");
-            charLabel.innerHTML = `Sorts pour ${char.nom} : `;
-        
-            const charSpellList = document.createElement("select");
-            const charBuy = document.createElement("button");
-            charBuy.innerHTML = "Acheter";
-        
+            const row = document.createElement("tr");
+            const charNameCell = document.createElement("td");
+            charNameCell.textContent = `${char.nom}`;
+            row.appendChild(charNameCell);
+            const spellSelectCell = document.createElement("td");
+            const spellSelect = document.createElement("select");
             spellPrefixes.forEach(prefix => {
                 spellTypes.forEach(type => {
                     const spellId = `${prefix}${type}${X}`;
                     const spell = Spell.getSpell(spellId);
-        
                     if (spell && !char.sorts.some(sort => sort.id === spellId)) {
                         const option = document.createElement("option");
                         option.value = spellId;
-                    
                         let elements = { fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré" };
                         const statNames = {
                             Strength: "Force", 
                             Agility: "Agilité", 
                             Intelligence: "Intelligence", 
                             Vitality: "Vitalité", 
-                            Willpower: "Volonté" 
+                            Willpower: "Volonté"
                         };
-                    
-                        // Extraction du type et de la stat si buff/debuff
                         let match = spell.id.match(/(buff|debuff)([A-Za-z]+)(\d+)/);
                         let [_, type, stat] = match || [];
-                    
-                        // Détermine le type d'action
                         let typeText = spell.type === "attack" ? "Attaque" 
                                      : spell.type === "heal" ? "Soin" 
                                      : spell.type === "buff" ? "Bénédiction" 
-                                     : "Malédiction"; // Par défaut, c'est "debuff"
-                    
-                        // Convertit la stat en français si applicable
+                                     : "Malédiction";
                         let statText = (spell.type === "buff" || spell.type === "debuff") && statNames[stat] 
                                      ? ` (${statNames[stat]})` 
                                      : "";
-                    
-                        // Gère l'affichage de l'élément
                         let elementText = elements[spell.element] ? `, Élément : ${elements[spell.element]}` : "";
-                    
-                        // Ajoute "sur cible" sauf si c'est un buff/debuff (toujours de zone)
                         let cibleText = (spell.type === "attack" || spell.type === "heal") 
                                       ? (spell.cible === 1 ? " sur cible" : " de zone") 
                                       : "";
-                    
-                        // Génération de l'option
+    
                         option.textContent = `${spell.nom} (${typeText}${statText}${cibleText}${elementText}) - ${costMultiplier * X} fragments`;
-                        
-                        charSpellList.appendChild(option);
+                        spellSelect.appendChild(option);
                     }
-                    
                 });
             });
-        
-            if (charSpellList.innerHTML === "") {
-                charSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
-                charBuy.style.display = "none";
+            if (spellSelect.innerHTML === "") {
+                spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
             }
-        
-            charBuy.addEventListener("click", () => {
-                const selectedSpellId = charSpellList.value;
+            spellSelectCell.appendChild(spellSelect);
+            row.appendChild(spellSelectCell);
+            const buyButtonCell = document.createElement("td");
+            const buyButton = document.createElement("button");
+            buyButton.textContent = "Acheter";
+            if (spellSelect.innerHTML === "<option disabled selected>Aucun sort n'est disponible</option>") {
+                buyButton.style.display = "none";
+            }
+            buyButton.addEventListener("click", () => {
+                const selectedSpellId = spellSelect.value;
                 if (!selectedSpellId) return;
-            
                 const spell = Spell.getSpell(selectedSpellId);
                 const cost = costMultiplier * X;
-            
                 if (gold < cost) {
                     tempoMsg = 0; 
                     addMessageToLog("Vous n'avez pas assez de fragments de magie !");
                     return;
                 }
-            
                 gold -= cost;
-            
-                // Extraction du type et du niveau du sort acheté
                 const spellMatch = selectedSpellId.match(/([a-zA-Z]+)(\d+)$/);
-                const spellBase = spellMatch[1]; // Ex: "windAoe"
+                const spellBase = spellMatch[1];
                 const spellLevel = parseInt(spellMatch[2]);
-            
-                // Suppression des anciennes versions du même sort
                 char.sorts = char.sorts.filter(s => {
                     const sMatch = s.id.match(/([a-zA-Z]+)(\d+)$/);
                     return !(sMatch && sMatch[1] === spellBase && parseInt(sMatch[2]) < spellLevel);
                 });
-            
                 char.sorts.push(spell);
                 tempoMsg = 0;
                 addMessageToLog(`${char.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
                 Character.charSheet();
-                charSpellList.querySelector(`option[value="${selectedSpellId}"]`).remove();
-            
-                if (charSpellList.innerHTML === "") {
-                    charSpellList.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
-                    charBuy.style.display = "none";
+                spellSelect.querySelector(`option[value="${selectedSpellId}"]`).remove();
+                if (spellSelect.innerHTML === "") {
+                    spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
+                    buyButton.style.display = "none";
                 }
             });
-            
-            charBox.appendChild(charLabel);
-            charBox.appendChild(charSpellList);
-            charBox.appendChild(charBuy);
+            buyButtonCell.appendChild(buyButton);
+            row.appendChild(buyButtonCell);
+            tbody.appendChild(row);
         }
 
+        table.appendChild(tbody);
+        magicShop.appendChild(table);
+
         chars.forEach(char => {
-            if (char.classe === "Guerrier") generateSpellShop(char, ["buff"], ["Vit"]);
-            if (char.classe === "Paladin") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Vit"]);
-            if (char.classe === "Chevalier noir") generateSpellShop(char, ["dark", "debuff"], ["Target", "Aoe", "Str"]);
-            if (char.classe === "Aéromancienne") generateSpellShop(char, ["ice", "lightning"], ["Target", "Aoe"]);
-            if (char.classe === "Géomancienne") generateSpellShop(char, ["fire", "earth"], ["Target", "Aoe"]);
+            if (char.classe === "Paladin") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Wil"]);
+            if (char.classe === "Chevalier noir") generateSpellShop(char, ["dark", "debuff"], ["Target", "Str"]);
+            if (char.classe === "Aéromancienne") generateSpellShop(char, ["ice", "lightning", "debuff"], ["Target", "Aoe", "Agi"]);
+            if (char.classe === "Géomancienne") generateSpellShop(char, ["fire", "earth", "buff"], ["Target", "Aoe", "Vit"]);
             if (char.classe === "Chaomancien") generateSpellShop(char, ["dark", "holy", "debuff"], ["Target", "Aoe", "Wil"]);
             if (char.classe === "Magelame") generateSpellShop(char, ["wind", "debuff"], ["Target", "Aoe", "Int"]);
             if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Int"]);
             if (char.classe === "Barbare") generateSpellShop(char, ["buff"], ["Str"]);
             if (char.classe === "Voleur") generateSpellShop(char, ["buff"], ["Agi"]);
-            if (char.classe === "Rôdeur") generateSpellShop(char, ["debuff"], ["Agi"]);
-            if (char.classe === "Invocateur") generateSpellShop(char, ["dark", "debuff"], ["Target", "Aoe", "Str"]);
+            if (char.classe === "Rôdeur") generateSpellShop(char, ["debuff"], ["Vit"]);
+            if (char.classe === "Invocateur") generateSpellShop(char, ["dark", "heal"], ["Target", "Aoe"]);
         });
+    }
+
+    static sellShop() {
+        if (document.getElementById("sellShop")) return;
+        const shopContainer = document.createElement("div");
+        shopContainer.id = "sellShop";
+        document.getElementById("exploreWindow").insertBefore(shopContainer, fightLog);
+        const table = document.createElement("table");
+        table.style.width = "100%";
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+        ["Objet", "Prix", "Vendre"].forEach(text => {
+            const th = document.createElement("th");
+            th.textContent = text;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        const tbody = document.createElement("tbody");
+        inventaire.forEach(entry => {
+            const item = entry.objet;
+            const quantity = entry.quantite;
+            const match = item.id.match(/(\d+)$/);
+            const level = match ? parseInt(match[1]) : 1;
+            let price = item.type === "equipement" ? 10 * level : 5 * level;
+            const row = document.createElement("tr");
+            const nameCell = document.createElement("td");
+            nameCell.textContent = item.nom;
+            row.appendChild(nameCell);
+            const priceCell = document.createElement("td");
+            priceCell.textContent = `${price} fragments/unité`;
+            row.appendChild(priceCell);
+            const actionCell = document.createElement("td");
+            const sellSelect = document.createElement("select");
+            for (let i = 1; i <= quantity; i++) {
+                let option = document.createElement("option");
+                option.value = i;
+                option.textContent = i;
+                sellSelect.appendChild(option);
+            }
+            const sellButton = document.createElement("button");
+            sellButton.innerHTML = "Vendre";
+            sellButton.addEventListener("click", () => {
+                const amount = parseInt(sellSelect.value);
+                inventaire = inventaire.map(entry => {
+                    if (entry.objet.id === item.id) {
+                        entry.quantite -= amount;
+                    }
+                    return entry;
+                }).filter(entry => entry.quantite > 0);
+    
+                gold += price * amount;
+                tempoMsg = 0;
+                addMessageToLog(`Vous vendez ${amount} ${item.nom} pour ${price * amount} fragments de magie.`);
+                Character.charSheet();
+                shopContainer.remove();
+                Character.sellShop();
+            });
+            actionCell.appendChild(sellSelect);
+            actionCell.appendChild(sellButton);
+            row.appendChild(actionCell);
+            tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+        shopContainer.appendChild(table);
     }
 };

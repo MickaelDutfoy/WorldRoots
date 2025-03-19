@@ -12,77 +12,72 @@
 </head>
 <body class="arcadebody">
     <div id="titleBanner">
-        <h1><a href="index.html">WorldRoots v0.27</a></h1>
+        <h1><a href="index.html">WorldRoots v0.28</a></h1>
         <p>RPG old-school minimaliste en JavaScript</p>
     </div>
     <div id="teamWindow">
         <h2>Fiche d'équipe</h2>
         <div id="teamSelector">
-            <p>Pour commencer, formez une équipe de trois personnages.</p><br>
-            <label for="classe1">Personnage 1 :</label>
-            <select id="classe1">
-                <option value="Guerrier" selected>Boris, Guerrier</option>
-                <option value="Paladin">Matthew, Paladin</option>
-                <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
-                <option value="Aéromancienne">Helmi, Aéromancienne</option>
-                <option value="Géomancienne">Tilkka, Géomancienne</option>
-                <option value="Chaomancien">Monadh, Chaomancien</option>
-                <option value="Magelame">Inari, Magelame</option>
-                <option value="Prêtresse">Kita, Prêtresse</option>
-                <option value="Barbare">Otnugh, Barbare</option>
-                <option value="Voleur">Tyven, Voleur</option>
-                <option value="Rôdeur" disabled>Électra, Rôdeur</option>
-                <option value="Invocateur" disabled>Kairos, Invocateur</option>
-            </select><br>
-            <label for="classe2">Personnage 2 :</label>
-            <select id="classe2">
-                <option value="Guerrier">Boris, Guerrier</option>
-                <option value="Paladin">Matthew, Paladin</option>
-                <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
-                <option value="Aéromancienne" selected>Helmi, Aéromancienne</option>
-                <option value="Géomancienne">Tilkka, Géomancienne</option>
-                <option value="Chaomancien">Monadh, Chaomancien</option>
-                <option value="Magelame">Inari, Magelame</option>
-                <option value="Prêtresse">Kita, Prêtresse</option>
-                <option value="Barbare">Otnugh, Barbare</option>
-                <option value="Voleur">Tyven, Voleur</option>
-                <option value="Rôdeur" disabled>Électra, Rôdeur</option>
-                <option value="Invocateur" disabled>Kairos, Invocateur</option>
-            </select><br>
-            <label for="classe3">Personnage 3 :</label>
-            <select id="classe3">
-                <option value="Guerrier">Boris, Guerrier</option>
-                <option value="Paladin">Matthew, Paladin</option>
-                <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
-                <option value="Aéromancienne">Helmi, Aéromancienne</option>
-                <option value="Géomancienne">Tilkka, Géomancienne</option>
-                <option value="Chaomancien">Monadh, Chaomancien</option>
-                <option value="Magelame">Inari, Magelame</option>
-                <option value="Prêtresse" selected>Kita, Prêtresse</option>
-                <option value="Barbare">Otnugh, Barbare</option>
-                <option value="Voleur">Tyven, Voleur</option>
-                <option value="Rôdeur" disabled>Électra, Rôdeur</option>
-                <option value="Invocateur" disabled>Kairos, Invocateur</option>
-            </select>
-            <br><button id="creerPerso">Créer une équipe</button>
+            <p>Pour commencer, formez une équipe de trois personnages.</p>
+            <div id="selector1">
+                <label for="classe1">Personnage 1 :</label>
+                <select id="classe1">
+                    <option value="Guerrier" selected>Boris, Guerrier</option>
+                    <option value="Paladin">Matthew, Paladin</option>
+                    <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
+                    <option value="Aéromancienne">Helmi, Aéromancienne</option>
+                    <option value="Géomancienne">Tilkka, Géomancienne</option>
+                    <option value="Chaomancien">Monadh, Chaomancien</option>
+                    <option value="Magelame">Inari, Magelame</option>
+                    <option value="Prêtresse">Kita, Prêtresse</option>
+                    <option value="Barbare">Otnugh, Barbare</option>
+                    <option value="Voleur">Tyven, Voleur</option>
+                    <option value="Rôdeur">Électra, Rôdeur</option>
+                    <option value="Invocateur">Kairos, Invocateur</option>
+                </select><br>
+                <p class="classDescription" id="descClasse1"></p>
+            </div>
+            <div id="selector2">
+                <label for="classe2">Personnage 2 :</label>
+                <select id="classe2">
+                    <option value="Guerrier">Boris, Guerrier</option>
+                    <option value="Paladin">Matthew, Paladin</option>
+                    <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
+                    <option value="Aéromancienne" selected>Helmi, Aéromancienne</option>
+                    <option value="Géomancienne">Tilkka, Géomancienne</option>
+                    <option value="Chaomancien">Monadh, Chaomancien</option>
+                    <option value="Magelame">Inari, Magelame</option>
+                    <option value="Prêtresse">Kita, Prêtresse</option>
+                    <option value="Barbare">Otnugh, Barbare</option>
+                    <option value="Voleur">Tyven, Voleur</option>
+                    <option value="Rôdeur">Électra, Rôdeur</option>
+                    <option value="Invocateur">Kairos, Invocateur</option>
+                </select><br>
+                <p class="classDescription" id="descClasse2"></p>
+            </div>
+            <div id="selector3">
+                <label for="classe3">Personnage 3 :</label>
+                <select id="classe3">
+                    <option value="Guerrier">Boris, Guerrier</option>
+                    <option value="Paladin">Matthew, Paladin</option>
+                    <option value="Chevalier noir">Yaëlle, Chevalier noir</option>
+                    <option value="Aéromancienne">Helmi, Aéromancienne</option>
+                    <option value="Géomancienne">Tilkka, Géomancienne</option>
+                    <option value="Chaomancien">Monadh, Chaomancien</option>
+                    <option value="Magelame">Inari, Magelame</option>
+                    <option value="Prêtresse" selected>Kita, Prêtresse</option>
+                    <option value="Barbare">Otnugh, Barbare</option>
+                    <option value="Voleur">Tyven, Voleur</option>
+                    <option value="Rôdeur">Électra, Rôdeur</option>
+                    <option value="Invocateur">Kairos, Invocateur</option>
+                </select>
+                <p class="classDescription" id="descClasse3"></p>
+            </div>
+            <button id="creerPerso">Créer une équipe</button>
         </div>
     </div>
     <div id="exploreWindow">
-        <h2 id="titleExploreWindow">Descriptif des classes</h2>
-        <ul id="classDescription">
-            <li id="Guerrier"><strong>Guerrier</strong> : Combattant équilibré alliant capacité défensive et dégâts physiques.<br><em>Capacité spéciale</em> : Provocation (consomme des MP pour attirer à lui les attaques adverses).</li>
-            <li id="Paladin"><strong>Paladin</strong> : Combattant défensif capable d'utiliser des sorts offensifs d'élément Sacré et des sorts de soin.<br><em>Capacité spéciale</em> : Action divine (consomme tous ses MP pour réanimer les alliés morts et soigner l'équipe proportionnellement aux MP consommés).</li>
-            <li id="Chevalier noir"><strong>Chevalier noir</strong> : Solide combattante capable d'encaisser des coups et de riposter avec des sorts d'élément Ténèbres.<br><em>Capacité spéciale</em> : Drain de vie (consomme des MP pour infliger des dégâts d'élément Ténèbres à tous les adversaires et se soigner d'autant).</li>
-            <li id="Aéromancienne"><strong>Aéromancienne</strong> : Mage capable d'utiliser des sorts d'éléments Glace et Foudre.<br><em>Capacité spéciale</em> : Manamnesis (consomme des MP pour brûler ceux de tous les adversaires, et inflige des dégâts proportionnels aux MP ainsi brûlés).</li>
-            <li id="Géomancienne"><strong>Géomancienne</strong> : Mage capable d'utiliser des sorts d'éléments Feu et Terre.<br><em>Capacité spéciale</em> : Élémantra (consomme tous ses MP pour créer une attaque de zone sans élément d'une puissance proportionnelle aux MP consommés).</li>
-            <li id="Chaomancien"><strong>Chaomancien</strong> : Mage capable d'utiliser des sorts d'éléments Ténèbres et Sacré.<br><em>Capacité spéciale</em> : Discorde (consomme des MP pour donner à chaque adversaire une attaque gratuite contre un allié à lui).</li>
-            <li id="Magelame"><strong>Magelame</strong> : Combattante équilibrée capable d'utiliser des sorts sans élément et de combattre à l'arme.<br><em>Capacité spéciale</em> : Analyse (consomme des MP pour obtenir des informations sur les ennemis présents en combat).</li>
-            <li id="Prêtresse"><strong>Prêtresse</strong> : Mage capable d'utiliser des sorts d'élément Sacré et des sorts de soin.<br><em>Capacité spéciale</em> : Don de mana (consomme des MP pour en rendre à ses alliés en vie).</li>
-            <li id="Barbare"><strong>Barbare</strong> : Puissant et agile guerrier ne comptant que sur la force physique pour éliminer les menaces.<br><em>Capacité spéciale</em> : Tourbillon (consomme des MP pour attaquer tous les adversaires à la fois).</li>
-            <li id="Voleur"><strong>Voleur</strong> : Combattant agile et rusé, capable de faire les poches même aux ennemis qui n'en ont pas.<br><em>Capacité spéciale</em> : Larcin (consomme des MP pour tenter de dérober un objet aléatoire à un ennemi aléatoire).</li>
-            <li id="Rôdeur"><strong>Rôdeur</strong> : Combattante agile commandant un fidèle compagnon renard.<br><em>Capacité spéciale</em> : Fraternité (consomme des MP pour réanimer son compagnon s'il est mort et le soigner).</li>
-            <li id="Invocateur"><strong>Invocateur</strong> : Mage capable d'utiliser des sorts d'élément Ténèbres et d'appeler à lui un serviteur du néant.<br><em>Capacité spéciale</em> : Conjuration (consomme des MP pour créer une entité d'élément Ténèbres combattant temporairement sous ses ordres).</li>
-        </ul>
+        <h2 id="titleExploreWindow">Fenêtre d'évènements</h2>
     </div>
     <script src="js/item.js"></script>
     <script src="js/spell.js"></script>

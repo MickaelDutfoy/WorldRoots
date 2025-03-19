@@ -779,32 +779,35 @@ function fight() {
     }
 
     function magicalDmg(attacker, target, bonus, element = "none") {
-        if (target.hp < 0) {let dmg = 0; return dmg};
-        let arme = 0; let armure = 0;
-        if (attacker.arme) arme = attacker.arme.valeur.intelligence;
-        if (target.armure) armure = target.armure.valeur.willpower;
-        let coeff = 1;
-        if (element !== "none" && target.resists) coeff = target.resists[element];
-
-        let dmg = Math.floor(( attacker.statsTemp.intelligence + arme + bonus - ( target.statsTemp.willpower + armure ) ) * coeff * ( Math.random() * 0.3 + 0.85 ));
-        if ( dmg < 0 ) { dmg = 0 };
-        target.hp -= dmg;
-        let dmgMsg = `<span class="red">${target.nom} perd ${dmg} HP</span>.`
-        if ( coeff === 0 ) {
-            addMessageToLog(`<strong>Immunité</strong> ! ${target.nom} perd ${dmg} HP.`);
-        } else if ( coeff > 0 && coeff < 1 ) {
-            addMessageToLog(`<strong>Résistance</strong> ! ` + dmgMsg);
-        } else if ( coeff > 1 ) {
-            addMessageToLog(`<strong>Faiblesse</strong> ! ` + dmgMsg);
+        if (target.hp < 0) {
+            let dmg = 0; return dmg
         } else {
-            addMessageToLog(dmgMsg);
+            let arme = 0; let armure = 0;
+            if (attacker.arme) arme = attacker.arme.valeur.intelligence;
+            if (target.armure) armure = target.armure.valeur.willpower;
+            let coeff = 1;
+            if (element !== "none" && target.resists) coeff = target.resists[element];
+    
+            let dmg = Math.floor(( attacker.statsTemp.intelligence + arme + bonus - ( target.statsTemp.willpower + armure ) ) * coeff * ( Math.random() * 0.3 + 0.85 ));
+            if ( dmg < 0 ) { dmg = 0 };
+            target.hp -= dmg;
+            let dmgMsg = `<span class="red">${target.nom} perd ${dmg} HP</span>.`
+            if ( coeff === 0 ) {
+                addMessageToLog(`<strong>Immunité</strong> ! ${target.nom} perd ${dmg} HP.`);
+            } else if ( coeff > 0 && coeff < 1 ) {
+                addMessageToLog(`<strong>Résistance</strong> ! ` + dmgMsg);
+            } else if ( coeff > 1 ) {
+                addMessageToLog(`<strong>Faiblesse</strong> ! ` + dmgMsg);
+            } else {
+                addMessageToLog(dmgMsg);
+            }
+            if (target.classe && target.hp <= 0) {
+                addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
+            } else if (target.hp <= 0) {
+                addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
+            }
+            return dmg;
         }
-        if (target.classe && target.hp <= 0) {
-            addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
-        } else if (target.hp <= 0) {
-            addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
-        }
-        return dmg;
     }
 
     function heal(caster, target, bonus) {
@@ -884,6 +887,7 @@ function fight() {
                 msgLog.appendChild(regenBtn);
                 msgLog.appendChild(rezBtn);
                 msgLog.appendChild(shopBtn);
+                msgLog.appendChild(sellBtn);
                 msgLog.appendChild(leaveBtn);
             }, 5600);
             if ( document.getElementById("fightButtons") ) { document.getElementById("fightButtons").remove(); }

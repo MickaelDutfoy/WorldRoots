@@ -12,38 +12,43 @@
 </head>
 <body class="indexbody">
     <div id="titleBanner">
-        <h1><a href="index.html">WorldRoots v0.27</a></h1>
+        <h1><a href="index.html">WorldRoots v0.28</a></h1>
         <p>RPG old-school minimaliste en JavaScript</p>
     </div>
     <div id="disclaimer">
-        <p>WorldRoots est un RPG tour par tour à l'ancienne, dans l'héritage des tous premiers Final Fantasy.</p>
+        <p>WorldRoots est un tactical RPG tour par tour à l'ancienne, dans l'héritage des tous premiers Final Fantasy.</p>
         <p>À l'origine, il s'agit d'un projet pour mettre en application JavaScript dans le cadre de ma formation-reconversion en tant que développeur. Toutefois, j'aime à penser qu'il puisse un jour faire le bonheur de quelque aventurier vidéoludique en quête de nostalgie rôlistique.</p>
-        <p>En l'état, le jeu n'est pas encore convenablement équilibré ! Je suis bien évidemment intéressé par tout retour sur les problèmes de fonctionnement, les forces et faiblesses de chaque personnage, etc...</p>
+        <p>Il s'agit d'une version en cours de développement, qui à l'heure actuelle ne propose qu'un Mode Arcade de type dungeon crawler : vous jouez une équipe de trois personnages choisis parmi douze et avancez de salle en salle, sans scénario ni graphismes, en éliminant les monstres sur votre passage. Le challenge se veut progressif, mais il est possible que l'équilibrage à haut niveau soit encore à revoir ! Le Mode Histoire est indisponible pour le moment.</p>
         <p>Notez que <strong>la sauvegarde automatique se fait dans le cache du navigateur</strong>. Cela implique que vous ne pouvez pas retrouver votre progression en changeant d'appareil, et que vider le cache supprime votre partie en cours.</p>
         <p>Je vous souhaite un bon moment par ici !</p>
     </div>
     <div id="changeLog">
-        <p>v0.27</p>
+        <p>v0.28 :</p>
+        <ul>
+            <li>En Mode Arcade, vous pouvez désormais vendre des objets entre les combats.</li>
+            <li>Quelques améliorations d'UI (boutiques, sélecteur d'équipe).</li>
+        </ul>
+        <p>v0.27 :</p>
         <ul>
             <li>Les sorts achetés <strong>remplaçent</strong> désormais les sorts identiques de niveaux inférieurs, plutôt que de s'ajouter, afin d'éviter que les personnages aient dix versions de chaque sort à haut niveau.</li>
         </ul>
-        <p>v0.26</p>
+        <p>v0.26 :</p>
         <ul>
             <li>Correction d'une situation où les buffs et debuffs ennemis ne pouvaient plus expirer une fois leur lanceur mort.</li>
             <li>Amélioration de l'IA adverse pour les buffs/debuffs : les ennemis ne relançeront pas un effet qui a encore au moins 2 rounds de durée, et ne lançeront pas un effet s'il en existe un supérieur en cours.</li>
         </ul>
-        <p>v0.25</p>
+        <p>v0.25 :</p>
         <ul>
             <li>Correction d'une situation où un ennemi relançant un debuff déjà en cours faisait planter le combat.</li>
             <li>Réduction du coût de MP des buffs/debuffs.</li>
         </ul>
-        <p>v0.23b</p>
+        <p>v0.23b :</p>
         <ul>
             <li>Rééquilibrage des classes : l'Elémentaliste est séparé entre Aéromancien et Géomancien. Les sorts du Magelame sont plus puissants mais consomment davantage de MP. La capacité du Magelame lui permet d'analyser ses ennemis, et l'Aéromancien hérite de Manamnesis.</li>
             <li>Changement assez drastique des formules de dégâts suite à l'alignement de stats ennemis/personnages.</li>
             <li>Implémentation des buffs/debuffs. Les dix sorts de buff/debuff sont répartis sur dix classes différentes.</li>
         </ul>
-        <p>v0.23a</p>
+        <p>v0.23a :</p>
         <ul>
             <li>Les ennemis ont désormais de meilleures stats pour s'aligner avec des personnages équipés d'armes et armures.</li>
             <li>Les ennemis donnent moins de fragments de magie.</li>
@@ -52,14 +57,14 @@
             <li>Les ennemis soigneurs font preuve de davantage d'intelligence dans leurs choix.</li>
             <li>Quelques améliorations d'UI (affichage des stats dans la fiche d'équipe).</li>
         </ul>
-        <p>v0.22</p>
+        <p>v0.22 :</p>
         <ul>
             <li>Les personnages ont désormais tous une capacité de classe fonctionnelle.</li>
             <li>Ajout d'une classe : le Voleur.</li>
             <li>Mise en place en Mode Arcade d'un score et d'un meilleur score sauvegardé (localement) en permanence. Le score obtenu dépend de votre avancée.</li>
             <li>Quelques améliorations d'UI (fiche de personnage).</li>
         </ul>
-        <p>v0.21</p>
+        <p>v0.21 :</p>
         <ul>
             <li>Légère baisse des dégâts physiques.</li>
             <li>Les sorts de soin sont désormais affectés par l'intelligence, comme les sorts offensifs.</li>

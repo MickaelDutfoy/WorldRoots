@@ -401,6 +401,7 @@ class Mob {
 
     static popMob() {
         if ( document.getElementById("magicShop") ) document.getElementById("magicShop").remove();
+        if ( document.getElementById("sellShop") ) document.getElementById("sellShop").remove();
         if ( chars.every(char => char.hp <= 0) || abandonned === true ) {
             window.location.href = "index.html";
             return;

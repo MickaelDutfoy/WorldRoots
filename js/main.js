@@ -150,6 +150,7 @@ function initGame() {
     <tr class="collapsabletr">
         <td colspan="2" style="text-align:center;" id="armor2"></td>
     </tr>`;
+    exploreWindow.style.opacity = "1";
     exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
     const collapseBtn = document.createElement("button");
     document.getElementById("teamWindow").appendChild(collapseBtn);
@@ -157,8 +158,6 @@ function initGame() {
     collapseBtn.innerHTML = "Réduire la fiche";
     collapseBtn.addEventListener("click", Character.collapseExpand);
     document.getElementById("teamSelector").style.display = "none";
-    document.getElementById("titleExploreWindow").textContent = "Fenêtre d'évènements"
-    document.getElementById("msgLog").style.borderBottom = "3px solid #121212";
     setTimeout(() => classDescription.remove(), tempoMsg)
     document.getElementById("teamWindow").appendChild(charSheet);
 }
@@ -220,6 +219,7 @@ function load() {
     msgLog.appendChild(regenBtn);
     msgLog.appendChild(rezBtn);
     msgLog.appendChild(shopBtn);
+    msgLog.appendChild(sellBtn);
     msgLog.appendChild(leaveBtn);
     tempoMsg = 0; addMessageToLog("Partie chargée avec succès !");
     Character.charSheet();
@@ -238,6 +238,7 @@ function quit() {
     regenBtn.remove();
     rezBtn.remove();
     shopBtn.remove();
+    sellBtn.remove();
     leaveBtn.remove();
     tempoMsg = 0;
     abandonned = true;
@@ -252,17 +253,53 @@ function quit() {
     }, 1200);
 }
 
-// function updateClassDescriptions() {
-//     let selectedClasses = [
-//         document.getElementById("classe1").value,
-//         document.getElementById("classe2").value,
-//         document.getElementById("classe3").value
-//     ];
+function updateClassDescriptions() {
+    let selectedClasses = [
+        document.getElementById("classe1").value,
+        document.getElementById("classe2").value,
+        document.getElementById("classe3").value
+    ];
+    console.log(selectedClasses)
 
-//     document.querySelectorAll("#classDescription li").forEach(li => {
-//         li.style.display = selectedClasses.includes(li.id) ? "list-item" : "none";
-//     });
-// }
+    for ( let i = 1; i <= 3; i++) {
+        if (selectedClasses[i-1] === "Guerrier") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattant 100% physique, le <strong>Guerrier</strong> est capable de faire des dégâts comme d'en encaisser. En combat, il peut attaquer à l'arme mais surtout attirer à lui les attaques ennemies avec sa capacité <em>Provocation</em> moyennant un faible coût en MP."
+        }
+        if (selectedClasses[i-1] === "Paladin") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattant béni des dieux, le <strong>Paladin</strong> sait se battre à l'épée mais il dispose aussi de sorts de Soin et d'attaques Sacrées sur cible unique. Il peut renforcer la Volonté de toute l'équipe et sa capacité <em>Action divine</em> lui permet de consommer tous ses MP pour ressuciter et soigner toute l'équipe."
+        }
+        if (selectedClasses[i-1] === "Chevalier noir") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattante liée aux Ténèbres, le <strong>Chevalier noir</strong> peut utiliser des sorts de cet élément sur cible unique et attaquer à l'épée, ainsi que réduire la Force des ennemis. Moyennant quelques MP, sa capacité <em>Siphon vital</em> déclenche un sort d'élément Ténèbres affectant tous les ennemis et la soignant d'un montant égal aux dégâts ainsi infligés."
+        }
+        if (selectedClasses[i-1] === "Aéromancienne") {
+            document.getElementById("descClasse" + i).innerHTML = "Mage capable d'utiliser des sorts d'éléments Glace et Foudre sur cible et de zone, l'<strong>Aéromancienne</strong> peut également entraver ses ennemis en réduisant leur Agilité. Sa capacité <em>Manamnesis</em> lui permet de brûler les MP de tous ses adversaires au prix des siens, et de leur infliger des dégâts en conséquence."
+        }
+        if (selectedClasses[i-1] === "Géomancienne") {
+            document.getElementById("descClasse" + i).innerHTML = "Mage capable d'utiliser des sorts d'éléments Feu et Terre sur cible et de zone, la <strong>Géomancienne</strong> a également la capacité de renforcer la Vitalité de sa propre équipe. Sa capacité <em>Élémantra</em> lui permet de vider sa réserve de MP et d'infliger à tous ses adversaires des dégâts proportionnels aux MP ainsi consommés."
+        }
+        if (selectedClasses[i-1] === "Chaomancien") {
+            document.getElementById("descClasse" + i).innerHTML = "Mage capable d'utiliser des sorts d'éléments Ténèbres et Sacré sur cible et de zone, le <strong>Chaomancien</strong> peut affaiblir la Volonté de ses adversaires et manipuler leurs esprits avec sa capacité <em>Discorde</em>, les forçant à s'attaquer les uns les autres."
+        }
+        if (selectedClasses[i-1] === "Magelame") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire l'Intelligence de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût de MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
+        }
+        if (selectedClasses[i-1] === "Prêtresse") {
+            document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des soins sur cible et de zone. Elle est en outre capable de renforcer l'Intelligence de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."
+        }
+        if (selectedClasses[i-1] === "Barbare") {
+            document.getElementById("descClasse" + i).innerHTML = "Puissant et agile combattant, le <strong>Barbare</strong> peut infliger de gros dégâts, surtout après avoir renforcé la Force de son équipe. Sa capacité <em>Tourbillon</em> lui permet, au prix d'un coût en MP, de déclencher une attaque physique sur tous les adversaires à la fois."
+        }
+        if (selectedClasses[i-1] === "Voleur") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattant agile et rusé, le <strong>Voleur</strong> sait se battre à l'épée et peut renforcer l'Agilité de toute l'équipe. Il est également capable de dénicher des trésors supplémentaires en faisant les poches de ses ennemis (même de ceux qui n'en ont pas !) grâce à sa capacité <em>Larcin</em>, moyennant quelques MP."
+        }
+        if (selectedClasses[i-1] === "Rôdeur") {
+            document.getElementById("descClasse" + i).innerHTML = "Personnage non fonctionnel à 100% à l'heure actuelle (capacité spéciale non implémentée."
+        }
+        if (selectedClasses[i-1] === "Invocateur") {
+            document.getElementById("descClasse" + i).innerHTML = "Personnage non fonctionnel à 100% à l'heure actuelle (capacité spéciale non implémentée."
+        }
+    }
+}
 
 function addMessageToLog(message) {
     setTimeout(() => {
@@ -282,7 +319,7 @@ function addSlowMsgToLog(message) {
         msgLog.appendChild(newMsg);
         setTimeout(() => { newMsg.classList.add("show");}, 10);
     }, tempoMsg);
-    tempoMsg += 1800;
+    tempoMsg += 1500;
 }
 
 function showTooltip(element, text) {
@@ -327,7 +364,8 @@ if (window.location.pathname.includes("arcade.html")) {
     });
 }
 
-// updateClassDescriptions();
+updateClassDescriptions();
+
 let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false; let score = 0;
 const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
 const exploreWindow = document.getElementById("exploreWindow"); 
@@ -337,12 +375,52 @@ const startBtn = document.createElement("button"); startBtn.id = "startBtn"; sta
 const regenBtn = document.createElement("button"); regenBtn.id = "regenBtn";
 const rezBtn = document.createElement("button"); rezBtn.id = "shopBtn"; 
 const shopBtn = document.createElement("button"); shopBtn.id = "shopBtn"; shopBtn.innerHTML = "Échanger des fragments de magie contre des sorts";
+const sellBtn = document.createElement("button"); sellBtn.id = "shopBtn"; sellBtn.innerHTML = "Vendre des objets pour des fragments de magie";
 const leaveBtn = document.createElement("button"); leaveBtn.id = "leaveBtn"; leaveBtn.innerHTML = "Sortir du donjon (abandonner la progression en cours)";
 regenBtn.addEventListener("click", Character.regenChars);
 rezBtn.addEventListener("click", Character.rezChars);
 shopBtn.addEventListener("click", Character.magicShop);
+sellBtn.addEventListener("click", Character.sellShop);
 leaveBtn.addEventListener("click", quit);
 document.getElementById("creerPerso").addEventListener("click", Character.createCharacters);
-// document.querySelectorAll("#classe1, #classe2, #classe3").forEach(select => {
-//     select.addEventListener("change", updateClassDescriptions);
-// });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const selects = document.querySelectorAll("#classe1, #classe2, #classe3");
+    document.querySelectorAll("#classe1, #classe2, #classe3").forEach(select => {
+        select.addEventListener("change", updateClassDescriptions);
+    });
+    function updateOptions() {
+        let selectedValues = new Set();
+
+        // Récupère toutes les valeurs actuellement sélectionnées
+        selects.forEach(select => {
+            if (select.value) {
+                selectedValues.add(select.value);
+            }
+        });
+
+        selects.forEach(select => {
+            Array.from(select.options).forEach(option => {
+                if (option.value && !option.disabled) {
+                    // Désactive si déjà choisi ailleurs
+                    option.disabled = selectedValues.has(option.value) && option.value !== select.value;
+                }
+            });
+        });
+
+        // Réactive les options qui ne sont dans aucun sélecteur
+        selects.forEach(select => {
+            Array.from(select.options).forEach(option => {
+                if (option.value && !selectedValues.has(option.value)) {
+                    option.disabled = false;
+                }
+            });
+        });
+    }
+
+    selects.forEach(select => {
+        select.addEventListener("change", updateOptions);
+    });
+
+    updateOptions();
+});
