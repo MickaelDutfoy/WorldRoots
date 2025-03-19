@@ -263,11 +263,13 @@ function fight() {
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.mp} MP</span> et utilise ${char.skill}.`);
                 let ratio = char.mp / char.maxmp;
-                for (let i = 0; i < chars.length; i++) {
-                    if (chars[i].hp === 0) { addMessageToLog(`${chars[i].nom} revient à la vie !`) }
-                    let heal = Math.floor(ratio * chars[i].maxhp);
-                    chars[i].hp = Math.min(chars[i].hp + heal, chars[i].maxhp);
-                    addMessageToLog(`<span class="green">${chars[i].nom} gagne ${heal} HP</span>.`);
+                let targets = [...chars, ...summons]
+                for (let i = 0; i < targets.length; i++) {
+                    if (targets[i].nom === "Rejeton du néant" && targets[i].hp === 0) continue;
+                    if (targets[i].hp === 0) { addMessageToLog(`${targets[i].nom} <strong>revient à la vie</strong> !`) }
+                    let heal = Math.floor(ratio * targets[i].maxhp);
+                    targets[i].hp = Math.min(targets[i].hp + heal, targets[i].maxhp);
+                    addMessageToLog(`<span class="green">${targets[i].nom} gagne ${heal} HP</span>.`);
                 }
                 char.mp = 0;
             }
@@ -443,7 +445,7 @@ function fight() {
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 let heal = Math.floor(0.25 * renard.maxhp);
-                if (renard.hp === 0) addMessageToLog(`${renard.nom} revient à la vie !`);
+                if (renard.hp === 0) addMessageToLog(`${renard.nom} <strong>revient à la vie</strong> !`);
                 addMessageToLog(`<span class="green">${renard.nom} gagne ${heal} HP</span>.`);
                 renard.hp = Math.min(renard.hp + heal, renard.maxhp);
                 char.mp -= char.niveau * 2;
@@ -666,7 +668,7 @@ function fight() {
         } else if (item.effet === "resurrect") {
             if ( chars[cibleIndex].hp <= 0 ) {
                 chars[cibleIndex].hp = chars[cibleIndex].maxhp * item.valeur;
-                addMessageToLog(`${chars[cibleIndex].nom} revient à la vie !`)
+                addMessageToLog(`${chars[cibleIndex].nom} <strong>revient à la vie</strong> !`)
                 addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${chars[cibleIndex].hp} HP</span>.`)
             } else {
                 addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
