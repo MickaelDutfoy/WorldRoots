@@ -1,14 +1,14 @@
 function fight() {
     document.getElementById("ennemyTargets").remove();
-    let fightMobDiv = document.createElement("div"); msgLog.appendChild(fightMobDiv); fightMobDiv.id = "FightMobList";
-    let fightMobP = document.createElement("p"); fightMobP.innerHTML = "Ennemis présents dans la salle :"; fightMobDiv.appendChild(fightMobP);
-    let fightMobList = document.createElement("ul"); fightMobDiv.appendChild(fightMobList)
+    let fightInfo = document.createElement("table"); msgLog.appendChild(fightInfo); fightInfo.id = "fightInfo";
+    fightInfo.innerHTML = `<tr><td id="mobInfo"></td><td id="summonInfo"></td></tr>`;
+    let mobInfoP = document.createElement("p"); mobInfoP.innerHTML = "Ennemis présents dans la salle :"; document.getElementById("mobInfo").appendChild(mobInfoP); let mobInfoUL = document.createElement("ul"); document.getElementById("mobInfo").appendChild(mobInfoUL);
+    let summonInfoP = document.createElement("p"); summonInfoP.innerHTML = "Compagnons présents dans la salle :"; document.getElementById("summonInfo").appendChild(summonInfoP); let summonInfoUL = document.createElement("ul"); document.getElementById("summonInfo").appendChild(summonInfoUL);
     let xpGained = 0; let lootsGained = []; let goldGained = 0; tempoMsg = 0;
     onFight = true; exploreWindow.classList.add("fight");
     const combatActions = document.createElement("div");
     let targets = document.createElement("div");
     let initiativeTable = []; let round = 1; let taunt = false;
-
     let turnIndex = 0; setInitiativeTable(); nextTurn();
 
     function setInitiativeTable() {
@@ -19,6 +19,9 @@ function fight() {
         mobs.forEach((mob, index) => {
             initiativeTable.push({ type: "mob", entity: mob, index: index, agility: mob.statsTemp.agility });
         });
+        summons.forEach((summon, index) => {
+            initiativeTable.push({ type: "summon", entity: summon, index: index, agility: summon.statsTemp.agility });
+        });
         initiativeTable.sort((a, b) => b.agility - a.agility);
         for (let i = 0; i < initiativeTable.length - 1; i++) {
             if (initiativeTable[i].agility === initiativeTable[i + 1].agility) {
@@ -27,7 +30,6 @@ function fight() {
                 }
             }
         }
-        console.log(initiativeTable);
     }
 
     function nextTurn() {
@@ -40,16 +42,17 @@ function fight() {
         decrementStatusEffects(fighter.entity);
         if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
             addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
-
+            let targets = [...chars, ...summons];
             let target;
                 do {
-                    target = chars[Math.floor(Math.random() * chars.length)];
+                    target = targets[Math.floor(Math.random() * targets.length)];
                 } while (target.hp <= 0);
                 if ( taunt === true && chars.find(personnage => personnage.skill === "Provocation").hp > 0 ) { target = chars.find(personnage => personnage.skill === "Provocation"); }
             mobAttack(fighter.entity, target);
             turnIndex++;
             nextTurn();
         } else if ( fighter.type === "char" && fighter.entity.hp > 0 ) {
+            if (mobs.length === 0) return;
             addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
             let mobsAlive = 0; mobs.forEach(mob => {
                 if (mob.hp > 0) mobsAlive++;
@@ -66,11 +69,8 @@ function fight() {
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Analyse") {mpSkill = mobsAlive * fighter.entity.niveau}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
-            else if (fighter.entity.skill === "Fraternité") {
-                // insérer ici coût capacité Rôdeur
-            } else if (fighter.entity.skill === "Portail") {
-                // insérer ici coût capacité Invocateur
-            }
+            else if (fighter.entity.skill === "Lien animal") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Portail") {mpSkill = 3 * fighter.entity.niveau}
             setTimeout(() => {
                 let actions = `<div id="fightButtons"><button id="attack">Attaquer</button><button id="skill">${fighter.entity.skill} (${mpSkill} MP)</button>`
                 if ( fighter.entity.sorts.length > 0 ) actions += `<button id="spell">Lancer un sort</button>`
@@ -96,6 +96,16 @@ function fight() {
                 }
             }, tempoMsg);
             tempoMsg += 600;
+        } else if ( fighter.type === "summon" && fighter.entity.hp > 0 ) {
+            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            let target;
+                do {
+                    cibleIndex = Math.floor(Math.random() * mobs.length);
+                    target = mobs[cibleIndex];
+                } while (target.hp <= 0);
+            summonAttack(fighter.entity, target);
+            turnIndex++;
+            nextTurn();
         } else {
             turnIndex++;
             nextTurn();
@@ -153,13 +163,22 @@ function fight() {
     } 
 
     function refreshMobList() {
-        fightMobList.innerHTML = "";
+        mobInfoUL.innerHTML = "";
         mobs.sort((a, b) => a.nom.localeCompare(b.nom));
         for (let i = 0; i < mobs.length; i++) {
             if (mobs[i].hp > 0) {
                 let mobToList = document.createElement("li");
                 mobToList.innerHTML = `${mobs[i].nom}`;
-                fightMobList.appendChild(mobToList);
+                mobInfoUL.appendChild(mobToList);
+            }
+        }
+        summonInfoUL.innerHTML = "";
+        summons.sort((a, b) => a.nom.localeCompare(b.nom));
+        for (let i = 0; i < summons.length; i++) {
+            if (summons[i].hp > 0) {
+                let summonToList = document.createElement("li");
+                summonToList.innerHTML = `${summons[i].nom} (HP : ${summons[i].hp}/${summons[i].maxhp}, MP : ${summons[i].mp}/${summons[i].maxmp})`;
+                summonInfoUL.appendChild(summonToList);
             }
         }
     }
@@ -417,10 +436,31 @@ function fight() {
                     addMessageToLog(`${char.nom} tente de voler ${cible.nom}, mais échoue...`);
                 }
             }
-        } else if (char.skill === "Fraternité") {
-            // insérer ici fonctionnement capacité Rôdeur
+        } else if (char.skill === "Lien animal") {
+            let renard = summons.find(summon => summon.nom === "Renard agile");
+            if ( char.mp < char.niveau * 2 ) {
+                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            } else {
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                let heal = Math.floor(0.25 * renard.maxhp);
+                if (renard.hp === 0) addMessageToLog(`${renard.nom} revient à la vie !`);
+                addMessageToLog(`<span class="green">${renard.nom} gagne ${heal} HP</span>.`);
+                renard.hp = Math.min(renard.hp + heal, renard.maxhp);
+                char.mp -= char.niveau * 2;
+            }
         } else if (char.skill === "Portail") {
-            // insérer ici fonctionnement capacité Invocateur
+            let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+            if ( char.mp < char.niveau * 3 ) {
+                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            } else if (rejeton.hp > 0) {
+                addMessageToLog(`${char.nom} ne peut contrôler qu'un seul Rejeton du néant à la fois.`); return;
+            } else {
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
+                rejeton.hp = rejeton.maxhp;
+                rejeton.mp = rejeton.maxmp;
+                addMessageToLog(`${char.nom} invoque un ${rejeton.nom} !`)
+                char.mp -= char.niveau * 3;
+            }
         }
         Character.charSheet();
         proceed();
@@ -484,7 +524,7 @@ function fight() {
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             for (let i = 0; i < mobs.length; i++) {
-                magicalDmg(char, mobs[i], sort.valeur, sort.element)
+                if (mobs[i].hp > 0) magicalDmg(char, mobs[i], sort.valeur, sort.element);
             }
             if (isFightOver()) return;
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
@@ -496,9 +536,10 @@ function fight() {
             Character.charSheet();
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
-            for (let i = 0; i < chars.length; i++) {
-                if (chars[i].hp > 0) {
-                    heal(char, chars[i], sort.valeur);
+            let targets = [...chars, ...summons]
+            for (let i = 0; i < targets.length; i++) {
+                if (targets[i].hp > 0) {
+                    heal(char, targets[i], sort.valeur);
                 }
             }
             Character.charSheet();
@@ -515,7 +556,8 @@ function fight() {
             };
             let displayStat = statNames[stat]
             let buffType = `${type}${stat}`;
-            chars.forEach(perso => {
+            let targets = [...chars, ...summons]
+            targets.forEach(perso => {
                 if (perso.statusEffects[buffType] && perso.statusEffects[buffType].lvl < niveau ) { // si le personnage reçoit un buff de niveau supérieur
                     perso.statsTemp[stat] -= 3 * perso.statusEffects[buffType].lvl // on remet la stat à sa valeur
                     perso.statsTemp[stat] += sort.valeur; perso.statusEffects[buffType] = {lvl: niveau, caster: char, turns: 3}; // on applique le buff pour trois tours
@@ -616,7 +658,7 @@ function fight() {
         if (item.effet === "heal") {
             char.hp += item.valeur;
             if (char.hp > char.maxhp) char.hp = char.maxhp;
-            addMessageToLog(`<span class="green">${char.nom} récupère ${item.valeur} HP</span> !`);
+            addMessageToLog(`<span class="green">${char.nom} gagne ${item.valeur} HP</span> !`);
         } else if (item.effet === "regen") {
             char.mp += item.valeur;
             if (char.mp > char.maxmp) char.mp = char.maxmp;
@@ -624,7 +666,8 @@ function fight() {
         } else if (item.effet === "resurrect") {
             if ( chars[cibleIndex].hp <= 0 ) {
                 chars[cibleIndex].hp = chars[cibleIndex].maxhp * item.valeur;
-                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} récupère ${100 * item.valeur}% de ses HP</span> et revient à la vie !`)
+                addMessageToLog(`${chars[cibleIndex].nom} revient à la vie !`)
+                addMessageToLog(`<span class="green">${chars[cibleIndex].nom} gagne ${chars[cibleIndex].hp} HP</span>.`)
             } else {
                 addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
             }
@@ -660,10 +703,9 @@ function fight() {
         } else if ( sort.type === "attack" && sort.cible === "all" ) {
             cibleIndex = "all";
             addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
-            for (let i = 0; i < chars.length; i++) {
-                if ( chars[i].hp > 0 ) {
-                    magicalDmg(mob, chars[i], sort.valeur, sort.element)
-                }
+            let targets = [...chars, ...summons]
+            for (let i = 0; i < targets.length; i++) {
+                if ( targets[i].hp > 0 ) magicalDmg(mob, targets[i], sort.valeur, sort.element);
             }
         } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
             console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`)
@@ -734,7 +776,8 @@ function fight() {
             let debuffType = `${type}${stat}`;
             let breakLoop = false;
             let msgCast = false;
-            chars.forEach(perso => {
+            let targets = [...chars, ...summons]
+            targets.forEach(perso => {
                 if (breakLoop) return;
                 if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl < niveau ) {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
@@ -758,6 +801,31 @@ function fight() {
         }
     }
 
+    function summonAttack(summon, cible) {
+        if ( Math.random() < 0.3 && summon.sorts[1]?.mp !== undefined && summon.mp >= summon.sorts[1].mp ) {
+            summonSpellResolve(summon, summon.sorts[1], cible)
+        } else if ( Math.random() < 0.6 && summon.sorts[0]?.mp !== undefined && summon.mp >= summon.sorts[0].mp ) {
+            summonSpellResolve(summon, summon.sorts[0], cible)
+        } else {
+            physicalDmg(summon, cible);
+        }
+        if (isFightOver()) return;
+    }
+
+    function summonSpellResolve(summon, sort, cible) {
+        summon.mp -= sort.mp;
+        if ( sort.type === "attack" && sort.cible === 1 ) {
+            addMessageToLog(`${summon.nom} utilise ${sort.nom} !`)
+            magicalDmg(summon, cible, sort.valeur, sort.element)
+        } else if ( sort.type === "attack" && sort.cible === "all" ) {
+            cibleIndex = "all";
+            addMessageToLog(`${summon.nom} utilise ${sort.nom} !`)
+            for (let i = 0; i < mobs.length; i++) {
+                if ( mobs[i].hp > 0 ) magicalDmg(summon, mobs[i], sort.valeur, sort.element);
+            }
+        }
+    }
+
     function physicalDmg(attacker, target, bonus = 0) {
         if (target.hp < 0) return;
         let arme = 0; let armure = 0; let dodge = 0;
@@ -768,11 +836,16 @@ function fight() {
         } else {
             let dmg = Math.floor(( 2 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 ));
             if ( dmg < 0 ) { dmg = 0 };
-            target.hp -= dmg;
+            target.hp = Math.max(target.hp - dmg, 0);
             addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
         }
         if (target.classe && target.hp <= 0) {
             addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
+            if (target.classe === "Invocateur") {
+                let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+                rejeton.hp = 0;
+                addMessageToLog(`${rejeton.nom} <strong>disparaît</strong>.`);
+            }
         } else if (target.hp <= 0) {
             addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
         }
@@ -787,10 +860,9 @@ function fight() {
             if (target.armure) armure = target.armure.valeur.willpower;
             let coeff = 1;
             if (element !== "none" && target.resists) coeff = target.resists[element];
-    
             let dmg = Math.floor(( attacker.statsTemp.intelligence + arme + bonus - ( target.statsTemp.willpower + armure ) ) * coeff * ( Math.random() * 0.3 + 0.85 ));
             if ( dmg < 0 ) { dmg = 0 };
-            target.hp -= dmg;
+            target.hp = Math.max(target.hp - dmg, 0);
             let dmgMsg = `<span class="red">${target.nom} perd ${dmg} HP</span>.`
             if ( coeff === 0 ) {
                 addMessageToLog(`<strong>Immunité</strong> ! ${target.nom} perd ${dmg} HP.`);
@@ -803,6 +875,11 @@ function fight() {
             }
             if (target.classe && target.hp <= 0) {
                 addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
+                if (target.classe === "Invocateur") {
+                    let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+                    rejeton.hp = 0;
+                    addMessageToLog(`${rejeton.nom} <strong>disparaît</strong>.`);
+                }
             } else if (target.hp <= 0) {
                 addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
             }
@@ -872,9 +949,15 @@ function fight() {
         }
         if ( mobs.every(mob => mob.hp <= 0 ) ) {
             mobs.length = 0;
+            let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+            if (rejeton) rejeton.hp = 0;
             chars.forEach(char => {
                 char.statsTemp = { ...char.stats };
                 char.statusEffects = {};
+            })
+            summons.forEach(summon => {
+                summon.statsTemp = { ...summon.stats };
+                summon.statusEffects = {};
             })
             setTimeout(() => {
                 onFight = false;
@@ -895,7 +978,7 @@ function fight() {
             if ( document.getElementById("itemList") ) { document.getElementById("itemList").remove(); }
             if ( document.getElementById("spellList") ) { document.getElementById("spellList").remove(); }
             if ( targets ) targets.remove();
-            fightMobDiv.remove();
+            fightInfo.remove();
             chars.forEach(char => char.gainXP(xpGained))
             gold += goldGained;
             if ( goldGained > 0 ) addMessageToLog(`Vous obtenez ${goldGained} fragments de magie.`);

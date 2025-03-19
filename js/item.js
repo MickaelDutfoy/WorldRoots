@@ -51,7 +51,7 @@ class Item {
         lightArmor1: new Item("Veste abîmée", "lightArmor1", "equipement", "armure", {agility: 2, vitality: 0, willpower: 0}),
         lightArmor2: new Item("Veste renforcée", "lightArmor2", "equipement", "armure", {agility: 4, vitality: 0, willpower: 0}),
         lightArmor3: new Item("Cape du vent", "lightArmor3", "equipement", "armure", {agility: 6, vitality: 0, willpower: 0}),
-        lightArmor4: new Item("Armure de rôdeur", "lightArmor4", "equipement", "armure", {agility: 8, vitality: 0, willpower: 0}),
+        lightArmor4: new Item("Armure de Rôdeuse", "lightArmor4", "equipement", "armure", {agility: 8, vitality: 0, willpower: 0}),
         lightArmor5: new Item("Manteau d'ombre", "lightArmor5", "equipement", "armure", {agility: 10, vitality: 0, willpower: 0}),
         lightArmor6: new Item("Armure sylvestre", "lightArmor6", "equipement", "armure", {agility: 12, vitality: 0, willpower: 0}),
         lightArmor7: new Item("Cape elfique", "lightArmor7", "equipement", "armure", {agility: 14, vitality: 0, willpower: 0}),

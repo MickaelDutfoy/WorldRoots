@@ -56,7 +56,7 @@ class Character {
             sorts: [Spell.getSpell("buffAgility1")],
             arme: Item.getItem("sword1"),
             armure: Item.getItem("lightArmor1")},
-            "Rôdeur": { nom: "Électra", skill: "Fraternité",
+            "Rôdeuse": { nom: "Électra", skill: "Lien animal",
             stats: {strength: 2, intelligence: 1, agility: 3, vitality: 2, willpower: 2},
             sorts: [Spell.getSpell("debuffVitality1")],
             arme: Item.getItem("hache1"),
@@ -96,8 +96,9 @@ class Character {
         for ( let i = 0; i <=2; i++ ) Character.addItem(Item.getItem("potion1"));
         for ( let i = 0; i <=1; i++ ) Character.addItem(Item.getItem("ether1"));
         Character.addItem(Item.getItem("rez1"));
+        Summon.generateSummons();
         initGame();
-        tempoMsg = 1500;
+        tempoMsg = 3000;
         addSlowMsgToLog(`Bienvenue dans le Mode Arcade de WorldRoots !`)
         addSlowMsgToLog(`L'objectif est simple : avancer le plus loin possible.`)
         addSlowMsgToLog(`La partie se termine si vos trois personnages tombent à 0 HP...`)
@@ -107,7 +108,6 @@ class Character {
             msgLog.appendChild(startBtn); startBtn.addEventListener("click", Mob.popMob);
             document.getElementById("msgLog").style.borderBottom = "3px solid #121212";
         }, tempoMsg);
-        Character.charSheet();
     };
 
     static addItem(objet) {
@@ -139,6 +139,15 @@ class Character {
         this.statsTemp = { ...this.stats };
         const charIndex = chars.findIndex(char => char === this);
         this.addLevelUpListeners(charIndex);
+        if (this.classe === "Rôdeuse") {
+            let renard = summons.find(summon => summon.nom === "Renard agile");
+            Summon.levelUp(renard)
+        }
+
+        if (this.classe === "Invocateur") {
+            let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+            Summon.levelUp(rejeton)
+        }
     }
     
     addLevelUpListeners = (charIndex) => {
@@ -158,57 +167,46 @@ class Character {
         const volDwnBtn = document.getElementById("VolDwn" + charIndex);
         const lvlUpBtn = document.getElementById("LvlUpBtn" + charIndex);
     
-        // Vérifier si les listeners sont déjà ajoutés, par exemple via un attribut "data-listener"
         if (!agiUpBtn.hasAttribute("data-listener")) {
             agiUpBtn.addEventListener("click", () => this.modifyStat(charIndex, "agility", "+"));
-            agiUpBtn.setAttribute("data-listener", "true"); // Marque le bouton comme ayant son listener
+            agiUpBtn.setAttribute("data-listener", "true"); 
         }
-    
         if (!forUpBtn.hasAttribute("data-listener")) {
             forUpBtn.addEventListener("click", () => this.modifyStat(charIndex, "strength", "+"));
             forUpBtn.setAttribute("data-listener", "true");
         }
-    
         if (!intUpBtn.hasAttribute("data-listener")) {
             intUpBtn.addEventListener("click", () => this.modifyStat(charIndex, "intelligence", "+"));
             intUpBtn.setAttribute("data-listener", "true");
         }
-    
         if (!vitUpBtn.hasAttribute("data-listener")) {
             vitUpBtn.addEventListener("click", () => this.modifyStat(charIndex, "vitality", "+"));
             vitUpBtn.setAttribute("data-listener", "true");
         }
-    
         if (!volUpBtn.hasAttribute("data-listener")) {
             volUpBtn.addEventListener("click", () => this.modifyStat(charIndex, "willpower", "+"));
             volUpBtn.setAttribute("data-listener", "true");
         }
-    
         if (!agiDwnBtn.hasAttribute("data-listener")) {
             agiDwnBtn.addEventListener("click", () => this.modifyStat(charIndex, "agility", "-"));
             agiDwnBtn.setAttribute("data-listener", "true");
         }
-    
         if (!forDwnBtn.hasAttribute("data-listener")) {
             forDwnBtn.addEventListener("click", () => this.modifyStat(charIndex, "strength", "-"));
             forDwnBtn.setAttribute("data-listener", "true");
         }
-    
         if (!intDwnBtn.hasAttribute("data-listener")) {
             intDwnBtn.addEventListener("click", () => this.modifyStat(charIndex, "intelligence", "-"));
             intDwnBtn.setAttribute("data-listener", "true");
         }
-    
         if (!vitDwnBtn.hasAttribute("data-listener")) {
             vitDwnBtn.addEventListener("click", () => this.modifyStat(charIndex, "vitality", "-"));
             vitDwnBtn.setAttribute("data-listener", "true");
         }
-    
         if (!volDwnBtn.hasAttribute("data-listener")) {
             volDwnBtn.addEventListener("click", () => this.modifyStat(charIndex, "willpower", "-"));
             volDwnBtn.setAttribute("data-listener", "true");
         }
-    
         if (!lvlUpBtn.hasAttribute("data-listener")) {
             lvlUpBtn.addEventListener("click", () => this.validateLvlUp(charIndex));
             lvlUpBtn.setAttribute("data-listener", "true");
@@ -268,7 +266,7 @@ class Character {
             document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques et l'efficacité des sorts de soin">Intelligence</span> :`;
             document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence + chars[i].arme.valeur.intelligence}</span>`;
             document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique">Vitalité</span> :`;
-            document.getElementById("vitVal" + i).innerHTML = ` <span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
+            document.getElementById("vitVal" + i).innerHTML = `<span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
             document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique">Volonté</span> :`;
             document.getElementById("volVal" + i).innerHTML = `<span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="bluebold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower + chars[i].armure.valeur.willpower}</span>`;
             document.getElementById("lvlUpPoints" + i).innerHTML = `Disponibles :`;
@@ -567,7 +565,7 @@ class Character {
             if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Int"]);
             if (char.classe === "Barbare") generateSpellShop(char, ["buff"], ["Str"]);
             if (char.classe === "Voleur") generateSpellShop(char, ["buff"], ["Agi"]);
-            if (char.classe === "Rôdeur") generateSpellShop(char, ["debuff"], ["Vit"]);
+            if (char.classe === "Rôdeuse") generateSpellShop(char, ["debuff"], ["Vit"]);
             if (char.classe === "Invocateur") generateSpellShop(char, ["dark", "heal"], ["Target", "Aoe"]);
         });
     }

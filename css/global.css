@@ -210,6 +210,10 @@ body > div {
   right: 10px;
 }
 
+#teamSelector {
+  transition: opacity 1.5s ease;
+}
+
 #teamSelector label {
   font-weight: bold;
 }
@@ -217,7 +221,7 @@ body > div {
 #exploreWindow {
   grid-area: exploreWindow;
   opacity: 0;
-  transition: opacity 1.5s ease;
+  transition: opacity 3s ease;
 }
 
 .fight {
@@ -232,7 +236,6 @@ body > div {
   min-height: 180px;
   padding-bottom: 5px;
   margin-bottom: 5px;
-  border-bottom: 3px solid rgb(18, 18, 18);
 }
 
 #magicShop, #sellShop {
@@ -282,8 +285,16 @@ body > div {
   border: 3px solid #966;
 }
 
-#FightMobList {
+#fightInfo {
   font-weight: bold;
+}
+
+#mobInfo {
+  text-align: left;
+}
+
+#summonInfo {
+  text-align: left;
 }
 
 #fightLog button {
@@ -304,6 +315,11 @@ table {
   width: 100%;
   margin-top: 10px;
   border-collapse: collapse;
+}
+
+#charSheet {
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 
 #inventory {

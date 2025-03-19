@@ -1,4 +1,5 @@
 function initGame() {
+    exploreWindow.style.opacity = "1";
     charSheet.innerHTML = `
     <tr>
         <td id="inventory" class="collapsabletd" rowspan="16"></td>
@@ -150,16 +151,19 @@ function initGame() {
     <tr class="collapsabletr">
         <td colspan="2" style="text-align:center;" id="armor2"></td>
     </tr>`;
-    exploreWindow.style.opacity = "1";
     exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
     const collapseBtn = document.createElement("button");
     document.getElementById("teamWindow").appendChild(collapseBtn);
     collapseBtn.id = "collapseBtn";
-    collapseBtn.innerHTML = "Réduire la fiche";
+    collapseBtn.innerHTML = "Agrandir la fiche";
     collapseBtn.addEventListener("click", Character.collapseExpand);
-    document.getElementById("teamSelector").style.display = "none";
-    setTimeout(() => classDescription.remove(), tempoMsg)
-    document.getElementById("teamWindow").appendChild(charSheet);
+    document.getElementById("teamSelector").style.opacity = "0";
+    setTimeout(() => {
+        document.getElementById("teamSelector").remove()
+        Character.charSheet();
+        Character.collapseExpand();
+        charSheet.style.opacity = "1";
+    }, 1500)
 }
 
 function save() {
@@ -175,6 +179,7 @@ function save() {
         const saveData = {
             chars: chars,
             inventaire: inventaire,
+            summons: summons,
             gold: gold,
             score: score,
             charSheetState: charSheetState,
@@ -207,6 +212,19 @@ function load() {
     chars.forEach(char => {
         if ( char.pointsLvlUp > 0 ) char.levelUp()
     })
+    let renardhp = 0; let renardmp = 0;
+    summons = saveData.summons;
+    if (summons.find(summon => summon.nom === "Renard agile")) {
+        let renard = summons.find(summon => summon.nom === "Renard agile");
+        renardhp = renard.hp   
+        renardmp = renard.mp   
+    }
+    summons = []; Summon.generateSummons();
+    if (summons.find(summon => summon.nom === "Renard agile")) {
+        let renard = summons.find(summon => summon.nom === "Renard agile");
+        renard.hp = renardhp
+        renard.mp = renardmp
+    }
     inventaire = saveData.inventaire;
     gold = saveData.gold;
     score = saveData.score;
@@ -221,8 +239,8 @@ function load() {
     msgLog.appendChild(shopBtn);
     msgLog.appendChild(sellBtn);
     msgLog.appendChild(leaveBtn);
+    document.getElementById("msgLog").style.borderBottom = "3px solid #121212";
     tempoMsg = 0; addMessageToLog("Partie chargée avec succès !");
-    Character.charSheet();
     if ( charSheetState === "collapsed" ) {
         let collapsabletd = document.querySelectorAll(".collapsabletd");
         let collapsabletr = document.querySelectorAll(".collapsabletr");
@@ -230,6 +248,7 @@ function load() {
         collapsabletd.forEach(el => el.style.display = "none");
         collapsabletr.forEach(el => el.style.display = "none");
     }
+    Character.charSheet();
 }
 
 function quit() {
@@ -259,14 +278,13 @@ function updateClassDescriptions() {
         document.getElementById("classe2").value,
         document.getElementById("classe3").value
     ];
-    console.log(selectedClasses)
 
     for ( let i = 1; i <= 3; i++) {
         if (selectedClasses[i-1] === "Guerrier") {
-            document.getElementById("descClasse" + i).innerHTML = "Combattant 100% physique, le <strong>Guerrier</strong> est capable de faire des dégâts comme d'en encaisser. En combat, il peut attaquer à l'arme mais surtout attirer à lui les attaques ennemies avec sa capacité <em>Provocation</em> moyennant un faible coût en MP."
+            document.getElementById("descClasse" + i).innerHTML = "Combattant exclusivement physique, le <strong>Guerrier</strong> est capable de faire des dégâts comme d'en encaisser. En combat, il peut attaquer à l'arme mais surtout attirer à lui les attaques ennemies avec sa capacité <em>Provocation</em> moyennant un faible coût en MP."
         }
         if (selectedClasses[i-1] === "Paladin") {
-            document.getElementById("descClasse" + i).innerHTML = "Combattant béni des dieux, le <strong>Paladin</strong> sait se battre à l'épée mais il dispose aussi de sorts de Soin et d'attaques Sacrées sur cible unique. Il peut renforcer la Volonté de toute l'équipe et sa capacité <em>Action divine</em> lui permet de consommer tous ses MP pour ressuciter et soigner toute l'équipe."
+            document.getElementById("descClasse" + i).innerHTML = "Combattant béni des dieux, le <strong>Paladin</strong> sait se battre à l'épée mais il dispose aussi de sorts de Soin et d'attaques Sacrées sur cible unique. Il peut renforcer la Volonté de toute l'équipe et sa capacité <em>Action divine</em> lui permet de consommer tous ses MP pour réanimer et soigner toute l'équipe."
         }
         if (selectedClasses[i-1] === "Chevalier noir") {
             document.getElementById("descClasse" + i).innerHTML = "Combattante liée aux Ténèbres, le <strong>Chevalier noir</strong> peut utiliser des sorts de cet élément sur cible unique et attaquer à l'épée, ainsi que réduire la Force des ennemis. Moyennant quelques MP, sa capacité <em>Siphon vital</em> déclenche un sort d'élément Ténèbres affectant tous les ennemis et la soignant d'un montant égal aux dégâts ainsi infligés."
@@ -284,7 +302,7 @@ function updateClassDescriptions() {
             document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire l'Intelligence de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût de MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
         }
         if (selectedClasses[i-1] === "Prêtresse") {
-            document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des soins sur cible et de zone. Elle est en outre capable de renforcer l'Intelligence de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."
+            document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des Soins sur cible et de zone. Elle est en outre capable de renforcer l'Intelligence de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."
         }
         if (selectedClasses[i-1] === "Barbare") {
             document.getElementById("descClasse" + i).innerHTML = "Puissant et agile combattant, le <strong>Barbare</strong> peut infliger de gros dégâts, surtout après avoir renforcé la Force de son équipe. Sa capacité <em>Tourbillon</em> lui permet, au prix d'un coût en MP, de déclencher une attaque physique sur tous les adversaires à la fois."
@@ -292,11 +310,11 @@ function updateClassDescriptions() {
         if (selectedClasses[i-1] === "Voleur") {
             document.getElementById("descClasse" + i).innerHTML = "Combattant agile et rusé, le <strong>Voleur</strong> sait se battre à l'épée et peut renforcer l'Agilité de toute l'équipe. Il est également capable de dénicher des trésors supplémentaires en faisant les poches de ses ennemis (même de ceux qui n'en ont pas !) grâce à sa capacité <em>Larcin</em>, moyennant quelques MP."
         }
-        if (selectedClasses[i-1] === "Rôdeur") {
-            document.getElementById("descClasse" + i).innerHTML = "Personnage non fonctionnel à 100% à l'heure actuelle (capacité spéciale non implémentée."
+        if (selectedClasses[i-1] === "Rôdeuse") {
+            document.getElementById("descClasse" + i).innerHTML = "Combattante de corps à corps rapide accompagnée en permanence de son fidèle compagnon Renard, la <strong>Rôdeuse</strong> sait en outre manipuler les poisons et peut affaiblir la Vitalité de tous ses adversaires en combat. Sa capacité <em>Lien animal</em> lui permet de réanimer et soigner son compagnon."
         }
         if (selectedClasses[i-1] === "Invocateur") {
-            document.getElementById("descClasse" + i).innerHTML = "Personnage non fonctionnel à 100% à l'heure actuelle (capacité spéciale non implémentée."
+            document.getElementById("descClasse" + i).innerHTML = "Mage manipulateur des Ténèbres, l'<strong>Invocateur</strong> sait utiliser des sorts de cet élément et des Soins sur cible unique comme sur zone. Sa capacité <em>Portail</em> lui permet d'appeler un Rejeton du néant qui se bat à ses côtés jusqu'à la fin du combat ou jusqu'à sa mort."
         }
     }
 }
@@ -317,7 +335,6 @@ function addSlowMsgToLog(message) {
         newMsg.classList.add("generatedMessage")
         newMsg.style.fontSize = "1.2em";
         msgLog.appendChild(newMsg);
-        setTimeout(() => { newMsg.classList.add("show");}, 10);
     }, tempoMsg);
     tempoMsg += 1500;
 }
@@ -366,8 +383,8 @@ if (window.location.pathname.includes("arcade.html")) {
 
 updateClassDescriptions();
 
-let chars = []; let mobs = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false; let score = 0;
-const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded";
+let chars = []; let mobs = []; let summons = []; let tempoMsg = 0; let onFight = false; inventaire = []; gold = 50; let abandonned = false; let score = 0;
+const charSheet = document.createElement('table'); charSheet.id = "charSheet"; charSheet.innerHTML = ""; let charSheetState = "expanded"; document.getElementById("teamWindow").appendChild(charSheet);
 const exploreWindow = document.getElementById("exploreWindow"); 
 const msgLog = document.createElement("div"); msgLog.id = "msgLog"; msgLog.innerHTML = "";
 const fightLog = document.createElement("div"); fightLog.id = "fightLog"; fightLog.innerHTML = "";
