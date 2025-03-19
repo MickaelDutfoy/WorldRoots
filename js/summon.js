@@ -6,6 +6,7 @@ class Summon {
         this.sorts = [];
         this.stats = this.calculateStats();
         this.statsTemp = { ...this.stats };
+        this.statusEffects = {};
         this.maxhp = 10 * this.stats.vitality;
         this.hp = (type === "renard" ? this.maxhp : 0);
         this.maxmp = 10 * this.stats.willpower;

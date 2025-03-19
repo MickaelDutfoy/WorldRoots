@@ -560,6 +560,7 @@ function fight() {
             let buffType = `${type}${stat}`;
             let targets = [...chars, ...summons]
             targets.forEach(perso => {
+                if (perso.hp <= 0) return;
                 if (perso.statusEffects[buffType] && perso.statusEffects[buffType].lvl < niveau ) { // si le personnage reçoit un buff de niveau supérieur
                     perso.statsTemp[stat] -= 3 * perso.statusEffects[buffType].lvl // on remet la stat à sa valeur
                     perso.statsTemp[stat] += sort.valeur; perso.statusEffects[buffType] = {lvl: niveau, caster: char, turns: 3}; // on applique le buff pour trois tours
@@ -780,6 +781,7 @@ function fight() {
             let msgCast = false;
             let targets = [...chars, ...summons]
             targets.forEach(perso => {
+                if (perso.hp <= 0) return;
                 if (breakLoop) return;
                 if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl < niveau ) {
                     perso.statsTemp[stat] += 3 * perso.statusEffects[debuffType].lvl;
