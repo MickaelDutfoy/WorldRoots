@@ -57,7 +57,6 @@ class Summon {
         summon.maxmp = 10 * summon.stats.willpower;
         summon.hp += 10 * (summon.stats.vitality - previousVit)
         summon.mp += 10 * (summon.stats.willpower - previousWil)
-        console.log(`${summon.nom} monte en niveau :`, summon);
     }   
     
 }

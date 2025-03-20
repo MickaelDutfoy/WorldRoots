@@ -43,27 +43,27 @@
           willpower: parseInt(row[7], 10)
         };
         const resists = {
-          fire: parseFloat(row[8] || "1"),
-          ice: parseFloat(row[9] || "1"),
-          lightning: parseFloat(row[10] || "1"),
-          earth: parseFloat(row[11] || "1"),
-          dark: parseFloat(row[12] || "1"),
-          holy: parseFloat(row[13] || "1")
+          fire: parseFloat(row[10] || "1"),
+          ice: parseFloat(row[11] || "1"),
+          lightning: parseFloat(row[12] || "1"),
+          earth: parseFloat(row[13] || "1"),
+          dark: parseFloat(row[14] || "1"),
+          holy: parseFloat(row[15] || "1")
         };
 
         // Récupère les sorts (colonne 14 et 15)
         const sorts = [];
-        if (row[14] && row[14].trim() !== "") {
-          sorts.push(`Spell.getSpell("${row[14].trim()}")`);
+        if (row[16] && row[16].trim() !== "") {
+          sorts.push(`Spell.getSpell("${row[16].trim()}")`);
         }
-        if (row[15] && row[15].trim() !== "") {
-          sorts.push(`Spell.getSpell("${row[15].trim()}")`);
+        if (row[17] && row[17].trim() !== "") {
+          sorts.push(`Spell.getSpell("${row[17].trim()}")`);
         }
         
         // Récupère le loot (colonne 16)
         const lootTable = [];
-        if (row[16] && row[16].trim() !== "") {
-          lootTable.push(`{item: Item.getItem("${row[16].trim()}"), chance: 0.1}`);
+        if (row[18] && row[18].trim() !== "") {
+          lootTable.push(`{item: Item.getItem("${row[18].trim()}"), chance: 0.1}`);
         }
         
         // Retourne le string formaté tel que voulu

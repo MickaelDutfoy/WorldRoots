@@ -152,6 +152,8 @@ function initGame() {
         <td colspan="2" style="text-align:center;" id="armor2"></td>
     </tr>`;
     exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
+
+
     const collapseBtn = document.createElement("button");
     document.getElementById("teamWindow").appendChild(collapseBtn);
     collapseBtn.id = "collapseBtn";
@@ -179,11 +181,12 @@ function save() {
         const saveData = {
             chars: chars,
             inventaire: inventaire,
-            summons: summons,
             gold: gold,
             score: score,
             charSheetState: charSheetState,
         };
+        let renard = summons.find(summon => summon.nom === "Renard agile");
+        saveData.renard = renard ? [renard.hp, renard.mp] : null;
         localStorage.setItem("worldrootsSave", JSON.stringify(saveData));
     }
 }
@@ -209,22 +212,14 @@ function load() {
         char.armure = Item.getItem(charData.armure.id);
         return char;
     });
+    Summon.generateSummons();
+    if (saveData.renard && summons.find(s => s.nom === "Renard agile")) {
+        let renard = summons.find(s => s.nom === "Renard agile");
+        [renard.hp, renard.mp] = saveData.renard;
+    }
     chars.forEach(char => {
         if ( char.pointsLvlUp > 0 ) char.levelUp()
     })
-    let renardhp = 0; let renardmp = 0;
-    summons = saveData.summons;
-    if (summons.find(summon => summon.nom === "Renard agile")) {
-        let renard = summons.find(summon => summon.nom === "Renard agile");
-        renardhp = renard.hp   
-        renardmp = renard.mp   
-    }
-    summons = []; Summon.generateSummons();
-    if (summons.find(summon => summon.nom === "Renard agile")) {
-        let renard = summons.find(summon => summon.nom === "Renard agile");
-        renard.hp = renardhp
-        renard.mp = renardmp
-    }
     inventaire = saveData.inventaire;
     gold = saveData.gold;
     score = saveData.score;
@@ -299,10 +294,10 @@ function updateClassDescriptions() {
             document.getElementById("descClasse" + i).innerHTML = "Mage capable d'utiliser des sorts d'éléments Ténèbres et Sacré sur cible et de zone, le <strong>Chaomancien</strong> peut affaiblir la Volonté de ses adversaires et manipuler leurs esprits avec sa capacité <em>Discorde</em>, les forçant à s'attaquer les uns les autres."
         }
         if (selectedClasses[i-1] === "Magelame") {
-            document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire l'Intelligence de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût de MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
+            document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire la Sagesse de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût de MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
         }
         if (selectedClasses[i-1] === "Prêtresse") {
-            document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des Soins sur cible et de zone. Elle est en outre capable de renforcer l'Intelligence de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."
+            document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des Soins sur cible et de zone. Elle est en outre capable de renforcer la Sagesse de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."
         }
         if (selectedClasses[i-1] === "Barbare") {
             document.getElementById("descClasse" + i).innerHTML = "Puissant et agile combattant, le <strong>Barbare</strong> peut infliger de gros dégâts, surtout après avoir renforcé la Force de son équipe. Sa capacité <em>Tourbillon</em> lui permet, au prix d'un coût en MP, de déclencher une attaque physique sur tous les adversaires à la fois."

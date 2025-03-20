@@ -38,12 +38,12 @@ class Character {
             armure: Item.getItem("robe1")},
             "Magelame": { nom: "Inari", skill: "Analyse",
             stats: {strength: 2, intelligence: 2, agility: 2, vitality: 2, willpower: 2},
-            sorts: [Spell.getSpell("windAoe1"), Spell.getSpell("debuffIntelligence1")],
+            sorts: [Spell.getSpell("windAoe1"), Spell.getSpell("debuffSagesse1")],
             arme: Item.getItem("sword1"),
             armure: Item.getItem("battleRobe1")},
             "Prêtresse": { nom: "Kita", skill: "Don de mana",
             stats: {strength: 1, intelligence: 2, agility: 2, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("buffIntelligence1")],
+            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("buffSagesse1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("battleRobe1")},
             "Barbare": { nom: "Otnugh", skill: "Tourbillon",
@@ -141,12 +141,12 @@ class Character {
         this.addLevelUpListeners(charIndex);
         if (this.classe === "Rôdeuse") {
             let renard = summons.find(summon => summon.nom === "Renard agile");
-            Summon.levelUp(renard)
+            if (renard.niveau < this.niveau) Summon.levelUp(renard)
         }
 
         if (this.classe === "Invocateur") {
             let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
-            Summon.levelUp(rejeton)
+            if (rejeton.niveau < this.niveau) Summon.levelUp(rejeton)
         }
     }
     
@@ -263,7 +263,7 @@ class Character {
             document.getElementById("agiVal" + i).innerHTML = `<span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="bluebold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility + chars[i].armure.valeur.agility}</span>`;
             document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques">Force</span> :`;
             document.getElementById("forVal" + i).innerHTML = ` <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="bluebold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength + chars[i].arme.valeur.strength}</span>`
-            document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques et l'efficacité des sorts de soin">Intelligence</span> :`;
+            document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques et l'efficacité des sorts de soin">Sagesse</span> :`;
             document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence + chars[i].arme.valeur.intelligence}</span>`;
             document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique">Vitalité</span> :`;
             document.getElementById("vitVal" + i).innerHTML = `<span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
@@ -276,7 +276,7 @@ class Character {
                 const statNames = {
                     Strength: "Force", 
                     Agility: "Agilité", 
-                    Intelligence: "Intelligence", 
+                    Sagesse: "Sagesse", 
                     Vitality: "Vitalité", 
                     Willpower: "Volonté" 
                 };
@@ -287,7 +287,7 @@ class Character {
                              : sort.type === "buff" ? "Bénédiction" 
                              : "Malédiction";
                 let statText = (sort.type === "buff" || sort.type === "debuff") && statNames[stat] 
-                             ? ` (${statNames[stat]})` 
+                             ? ` ${statNames[stat]}` 
                              : "";
                 let elementText = elements[sort.element] ? `, Élément : ${elements[sort.element]}` : "";
                 let intensityText = `${sort.type === "attack" ? "Puissance" : "Intensité"} : ${sort.valeur}`;
@@ -316,7 +316,7 @@ class Character {
                 selectArmeHTML += `<option value="${arme.nom}" ${selected}>
                 ${arme.nom} (${[ 
                     arme.valeur.strength > 0 ? `+${arme.valeur.strength} FOR` : '',
-                    arme.valeur.intelligence > 0 ? `+${arme.valeur.intelligence} INT` : ''
+                    arme.valeur.intelligence > 0 ? `+${arme.valeur.intelligence} SAG` : ''
                 ].filter(Boolean).join(', ')})
                 </option>`;
             });
@@ -449,9 +449,7 @@ class Character {
 
     static magicShop() {
         if (document.getElementById("magicShop")) return;
-        const magicShop = document.createElement("div");
-        magicShop.id = "magicShop";
-        document.getElementById("exploreWindow").insertBefore(magicShop, fightLog);
+        const magicShop = document.createElement("div"); magicShop.id = "magicShop"; document.getElementById("exploreWindow").insertBefore(magicShop, fightLog);
         const table = document.createElement("table");
         table.style.width = "100%";
         const thead = document.createElement("thead");
@@ -485,7 +483,7 @@ class Character {
                         const statNames = {
                             Strength: "Force", 
                             Agility: "Agilité", 
-                            Intelligence: "Intelligence", 
+                            Sagesse: "Sagesse", 
                             Vitality: "Vitalité", 
                             Willpower: "Volonté"
                         };
@@ -496,7 +494,7 @@ class Character {
                                      : spell.type === "buff" ? "Bénédiction" 
                                      : "Malédiction";
                         let statText = (spell.type === "buff" || spell.type === "debuff") && statNames[stat] 
-                                     ? ` (${statNames[stat]})` 
+                                     ? ` ${statNames[stat]}` 
                                      : "";
                         let elementText = elements[spell.element] ? `, Élément : ${elements[spell.element]}` : "";
                         let cibleText = (spell.type === "attack" || spell.type === "heal") 
@@ -556,25 +554,29 @@ class Character {
         magicShop.appendChild(table);
 
         chars.forEach(char => {
-            if (char.classe === "Paladin") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Wil"]);
-            if (char.classe === "Chevalier noir") generateSpellShop(char, ["dark", "debuff"], ["Target", "Str"]);
-            if (char.classe === "Aéromancienne") generateSpellShop(char, ["ice", "lightning", "debuff"], ["Target", "Aoe", "Agi"]);
-            if (char.classe === "Géomancienne") generateSpellShop(char, ["fire", "earth", "buff"], ["Target", "Aoe", "Vit"]);
-            if (char.classe === "Chaomancien") generateSpellShop(char, ["dark", "holy", "debuff"], ["Target", "Aoe", "Wil"]);
-            if (char.classe === "Magelame") generateSpellShop(char, ["wind", "debuff"], ["Target", "Aoe", "Int"]);
-            if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Int"]);
-            if (char.classe === "Barbare") generateSpellShop(char, ["buff"], ["Str"]);
-            if (char.classe === "Voleur") generateSpellShop(char, ["buff"], ["Agi"]);
-            if (char.classe === "Rôdeuse") generateSpellShop(char, ["debuff"], ["Vit"]);
+            if (char.classe === "Guerrier") generateSpellShop(char, [], []);
+            if (char.classe === "Paladin") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Willpower"]);
+            if (char.classe === "Chevalier noir") generateSpellShop(char, ["dark", "debuff"], ["Target", "Strength"]);
+            if (char.classe === "Aéromancienne") generateSpellShop(char, ["ice", "lightning", "debuff"], ["Target", "Aoe", "Agility"]);
+            if (char.classe === "Géomancienne") generateSpellShop(char, ["fire", "earth", "buff"], ["Target", "Aoe", "Vitality"]);
+            if (char.classe === "Chaomancien") generateSpellShop(char, ["dark", "holy", "debuff"], ["Target", "Aoe", "Willpower"]);
+            if (char.classe === "Magelame") generateSpellShop(char, ["wind", "debuff"], ["Target", "Aoe", "Sagesse"]);
+            if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Sagesse"]);
+            if (char.classe === "Barbare") generateSpellShop(char, ["buff"], ["Strength"]);
+            if (char.classe === "Voleur") generateSpellShop(char, ["buff"], ["Agility"]);
+            if (char.classe === "Rôdeuse") generateSpellShop(char, ["debuff"], ["Vitality"]);
             if (char.classe === "Invocateur") generateSpellShop(char, ["dark", "heal"], ["Target", "Aoe"]);
         });
     }
 
     static sellShop() {
         if (document.getElementById("sellShop")) return;
-        const shopContainer = document.createElement("div");
-        shopContainer.id = "sellShop";
-        document.getElementById("exploreWindow").insertBefore(shopContainer, fightLog);
+        const shopContainer = document.createElement("div"); shopContainer.id = "sellShop";
+        if (document.getElementById("magicShop")) {
+            document.getElementById("exploreWindow").insertBefore(shopContainer, magicShop);
+        } else {
+            document.getElementById("exploreWindow").insertBefore(shopContainer, fightLog);
+        }
         const table = document.createElement("table");
         table.style.width = "100%";
         const thead = document.createElement("thead");
