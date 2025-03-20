@@ -1,4 +1,6 @@
 function fight() {
+    let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+    if (rejeton) rejeton.hp = 0;
     document.getElementById("ennemyTargets").remove();
     let fightInfo = document.createElement("table"); msgLog.appendChild(fightInfo); fightInfo.id = "fightInfo";
     fightInfo.innerHTML = `<tr><td>Ennemis présents dans la salle :</td><td>Compagnons présents dans la salle : </td></tr>
@@ -11,8 +13,6 @@ function fight() {
     let targets = document.createElement("div");
     let initiativeTable = []; let round = 1; let taunt = false;
     let turnIndex = 0; setInitiativeTable(); nextTurn();
-    let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
-    if (rejeton) rejeton.hp = 0;
 
     function setInitiativeTable() {
         initiativeTable.length = 0;
