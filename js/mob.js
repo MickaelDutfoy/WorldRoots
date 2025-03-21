@@ -69,7 +69,7 @@ class Mob {
             niveau: 4,
             stats: { strength: 6, intelligence: 3, agility: 3, vitality: 5, willpower: 3 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
-            sorts: [],
+            sorts: [Spell.getSpell("healTarget1")],
             lootTable: [{item: Item.getItem("baton2"), chance: 0.1}]
         },
         {
@@ -132,7 +132,7 @@ class Mob {
             niveau: 8,
             stats: { strength: 7, intelligence: 3, agility: 3, vitality: 8, willpower: 7 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("debuffAgility1")],
+            sorts: [Spell.getSpell("debuffAgility1"), Spell.getSpell("healAoe1")],
             lootTable: [{item: Item.getItem("baton2"), chance: 0.1}]
         },
         {
@@ -258,7 +258,7 @@ class Mob {
             niveau: 15,
             stats: { strength: 13, intelligence: 8, agility: 7, vitality: 11, willpower: 7 },
             resists: { fire: 0.5, ice: 2, lightning: 0.5, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe2")],
+            sorts: [Spell.getSpell("fireAoe2"), Spell.getSpell("healTarget2")],
             lootTable: []
         },
         {
@@ -663,7 +663,7 @@ class Mob {
             niveau: 37,
             stats: { strength: 28, intelligence: 15, agility: 15, vitality: 25, willpower: 15 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
-            sorts: [],
+            sorts: [Spell.getSpell("healTarget4")],
             lootTable: [{item: Item.getItem("mediumArmor5"), chance: 0.1}]
         },
         {
@@ -726,7 +726,7 @@ class Mob {
             niveau: 41,
             stats: { strength: 28, intelligence: 12, agility: 12, vitality: 30, willpower: 28 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("debuffAgility5")],
+            sorts: [Spell.getSpell("debuffAgility5"), Spell.getSpell("healAoe5")],
             lootTable: [{item: Item.getItem("battleRobe6"), chance: 0.1}]
         },
         {
@@ -852,7 +852,7 @@ class Mob {
             niveau: 48,
             stats: { strength: 34, intelligence: 22, agility: 19, vitality: 30, willpower: 19 },
             resists: { fire: 0.5, ice: 2, lightning: 0.5, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe5")],
+            sorts: [Spell.getSpell("fireAoe5"), Spell.getSpell("healTarget5")],
             lootTable: []
         },
         {
@@ -1257,7 +1257,7 @@ class Mob {
             niveau: 70,
             stats: { strength: 50, intelligence: 28, agility: 28, vitality: 46, willpower: 28 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 0.5 },
-            sorts: [],
+            sorts: [Spell.getSpell("healTarget8")],
             lootTable: []
         },
         {
@@ -1288,7 +1288,7 @@ class Mob {
             lootTable: [{item: Item.getItem("baton9"), chance: 0.1}]
         },
         {
-            nom: "Serviteur du mal absolu",
+            nom: "Serviteur du Mal Absolu",
             id: "serviteurMalAbsolu",
             niveau: 72,
             stats: { strength: 47, intelligence: 23, agility: 38, vitality: 45, willpower: 31 },
@@ -1320,7 +1320,7 @@ class Mob {
             niveau: 74,
             stats: { strength: 48, intelligence: 21, agility: 21, vitality: 50, willpower: 48 },
             resists: { fire: 1, ice: 1, lightning: 1, earth: 1, dark: 1, holy: 2 },
-            sorts: [Spell.getSpell("debuffAgility8")],
+            sorts: [Spell.getSpell("debuffAgility8"), Spell.getSpell("healAoe8")],
             lootTable: [{item: Item.getItem("battleRobe9"), chance: 0.1}]
         },
         {
@@ -1446,7 +1446,7 @@ class Mob {
             niveau: 81,
             stats: { strength: 55, intelligence: 37, agility: 32, vitality: 50, willpower: 32 },
             resists: { fire: 0.5, ice: 2, lightning: 0.5, earth: 1, dark: 1, holy: 1 },
-            sorts: [Spell.getSpell("fireAoe9")],
+            sorts: [Spell.getSpell("fireAoe9"), Spell.getSpell("healTarget9")],
             lootTable: [{item: Item.getItem("sword10"), chance: 0.1}]
         },
         {

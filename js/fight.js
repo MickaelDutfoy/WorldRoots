@@ -580,6 +580,7 @@ function fight() {
                 strength: "Force",
                 agility: "Agilité",
                 sagesse: "Sagesse",
+                intelligence: "Sagesse", // provisoire
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -612,6 +613,7 @@ function fight() {
                 strength: "Force",
                 agility: "Agilité",
                 sagesse: "Sagesse",
+                intelligence: "Sagesse", // provisoire
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -715,9 +717,9 @@ function fight() {
     }
 
     function mobAttack(mob, cible) {
-        if ( Math.random() < 0.3 && mob.sorts[1]?.mp !== undefined && mob.mp >= mob.sorts[1].mp ) {
+        if ( Math.random() < 0.35 && mob.sorts[1]?.mp !== undefined && mob.mp >= mob.sorts[1].mp ) {
             mobSpellResolve(mob, mob.sorts[1], cible)
-        } else if ( Math.random() < 0.6 && mob.sorts[0]?.mp !== undefined && mob.mp >= mob.sorts[0].mp ) {
+        } else if ( Math.random() < 0.70 && mob.sorts[0]?.mp !== undefined && mob.mp >= mob.sorts[0].mp ) {
             mobSpellResolve(mob, mob.sorts[0], cible)
         } else {
             physicalDmg(mob, cible);
@@ -766,6 +768,7 @@ function fight() {
                 strength: "Force",
                 agility: "Agilité",
                 sagesse: "Sagesse",
+                intelligence: "Sagesse", // provisoire
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -804,6 +807,7 @@ function fight() {
                 strength: "Force",
                 agility: "Agilité",
                 sagesse: "Sagesse",
+                intelligence: "Sagesse", // provisoire
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -871,8 +875,7 @@ function fight() {
         if ( Math.random() * 100 < Math.min(50, 2 * (target.statsTemp.agility + dodge - attacker.statsTemp.agility)) ) {
             addMessageToLog(`${target.nom} <strong>esquive</strong> l'attaque de ${attacker.nom} !`);
         } else {
-            let dmg = Math.floor(( 2 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 ));
-            if ( dmg < 0 ) { dmg = 0 };
+            let dmg = Math.min(Math.floor(( 2.5 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 )), Math.floor(attacker.niveau / 10) + 1);
             target.hp = Math.max(target.hp - dmg, 0);
             addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
         }
