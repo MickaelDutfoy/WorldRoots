@@ -1,7 +1,7 @@
 function fight() {
     document.getElementById("ennemyTargets").remove();
     let fightInfo = document.createElement("table"); msgLog.appendChild(fightInfo); fightInfo.id = "fightInfo";
-    fightInfo.innerHTML = `<tr><td>Ennemis présents dans la salle :</td><td>Compagnons présents dans la salle : </td></tr>
+    fightInfo.innerHTML = `<tr><td>Ennemis dans la salle :</td><td>Compagnons dans la salle : </td></tr>
     <tr><td id="mobInfo"></td><td id="summonInfo"></td></tr>`;
     let mobInfoUL = document.createElement("ul"); document.getElementById("mobInfo").appendChild(mobInfoUL);
     let summonInfoUL = document.createElement("ul"); document.getElementById("summonInfo").appendChild(summonInfoUL);
@@ -65,12 +65,12 @@ function fight() {
             else if (fighter.entity.skill === "Siphon vital") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Élémantra") {mpSkill = Math.max(fighter.entity.mp, 1)}
             else if (fighter.entity.skill === "Discorde") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Manamnesis") {mpSkill = 3 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Manamnesis") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Don de mana") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Tourbillon") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Analyse") {mpSkill = Math.floor(fighter.entity.niveau * mobsAlive / 2)}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
-            else if (fighter.entity.skill === "Lien animal") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Lien animal") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Portail") {mpSkill = 2 * fighter.entity.niveau}
             setTimeout(() => {
                 let actions = `<div id="fightButtons"><button id="attack">Attaquer</button><button id="skill">${fighter.entity.skill} (${mpSkill} MP)</button>`
@@ -273,7 +273,7 @@ function fight() {
         tempoMsg = 0;
         if (char.skill === "Provocation") {
             if ( char.mp < char.niveau ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 char.mp -= char.niveau;
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
@@ -282,7 +282,7 @@ function fight() {
             }
         } else if (char.skill === "Action divine") {
             if ( char.mp === 0 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.mp} MP</span> et utilise ${char.skill}.`);
                 let ratio = char.mp / char.maxmp;
@@ -298,7 +298,7 @@ function fight() {
             }
         } else if (char.skill === "Siphon vital") {
             if ( char.mp < char.niveau * 2 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
@@ -314,7 +314,7 @@ function fight() {
             }
         } else if (char.skill === "Élémantra") {
             if ( char.mp === 0 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.mp} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
@@ -326,7 +326,7 @@ function fight() {
             }
         } else if (char.skill === "Discorde") {
             if ( char.mp < char.niveau * 2 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
@@ -355,44 +355,44 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Manamnesis") {
-            if ( char.mp < char.niveau * 3 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            if ( char.mp < char.niveau * 2 ) {
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 3 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
+                    let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2.5 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
                     if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
                     mobs[i].mp -= mpDmg;
                     mobs[i].hp -= dmg;
                     addMessageToLog(`<span class="purple">${mobs[i].nom} perd ${mpDmg} MP</span>. <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
                 }
-                char.mp -= char.niveau * 3;
+                char.mp -= char.niveau * 2;
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Don de mana") {
-            if ( char.mp < char.niveau * 3 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            if ( char.mp < char.niveau * 2 ) {
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                char.mp -= char.niveau * 3;
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 3} MP</span> et utilise ${char.skill}.`);
+                char.mp -= char.niveau * 2;
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 for (let i = 0; i < chars.length; i++) {
                     if (chars[i].nom !== char.nom && chars[i].hp > 0) {
-                        chars[i].mp = Math.min(chars[i].mp + char.niveau * 3, chars[i].maxmp);
-                        addMessageToLog(`<span class="blue">${chars[i].nom} récupère ${char.niveau * 3} MP</span> !`);
+                        chars[i].mp = Math.min(chars[i].mp + char.niveau * 2, chars[i].maxmp);
+                        addMessageToLog(`<span class="blue">${chars[i].nom} récupère ${char.niveau * 2} MP</span> !`);
                     }
                 }
             }
         } else if (char.skill === "Tourbillon") {
-            if ( char.mp < char.niveau * 2 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            if ( char.mp < char.niveau ) {
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    physicalDmg(char, mobs[i]);
+                    if (mobs[i].hp > 0) physicalDmg(char, mobs[i]);
                 }
-                char.mp -= char.niveau * 2;
+                char.mp -= char.niveau;
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Analyse") {
@@ -400,7 +400,7 @@ function fight() {
                 if (mob.hp > 0) mobsAlive++;
             })
             if ( char.mp < Math.floor(char.niveau * mobsAlive / 2) ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${Math.floor(char.niveau * mobsAlive / 2)} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
@@ -437,7 +437,7 @@ function fight() {
             }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 char.mp -= char.niveau;
@@ -467,20 +467,20 @@ function fight() {
             }
         } else if (char.skill === "Lien animal") {
             let renard = summons.find(summon => summon.nom === "Renard agile");
-            if ( char.mp < char.niveau * 2 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+            if ( char.mp < char.niveau ) {
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 let heal = Math.floor(0.33 * renard.maxhp);
                 if (renard.hp === 0) addMessageToLog(`${renard.nom} <strong>revient à la vie</strong> !`);
                 addMessageToLog(`<span class="green">${renard.nom} gagne ${heal} HP</span>.`);
                 renard.hp = Math.min(renard.hp + heal, renard.maxhp);
-                char.mp -= char.niveau * 2;
+                char.mp -= char.niveau;
             }
         } else if (char.skill === "Portail") {
             let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
             if ( char.mp < char.niveau * 2 ) {
-                addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
+                tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else if (rejeton.hp > 0) {
                 addMessageToLog(`${char.nom} ne peut contrôler qu'un seul Rejeton du néant à la fois.`); return;
             } else {
@@ -541,7 +541,7 @@ function fight() {
 
     function spellResolve(char, sort, cible) {
         if ( char.mp < sort.mp ) {
-            addMessageToLog(`${char.nom} n'a pas assez de MP !`);
+            tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`);
             return;
         }
         char.mp -= sort.mp;
@@ -557,7 +557,7 @@ function fight() {
             }
             if (isFightOver()) return;
         } else if ( sort.type === "heal" && sort.cible === 1 ) {
-            if ( chars[cibleIndex].hp > 0 ) {
+            if ( cible.hp > 0 ) {
                 heal(char, cible, sort.valeur);
             } else {
                 addMessageToLog(`${sort.nom} est sans effet sur les personnages morts.`)
@@ -579,8 +579,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                sagesse: "Sagesse",
-                intelligence: "Sagesse", // provisoire
+                intelligence: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -612,8 +611,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                sagesse: "Sagesse",
-                intelligence: "Sagesse", // provisoire
+                intelligence: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -740,7 +738,6 @@ function fight() {
                 if ( targets[i].hp > 0 ) magicalDmg(mob, targets[i], sort.valeur, sort.element);
             }
         } else if (sort.type === "heal" && mobs.filter(m => m.hp > 0).every(m => m.hp === m.maxhp)) {
-            console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`);
             physicalDmg(mob, cible);
         } else if (sort.type === "heal" && sort.cible === 1) {
             let mobsToHeal = mobs
@@ -767,8 +764,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                sagesse: "Sagesse",
-                intelligence: "Sagesse", // provisoire
+                intelligence: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -785,7 +781,6 @@ function fight() {
                     if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${ennemi.nom} reçoit un bonus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl > niveau) || (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns > 1)) {
-                    console.log(`${mob.nom} veut buff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
                     physicalDmg(mob, cible); breakLoop = true;
                 }
                  else if (ennemi.statusEffects[buffType] && ennemi.statusEffects[buffType].lvl === niveau && ennemi.statusEffects[buffType].turns === 1) {
@@ -806,8 +801,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                sagesse: "Sagesse",
-                intelligence: "Sagesse", // provisoire
+                intelligence: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -826,7 +820,6 @@ function fight() {
                     if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
                 } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
-                    console.log(`${mob.nom} veut debuff, mais il existe déjà un effet similaire ou supérieur pour au moins 2 tours.`)
                     physicalDmg(mob, cible); breakLoop = true;
                 }
                  else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {

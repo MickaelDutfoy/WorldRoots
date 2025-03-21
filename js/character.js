@@ -425,7 +425,13 @@ class Character {
         }
         gold -= cost;
         addMessageToLog(`Vous payez ${cost} fragments de magie.`);
-        chars.forEach(char => {
+        let targets = [...chars, ...summons];
+        let rejetonIndex = targets.findIndex(target => target.nom === "Rejeton du néant");
+        
+        if (rejetonIndex !== -1) {
+            targets.splice(rejetonIndex, 1);
+        }     
+        targets.forEach(char => {
             if ( char.hp > 0 ) {
                 char.hp = char.maxhp;
                 char.mp = char.maxmp;
@@ -440,12 +446,18 @@ class Character {
     static rezChars() {
         tempoMsg = 0;
         let cost = Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 20);
-        if (chars.every(char => char.hp > 0)) {
+        let targets = [...chars, ...summons];
+        let rejetonIndex = targets.findIndex(target => target.nom === "Rejeton du néant");
+        
+        if (rejetonIndex !== -1) {
+            targets.splice(rejetonIndex, 1);
+        }        
+        if (targets.every(char => char.hp > 0)) {
             addMessageToLog("Aucun personnage n'est mort !");
         } else if (gold < cost) {
             addMessageToLog("Vous n'avez pas assez de fragments de magie !");
         } else {
-            chars.forEach(char => {
+            targets.forEach(char => {
                 if (char.hp <= 0) char.hp = 1;
             });
             gold -= cost;
@@ -491,7 +503,7 @@ class Character {
                         const statNames = {
                             Strength: "Force", 
                             Agility: "Agilité", 
-                            Sagesse: "Sagesse", 
+                            intelligence: "Sagesse", 
                             Vitality: "Vitalité", 
                             Willpower: "Volonté"
                         };
@@ -568,8 +580,8 @@ class Character {
             if (char.classe === "Aéromancienne") generateSpellShop(char, ["ice", "lightning", "debuff"], ["Target", "Aoe", "Agility"]);
             if (char.classe === "Géomancienne") generateSpellShop(char, ["fire", "earth", "buff"], ["Target", "Aoe", "Vitality"]);
             if (char.classe === "Chaomancien") generateSpellShop(char, ["dark", "holy", "debuff"], ["Target", "Aoe", "Willpower"]);
-            if (char.classe === "Magelame") generateSpellShop(char, ["wind", "debuff"], ["Target", "Aoe", "Sagesse"]);
-            if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Sagesse"]);
+            if (char.classe === "Magelame") generateSpellShop(char, ["wind", "debuff"], ["Target", "Aoe", "Intelligence"]);
+            if (char.classe === "Prêtresse") generateSpellShop(char, ["holy", "heal", "buff"], ["Target", "Aoe", "Intelligence"]);
             if (char.classe === "Barbare") generateSpellShop(char, ["buff"], ["Strength"]);
             if (char.classe === "Voleur") generateSpellShop(char, ["buff"], ["Agility"]);
             if (char.classe === "Rôdeuse") generateSpellShop(char, ["debuff"], ["Vitality"]);
@@ -602,7 +614,7 @@ class Character {
             const quantity = entry.quantite;
             const match = item.id.match(/(\d+)$/);
             const level = match ? parseInt(match[1]) : 1;
-            let price = item.type === "equipement" ? 10 * level : 5 * level;
+            let price = item.type === "equipement" ? 20 * level : 5 * level;
             const row = document.createElement("tr");
             const nameCell = document.createElement("td");
             nameCell.textContent = item.nom;
