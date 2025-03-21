@@ -48,15 +48,20 @@ class Summon {
     }
 
     static levelUp(summon) {
-        let previousVit = summon.stats.vitality
-        let previousWil = summon.stats.willpower
+        let previousVit = summon.stats.vitality;
+        let previousWil = summon.stats.willpower;
+        
         summon.niveau = summon.owner.niveau;
         summon.stats = summon.calculateStats();
         summon.statsTemp = { ...summon.stats };
         summon.maxhp = 10 * summon.stats.vitality;
         summon.maxmp = 10 * summon.stats.willpower;
-        summon.hp += 10 * (summon.stats.vitality - previousVit)
-        summon.mp += 10 * (summon.stats.willpower - previousWil)
-    }   
+        
+        // Si c'est le Rejeton du néant ET qu'il est mort, il ne regagne pas de HP/MP
+        if (summon.nom === "Rejeton du néant" && summon.hp === 0) return;
+        
+        summon.hp += 10 * (summon.stats.vitality - previousVit);
+        summon.mp += 10 * (summon.stats.willpower - previousWil);
+    }    
     
 }

@@ -1,6 +1,4 @@
 function fight() {
-    let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
-    if (rejeton) rejeton.hp = 0;
     document.getElementById("ennemyTargets").remove();
     let fightInfo = document.createElement("table"); msgLog.appendChild(fightInfo); fightInfo.id = "fightInfo";
     fightInfo.innerHTML = `<tr><td>Ennemis présents dans la salle :</td><td>Compagnons présents dans la salle : </td></tr>
@@ -70,7 +68,7 @@ function fight() {
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 3 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = 2 * fighter.entity.niveau}
-            else if (fighter.entity.skill === "Analyse") {mpSkill = mobsAlive * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Analyse") {mpSkill = Math.floor(fighter.entity.niveau * mobsAlive / 2)}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Lien animal") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Portail") {mpSkill = 2 * fighter.entity.niveau}
@@ -401,10 +399,10 @@ function fight() {
             let mobsAlive = 0; mobs.forEach(mob => {
                 if (mob.hp > 0) mobsAlive++;
             })
-            if ( char.mp < char.niveau * mobsAlive ) {
+            if ( char.mp < Math.floor(char.niveau * mobsAlive / 2) ) {
                 addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * mobsAlive} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${Math.floor(char.niveau * mobsAlive / 2)} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
                     if (mobs[i].hp > 0) {
@@ -435,7 +433,7 @@ function fight() {
                         addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                     }
                 }
-                char.mp -= char.niveau * mobsAlive;
+                char.mp -= Math.floor(char.niveau * mobsAlive / 2);
             }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
@@ -443,7 +441,11 @@ function fight() {
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 char.mp -= char.niveau;
-                let cible = mobs[Math.floor(Math.random() * mobs.length)];
+                let mobsVivants = mobs.filter(m => m.hp > 0);
+                let cible = mobs[0];
+                if (mobsVivants.length > 0) {
+                    cible = mobsVivants[Math.floor(Math.random() * mobsVivants.length)];
+                }                
                 if ( cible.lootTable.length === 0 ) {
                     addMessageToLog(`${char.nom} essaye de voler ${cible.nom}, mais ne trouve rien d'intéressant.`);
                     return;
@@ -577,7 +579,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                intelligence: "Sagesse",
+                sagesse: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -609,7 +611,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                intelligence: "Sagesse",
+                sagesse: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -735,20 +737,25 @@ function fight() {
             for (let i = 0; i < targets.length; i++) {
                 if ( targets[i].hp > 0 ) magicalDmg(mob, targets[i], sort.valeur, sort.element);
             }
-        } else if ( sort.type === "heal" && mobs.every(mob => mob.hp === mob.maxhp)) {
-            console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`)
+        } else if (sort.type === "heal" && mobs.filter(m => m.hp > 0).every(m => m.hp === m.maxhp)) {
+            console.log(`${mob.nom} veut soigner mais ne trouve aucune cible.`);
             physicalDmg(mob, cible);
-        } else if ( sort.type === "heal" && sort.cible === 1 ) {
-            let mobsToHeal = mobs.sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp));
-            cible = mobsToHeal[0];
-            addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
-            heal(mob, cible, sort.valeur);
+        } else if (sort.type === "heal" && sort.cible === 1) {
+            let mobsToHeal = mobs
+                .filter(m => m.hp > 0) // Exclut les morts
+                .sort((a, b) => (b.maxhp - b.hp) - (a.maxhp - a.hp)); // Trie par PV manquants
+        
+            if (mobsToHeal.length > 0) {
+                cible = mobsToHeal[0];
+                addMessageToLog(`${mob.nom} utilise ${sort.nom} !`);
+                heal(mob, cible, sort.valeur);
+            }
         } else if ( sort.type === "heal" && sort.cible === "all" ) {
             cibleIndex = "all";
             addMessageToLog(`${mob.nom} utilise ${sort.nom} !`)
             for (let i = 0; i < mobs.length; i++) {
                 if (mobs[i].hp > 0) {
-                    heal(char, chars[i], sort.valeur);
+                    heal(mob, mobs[i], sort.valeur);
                 }
             }
         } else if (sort.type === "buff") {
@@ -758,7 +765,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                intelligence: "Sagesse",
+                sagesse: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -796,7 +803,7 @@ function fight() {
             const statNames = {
                 strength: "Force",
                 agility: "Agilité",
-                intelligence: "Sagesse",
+                sagesse: "Sagesse",
                 vitality: "Vitalité",
                 willpower: "Volonté"
             };
@@ -989,6 +996,8 @@ function fight() {
         }
         if ( mobs.every(mob => mob.hp <= 0 ) ) {
             mobs.length = 0;
+            let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
+            if (rejeton && rejeton.hp > 0) rejeton.hp = 0;
             chars.forEach(char => {
                 char.statsTemp = { ...char.stats };
                 char.statusEffects = {};

@@ -361,6 +361,10 @@ class Character {
                     }
                 }
                 chars[i].arme = nouvelleArme;
+                if (document.getElementById("sellShop")) {
+                    document.getElementById("sellShop").remove(); // Supprime l'ancien shop
+                    Character.sellShop(); // Le recrée immédiatement
+                }
                 Character.charSheet();
             });
             document.getElementById("selectArmure" + i).addEventListener("change", (e) => {
@@ -387,6 +391,10 @@ class Character {
                 chars[i].maxmp = 10 * (chars[i].stats.willpower + chars[i].armure.valeur.willpower);
                 if (chars[i].hp > chars[i].maxhp) chars[i].hp = chars[i].maxhp;
                 if (chars[i].mp > chars[i].maxmp) chars[i].mp = chars[i].maxmp;
+                if (document.getElementById("sellShop")) {
+                    document.getElementById("sellShop").remove(); // Supprime l'ancien shop
+                    Character.sellShop(); // Le recrée immédiatement
+                }
                 Character.charSheet();
             });
         }
