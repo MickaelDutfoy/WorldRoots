@@ -875,7 +875,7 @@ function fight() {
         if ( Math.random() * 100 < Math.min(50, 2 * (target.statsTemp.agility + dodge - attacker.statsTemp.agility)) ) {
             addMessageToLog(`${target.nom} <strong>esquive</strong> l'attaque de ${attacker.nom} !`);
         } else {
-            let dmg = Math.min(Math.floor(( 2.5 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 )), Math.floor(attacker.niveau / 10) + 1);
+            let dmg = Math.max(Math.floor(( 2.5 * ( attacker.statsTemp.strength + arme ) + bonus - ( target.statsTemp.vitality + armure ) ) * ( Math.random() * 0.3 + 0.85 )), Math.floor(attacker.niveau / 10) + 1);
             target.hp = Math.max(target.hp - dmg, 0);
             addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
         }
