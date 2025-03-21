@@ -304,8 +304,10 @@ function fight() {
                 cibleIndex = "all";
                 let heal = 0;
                 for (let i = 0; i < mobs.length; i++) {
-                    let dmg = magicalDmg(char, mobs[i], char.niveau * 2, "dark");
-                    heal += dmg;
+                    if (mobs[i].hp > 0 ) {
+                        let dmg = magicalDmg(char, mobs[i], char.niveau * 2, "dark");
+                        heal += dmg;
+                    }
                 }
                 char.mp -= char.niveau * 2;
                 char.hp = Math.min(char.hp + heal, char.maxhp);
@@ -319,7 +321,7 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.mp} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    magicalDmg(char, mobs[i], char.mp * 2);
+                    if (mobs[i].hp > 0 ) magicalDmg(char, mobs[i], char.mp * 2);
                 }
                 char.mp = 0;
                 if (isFightOver()) return;
@@ -361,11 +363,13 @@ function fight() {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
-                    let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2.5 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
-                    if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
-                    mobs[i].mp -= mpDmg;
-                    mobs[i].hp -= dmg;
-                    addMessageToLog(`<span class="purple">${mobs[i].nom} perd ${mpDmg} MP</span>. <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                    if (mobs[i].hp > 0) {
+                        let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2.5 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
+                        if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
+                        mobs[i].mp -= mpDmg;
+                        mobs[i].hp -= dmg;
+                        addMessageToLog(`<span class="purple">${mobs[i].nom} perd ${mpDmg} MP</span>. <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
+                    }
                 }
                 char.mp -= char.niveau * 2;
                 if (isFightOver()) return;
