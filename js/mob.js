@@ -1822,16 +1822,16 @@ class Mob {
         else if (niveau >= 90 && niveau <= 99) ether = Item.getItem("ether11");
         this.lootTable.push({item: ether, chance: 0.2});
         let rez;
-        if (niveau >= 0 && niveau <= 9) rez = Item.getItem("rez1");
-        else if (niveau >= 10 && niveau <= 19) rez = Item.getItem("rez2");
-        else if (niveau >= 20 && niveau <= 29) rez = Item.getItem("rez3");
-        else if (niveau >= 30 && niveau <= 39) rez = Item.getItem("rez4");
-        else if (niveau >= 40 && niveau <= 49) rez = Item.getItem("rez5");
-        else if (niveau >= 50 && niveau <= 59) rez = Item.getItem("rez6");
-        else if (niveau >= 60 && niveau <= 69) rez = Item.getItem("rez7");
-        else if (niveau >= 70 && niveau <= 79) rez = Item.getItem("rez8");
-        else if (niveau >= 80 && niveau <= 89) rez = Item.getItem("rez9");
-        else if (niveau >= 90 && niveau <= 99) rez = Item.getItem("rez10");
+        if (niveau >= 0 && niveau <= 9) rez = Item.getItem("rez2");
+        else if (niveau >= 10 && niveau <= 19) rez = Item.getItem("rez3");
+        else if (niveau >= 20 && niveau <= 29) rez = Item.getItem("rez4");
+        else if (niveau >= 30 && niveau <= 39) rez = Item.getItem("rez5");
+        else if (niveau >= 40 && niveau <= 49) rez = Item.getItem("rez6");
+        else if (niveau >= 50 && niveau <= 59) rez = Item.getItem("rez7");
+        else if (niveau >= 60 && niveau <= 69) rez = Item.getItem("rez8");
+        else if (niveau >= 70 && niveau <= 79) rez = Item.getItem("rez9");
+        else if (niveau >= 80 && niveau <= 89) rez = Item.getItem("rez10");
+        else if (niveau >= 90 && niveau <= 99) rez = Item.getItem("rez11");
         this.lootTable.push({item: rez, chance: 0.1});
     }
 

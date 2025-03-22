@@ -337,7 +337,7 @@ table {
 
 
 #charSheet > tbody > tr:nth-child(n + 7):nth-child(-n + 11) {
-  background: linear-gradient(to right, #a8e6cf, #d4f7dc);
+  background: linear-gradient(to right, #a8dae6, #d4f3f7);
 }
 
 #charSheet > tbody > tr:nth-child(n + 12):nth-child(-n + 16) {

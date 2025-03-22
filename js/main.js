@@ -152,8 +152,6 @@ function initGame() {
         <td colspan="2" style="text-align:center;" id="armor2"></td>
     </tr>`;
     exploreWindow.appendChild(msgLog); exploreWindow.appendChild(fightLog);
-
-
     const collapseBtn = document.createElement("button");
     document.getElementById("teamWindow").appendChild(collapseBtn);
     collapseBtn.id = "collapseBtn";
@@ -163,7 +161,6 @@ function initGame() {
     setTimeout(() => {
         document.getElementById("teamSelector").remove()
         Character.charSheet();
-        Character.collapseExpand();
         charSheet.style.opacity = "1";
     }, 1500)
 }
@@ -224,6 +221,7 @@ function load() {
     gold = saveData.gold;
     score = saveData.score;
     charSheetState = saveData.charSheetState;
+    console.log(`Le menu s'ouvre ${charSheetState}.`)
     startBtn.innerHTML = "Aller dans la salle suivante !"
     startBtn.addEventListener("click", Mob.popMob);
     regenBtn.innerHTML = `Restaurer les HP/MP de l'équipe (${Math.floor(chars.reduce((sum, char) => sum + char.niveau, 0) / chars.length * 10)} fragments)`;

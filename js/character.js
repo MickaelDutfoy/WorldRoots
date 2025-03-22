@@ -38,12 +38,12 @@ class Character {
             armure: Item.getItem("robe1")},
             "Magelame": { nom: "Inari", skill: "Analyse",
             stats: {strength: 2, intelligence: 2, agility: 2, vitality: 2, willpower: 2},
-            sorts: [Spell.getSpell("windAoe1"), Spell.getSpell("debuffSagesse1")],
+            sorts: [Spell.getSpell("windAoe1"), Spell.getSpell("debuffIntelligence1")],
             arme: Item.getItem("sword1"),
             armure: Item.getItem("battleRobe1")},
             "Prêtresse": { nom: "Kita", skill: "Don de mana",
             stats: {strength: 1, intelligence: 2, agility: 2, vitality: 2, willpower: 3},
-            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("buffSagesse1")],
+            sorts: [Spell.getSpell("holyTarget1"), Spell.getSpell("healTarget1"), Spell.getSpell("buffIntelligence1")],
             arme: Item.getItem("baton1"),
             armure: Item.getItem("battleRobe1")},
             "Barbare": { nom: "Otnugh", skill: "Tourbillon",
@@ -95,9 +95,10 @@ class Character {
         chars.push(new Character(classe3));
         for ( let i = 0; i <=2; i++ ) Character.addItem(Item.getItem("potion1"));
         for ( let i = 0; i <=1; i++ ) Character.addItem(Item.getItem("ether1"));
-        Character.addItem(Item.getItem("rez1"));
+        Character.addItem(Item.getItem("rez2"));
         Summon.generateSummons();
         initGame();
+        Character.collapseExpand();
         tempoMsg = 3000;
         addSlowMsgToLog(`Bienvenue dans le Mode Arcade de WorldRoots !`)
         addSlowMsgToLog(`L'objectif est simple : avancer le plus loin possible.`)
@@ -260,15 +261,15 @@ class Character {
             document.getElementById("nameClass" + i).innerHTML = `${chars[i].nom}<br>${chars[i].classe}`;
             document.getElementById("lvlXP" + i).innerHTML = `Niveau : ${chars[i].niveau}<br>XP : ${chars[i].xp} / ${chars[i].niveau * 100}`;
             document.getElementById("agi" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit la capacité d'esquive, la précision et l'initiative">Agilité</span> :`;
-            document.getElementById("agiVal" + i).innerHTML = `<span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="bluebold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility + chars[i].armure.valeur.agility}</span>`;
+            document.getElementById("agiVal" + i).innerHTML = `<span ${chars[i].statsTemp.agility > chars[i].stats.agility ? 'class="greenbold"' : ''}${chars[i].statsTemp.agility < chars[i].stats.agility ? 'class="redbold"' : ''}>${chars[i].statsTemp.agility + chars[i].armure.valeur.agility}</span>`;
             document.getElementById("for" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts physiques">Force</span> :`;
-            document.getElementById("forVal" + i).innerHTML = ` <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="bluebold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength + chars[i].arme.valeur.strength}</span>`
+            document.getElementById("forVal" + i).innerHTML = ` <span ${chars[i].statsTemp.strength > chars[i].stats.strength ? 'class="greenbold"' : ''}${chars[i].statsTemp.strength < chars[i].stats.strength ? 'class="redbold"' : ''}>${chars[i].statsTemp.strength + chars[i].arme.valeur.strength}</span>`
             document.getElementById("int" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les dégâts magiques et l'efficacité des sorts de soin">Sagesse</span> :`;
-            document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="bluebold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence + chars[i].arme.valeur.intelligence}</span>`;
+            document.getElementById("intVal" + i).innerHTML = `<span ${chars[i].statsTemp.intelligence > chars[i].stats.intelligence ? 'class="greenbold"' : ''}${chars[i].statsTemp.intelligence < chars[i].stats.intelligence ? 'class="redbold"' : ''}>${chars[i].statsTemp.intelligence + chars[i].arme.valeur.intelligence}</span>`;
             document.getElementById("vit" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les HP max et la résistance physique">Vitalité</span> :`;
-            document.getElementById("vitVal" + i).innerHTML = `<span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="bluebold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
+            document.getElementById("vitVal" + i).innerHTML = `<span ${chars[i].statsTemp.vitality > chars[i].stats.vitality ? 'class="greenbold"' : ''}${chars[i].statsTemp.vitality < chars[i].stats.vitality ? 'class="redbold"' : ''}>${chars[i].statsTemp.vitality + chars[i].armure.valeur.vitality}</span>`;
             document.getElementById("vol" + i).innerHTML = `<span class="tooltip" data-tooltip="Régit les MP max et la résistance magique">Volonté</span> :`;
-            document.getElementById("volVal" + i).innerHTML = `<span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="bluebold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower + chars[i].armure.valeur.willpower}</span>`;
+            document.getElementById("volVal" + i).innerHTML = `<span ${chars[i].statsTemp.willpower > chars[i].stats.willpower ? 'class="greenbold"' : ''}${chars[i].statsTemp.willpower < chars[i].stats.willpower ? 'class="redbold"' : ''}>${chars[i].statsTemp.willpower + chars[i].armure.valeur.willpower}</span>`;
             document.getElementById("lvlUpPoints" + i).innerHTML = `Disponibles :`;
             document.getElementById("lvlUpPointsTot" + i).innerHTML = ` ${chars[i].pointsLvlUp}`;
             let elements = {fire: "Feu", earth: "Terre", ice: "Glace", lightning: "Foudre", dark: "Ténèbres", holy: "Sacré"};
@@ -276,7 +277,7 @@ class Character {
                 const statNames = {
                     Strength: "Force", 
                     Agility: "Agilité", 
-                    Sagesse: "Sagesse", 
+                    Intelligence: "Sagesse", 
                     Vitality: "Vitalité", 
                     Willpower: "Volonté" 
                 };
@@ -526,47 +527,45 @@ class Character {
                     }
                 });
             });
-            if (spellSelect.innerHTML === "") {
-                spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
-            }
             spellSelectCell.appendChild(spellSelect);
             row.appendChild(spellSelectCell);
-            const buyButtonCell = document.createElement("td");
-            const buyButton = document.createElement("button");
-            buyButton.textContent = "Acheter";
-            if (spellSelect.innerHTML === "<option disabled selected>Aucun sort n'est disponible</option>") {
-                buyButton.style.display = "none";
-            }
-            buyButton.addEventListener("click", () => {
-                const selectedSpellId = spellSelect.value;
-                if (!selectedSpellId) return;
-                const spell = Spell.getSpell(selectedSpellId);
-                const cost = costMultiplier * X;
-                if (gold < cost) {
-                    tempoMsg = 0; 
-                    addMessageToLog("Vous n'avez pas assez de fragments de magie !");
-                    return;
-                }
-                gold -= cost;
-                const spellMatch = selectedSpellId.match(/([a-zA-Z]+)(\d+)$/);
-                const spellBase = spellMatch[1];
-                const spellLevel = parseInt(spellMatch[2]);
-                char.sorts = char.sorts.filter(s => {
-                    const sMatch = s.id.match(/([a-zA-Z]+)(\d+)$/);
-                    return !(sMatch && sMatch[1] === spellBase && parseInt(sMatch[2]) < spellLevel);
+            if (spellSelect.innerHTML === "") {
+                spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
+            } else {
+                const buyButtonCell = document.createElement("td");
+                const buyButton = document.createElement("button");
+                buyButton.textContent = "Acheter";
+                buyButton.addEventListener("click", () => {
+                    const selectedSpellId = spellSelect.value;
+                    if (!selectedSpellId) return;
+                    const spell = Spell.getSpell(selectedSpellId);
+                    const cost = costMultiplier * X;
+                    if (gold < cost) {
+                        tempoMsg = 0; 
+                        addMessageToLog("Vous n'avez pas assez de fragments de magie !");
+                        return;
+                    }
+                    gold -= cost;
+                    const spellMatch = selectedSpellId.match(/([a-zA-Z]+)(\d+)$/);
+                    const spellBase = spellMatch[1];
+                    const spellLevel = parseInt(spellMatch[2]);
+                    char.sorts = char.sorts.filter(s => {
+                        const sMatch = s.id.match(/([a-zA-Z]+)(\d+)$/);
+                        return !(sMatch && sMatch[1] === spellBase && parseInt(sMatch[2]) < spellLevel);
+                    });
+                    char.sorts.push(spell);
+                    tempoMsg = 0;
+                    addMessageToLog(`${char.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
+                    Character.charSheet();
+                    spellSelect.querySelector(`option[value="${selectedSpellId}"]`).remove();
+                    if (spellSelect.innerHTML === "") {
+                        spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
+                        buyButton.remove();
+                    }
                 });
-                char.sorts.push(spell);
-                tempoMsg = 0;
-                addMessageToLog(`${char.nom} apprend ${spell.nom} pour ${cost} fragments de magie.`);
-                Character.charSheet();
-                spellSelect.querySelector(`option[value="${selectedSpellId}"]`).remove();
-                if (spellSelect.innerHTML === "") {
-                    spellSelect.innerHTML = "<option disabled selected>Aucun sort n'est disponible</option>";
-                    buyButton.style.display = "none";
-                }
-            });
-            buyButtonCell.appendChild(buyButton);
-            row.appendChild(buyButtonCell);
+                buyButtonCell.appendChild(buyButton);
+                row.appendChild(buyButtonCell);
+            }
             tbody.appendChild(row);
         }
 

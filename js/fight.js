@@ -42,7 +42,7 @@ function fight() {
         let fighter = initiativeTable[turnIndex];
         decrementStatusEffects(fighter.entity);
         if ( fighter.type === "mob" && fighter.entity.hp > 0 ) {
-            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            addMessageToLog(`<strong>--- Au tour de ${fighter.entity.nom} ! ---</strong>`);
             let targets = [...chars, ...summons];
             let target;
                 do {
@@ -54,7 +54,7 @@ function fight() {
             nextTurn();
         } else if ( fighter.type === "char" && fighter.entity.hp > 0 ) {
             if (mobs.length === 0) return;
-            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            addMessageToLog(`<strong>--- Au tour de ${fighter.entity.nom} ! ---</strong>`);
             let mobsAlive = 0; mobs.forEach(mob => {
                 if (mob.hp > 0) mobsAlive++;
             })
@@ -64,7 +64,7 @@ function fight() {
             else if (fighter.entity.skill === "Action divine") {mpSkill = Math.max(fighter.entity.mp, 1)}
             else if (fighter.entity.skill === "Siphon vital") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Élémantra") {mpSkill = Math.max(fighter.entity.mp, 1)}
-            else if (fighter.entity.skill === "Discorde") {mpSkill = 2 * fighter.entity.niveau}
+            else if (fighter.entity.skill === "Discorde") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = fighter.entity.niveau}
@@ -98,7 +98,7 @@ function fight() {
             }, tempoMsg);
             tempoMsg += 600;
         } else if ( fighter.type === "summon" && fighter.entity.hp > 0 ) {
-            addMessageToLog(`Au tour de ${fighter.entity.nom} !`);
+            addMessageToLog(`<strong>--- Au tour de ${fighter.entity.nom} ! ---</strong>`);
             let target;
                 do {
                     cibleIndex = Math.floor(Math.random() * mobs.length);
@@ -125,43 +125,35 @@ function fight() {
     }
 
     function decrementStatusEffects(fighter) {
-        let effects = ["buffagility", "debuffagility", "buffstrength", "debuffstrength", "buffintelligence", "debuffintelligence", "buffvitality", "debuffvitality", "buffwillpower", "debuffwillpower"]
+        let effects = ["buffagility", "debuffagility", "buffstrength", "debuffstrength", 
+                       "buffintelligence", "debuffintelligence", "buffvitality", "debuffvitality", 
+                       "buffwillpower", "debuffwillpower"];
+    
         effects.forEach(effect => {
-            mobs.forEach(mob => {
-                if (mob.statusEffects[effect] && mob.statusEffects[effect].caster === fighter) {
-                    mob.statusEffects[effect].turns--;
-                    if (mob.statusEffects[effect].turns === 0) {
+            let allFighters = [...mobs, ...chars, ...summons]; // Ajout des summons ici
+    
+            allFighters.forEach(target => {
+                if (target.statusEffects[effect] && target.statusEffects[effect].caster === fighter) {
+                    target.statusEffects[effect].turns--;
+    
+                    if (target.statusEffects[effect].turns === 0) {
                         let match = effect.match(/(buff|debuff)([A-Za-z]+)/);
                         let [_, type, stat] = match;
                         stat = stat.toLowerCase();
+    
                         if (type === "buff") {
-                            mob.statsTemp[stat] -= 3 * mob.statusEffects[effect].lvl
+                            target.statsTemp[stat] -= 3 * target.statusEffects[effect].lvl;
                         } else if (type === "debuff") {
-                            mob.statsTemp[stat] += 3 * mob.statusEffects[effect].lvl
+                            target.statsTemp[stat] += 3 * target.statusEffects[effect].lvl;
                         }
-                        delete mob.statusEffects[effect]
+    
+                        delete target.statusEffects[effect];
+                        if (target === Character) Character.charSheet(); // Rafraîchit l'affichage si besoin
                     }
                 }
-            })
-            chars.forEach(char => {
-                if (char.statusEffects[effect] && char.statusEffects[effect].caster === fighter) {
-                    char.statusEffects[effect].turns--;
-                    if (char.statusEffects[effect].turns === 0) {
-                        let match = effect.match(/(buff|debuff)([A-Za-z]+)/);
-                        let [_, type, stat] = match;
-                        stat = stat.toLowerCase();
-                        if (type === "buff") {
-                            char.statsTemp[stat] -= 3 * char.statusEffects[effect].lvl
-                        } else if (type === "debuff") {
-                            char.statsTemp[stat] += 3 * char.statusEffects[effect].lvl
-                        }
-                        delete char.statusEffects[effect]
-                        Character.charSheet();
-                    }
-                }
-            })
-        })
-    } 
+            });
+        });
+    }    
 
     function refreshMobList() {
         mobInfoUL.innerHTML = "";
@@ -178,7 +170,7 @@ function fight() {
         for (let i = 0; i < summons.length; i++) {
             if (summons[i].hp > 0) {
                 let summonToList = document.createElement("li");
-                summonToList.innerHTML = `${summons[i].nom} (HP : ${summons[i].hp}/${summons[i].maxhp}, MP : ${summons[i].mp}/${summons[i].maxmp})`;
+                summonToList.innerHTML = `${summons[i].nom} (HP : ${summons[i].hp}/${summons[i].maxhp})`;
                 summonInfoUL.appendChild(summonToList);
             }
         }
@@ -289,7 +281,7 @@ function fight() {
                 let targets = [...chars, ...summons]
                 for (let i = 0; i < targets.length; i++) {
                     if (targets[i].nom === "Rejeton du néant" && targets[i].hp === 0) continue;
-                    if (targets[i].hp === 0) { addMessageToLog(`${targets[i].nom} <strong>revient à la vie</strong> !`) }
+                    if (targets[i].hp === 0) { addMessageToLog(`${targets[i].nom} <span class="greenbold">revient à la vie</span> !`) }
                     let heal = Math.floor(ratio * targets[i].maxhp);
                     targets[i].hp = Math.min(targets[i].hp + heal, targets[i].maxhp);
                     addMessageToLog(`<span class="green">${targets[i].nom} gagne ${heal} HP</span>.`);
@@ -327,13 +319,13 @@ function fight() {
                 if (isFightOver()) return;
             }
         } else if (char.skill === "Discorde") {
-            if ( char.mp < char.niveau * 2 ) {
+            if ( char.mp < char.niveau ) {
                 tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau * 2} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
-                char.mp -= char.niveau * 2;
-                if (mobs.length === 1) {
+                char.mp -= char.niveau;
+                if (mobs.filter(mob => mob.hp > 0).length <= 1) {
                     addMessageToLog(`${char.skill} n'a aucun effet sur une cible unique.`);
                 } else {
                     let aliveMobs = mobs;
@@ -476,7 +468,7 @@ function fight() {
             } else {
                 addMessageToLog(`<span class="purple">${char.nom} perd ${char.niveau} MP</span> et utilise ${char.skill}.`);
                 let heal = Math.floor(0.33 * renard.maxhp);
-                if (renard.hp === 0) addMessageToLog(`${renard.nom} <strong>revient à la vie</strong> !`);
+                if (renard.hp === 0) addMessageToLog(`${renard.nom} <span class="greenbold">revient à la vie</span> !`);
                 addMessageToLog(`<span class="green">${renard.nom} gagne ${heal} HP</span>.`);
                 renard.hp = Math.min(renard.hp + heal, renard.maxhp);
                 char.mp -= char.niveau;
@@ -700,7 +692,7 @@ function fight() {
         } else if (item.effet === "resurrect") {
             if ( cible.hp <= 0 ) {
                 cible.hp = cible.maxhp * item.valeur;
-                addMessageToLog(`${cible.nom} <strong>revient à la vie</strong> !`)
+                addMessageToLog(`${cible.nom} <span class="redbold">revient à la vie</span> !`)
                 addMessageToLog(`<span class="green">${cible.nom} gagne ${cible.hp} HP</span>.`)
             } else {
                 addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
@@ -823,10 +815,9 @@ function fight() {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} reçoit un malus temporaire +${sort.valeur} ${displayStat}.`);
-                } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) {
+                } else if ((perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl > niveau) || (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns > 1)) { // si le debuff s'apprête à cibler quelqu'un ayant encore au moins 2 tours restant du même effet ou d'un effet supérieur, attaque à la place
                     physicalDmg(mob, cible); breakLoop = true;
-                }
-                 else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
+                } else if (perso.statusEffects[debuffType] && perso.statusEffects[debuffType].lvl === niveau && perso.statusEffects[debuffType].turns === 1) {
                     perso.statusEffects[debuffType] = {lvl: niveau, caster: mob, turns: 3};
                     if (!msgCast) { addMessageToLog(`${mob.nom} utilise ${sort.nom} !`); msgCast = true; }
                     addMessageToLog(`${perso.nom} a déjà un malus de -${sort.valeur} ${displayStat}. La durée est réinitialisée.`);
@@ -877,19 +868,19 @@ function fight() {
             addMessageToLog(`${attacker.nom} attaque ! <span class="red">${target.nom} perd ${dmg} HP</span>.`);
         }
         if (target.classe && target.hp <= 0 || target.nom === "Renard agile" && target.hp <= 0) {
-            addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
+            addMessageToLog(`${target.nom} <span class="redbold">s'effondre</span>...`);
             if (target.classe === "Invocateur") {
                 let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
                 if (rejeton.hp > 0) {
-                    addMessageToLog(`${rejeton.nom} <strong>disparaît</strong>.`);
+                    addMessageToLog(`${rejeton.nom} <span class="redbold">disparaît</span>.`);
                     rejeton.hp = 0;
                 }
             }
         } else if (target.nom === "Rejeton du néant" && target.hp <= 0) {
-            addMessageToLog(`${target.nom} <strong>disparaît</strong>...`);
+            addMessageToLog(`${target.nom} <span class="redbold">disparaît</span>...`);
         }
          else if (target.hp <= 0) {
-            addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
+            addMessageToLog(`${target.nom} est <span class="redbold">vaincu(e)</span> !`);
         }
     }
 
@@ -916,19 +907,19 @@ function fight() {
                 addMessageToLog(dmgMsg);
             }
             if (target.classe && target.hp <= 0 || target.nom === "Renard agile" && target.hp <= 0) {
-                addMessageToLog(`${target.nom} <strong>s'effondre</strong>...`);
+                addMessageToLog(`${target.nom} <span class="redbold">s'effondre</span>...`);
                 if (target.classe === "Invocateur") {
                     let rejeton = summons.find(summon => summon.nom === "Rejeton du néant");
                     if (rejeton.hp > 0) {
-                        addMessageToLog(`${rejeton.nom} <strong>disparaît</strong>.`);
+                        addMessageToLog(`${rejeton.nom} <span class="redbold">disparaît</span>.`);
                         rejeton.hp = 0;
                     }
                 }
             } else if (target.nom === "Rejeton du néant" && target.hp <= 0) {
-                addMessageToLog(`${target.nom} <strong>disparaît</strong>...`);
+                addMessageToLog(`${target.nom} <span class="redbold">disparaît</span>...`);
             }
              else if (target.hp <= 0) {
-                addMessageToLog(`${target.nom} est <strong>vaincu(e)</strong> !`);
+                addMessageToLog(`${target.nom} est <span class="redbold">vaincu(e)</span> !`);
             }
             return dmg;
         }
