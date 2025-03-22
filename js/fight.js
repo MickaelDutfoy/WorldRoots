@@ -356,8 +356,9 @@ function fight() {
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
                     if (mobs[i].hp > 0) {
-                        let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2.5 ) * ( Math.random() * 0.3 + 0.85 )); let dmg = Math.floor(mpDmg / 2);
+                        let mpDmg = Math.floor(( char.statsTemp.intelligence + char.arme.valeur.intelligence + char.niveau * 2.5 ) * ( Math.random() * 0.3 + 0.85 ));
                         if ( mpDmg > mobs[i].mp ) mpDmg = mobs[i].mp;
+                        let dmg = Math.floor(mpDmg / 2);
                         mobs[i].mp -= mpDmg;
                         mobs[i].hp -= dmg;
                         addMessageToLog(`<span class="purple">${mobs[i].nom} perd ${mpDmg} MP</span>. <span class="red">${mobs[i].nom} perd ${dmg} HP</span>.`);
@@ -692,7 +693,7 @@ function fight() {
         } else if (item.effet === "resurrect") {
             if ( cible.hp <= 0 ) {
                 cible.hp = cible.maxhp * item.valeur;
-                addMessageToLog(`${cible.nom} <span class="redbold">revient à la vie</span> !`)
+                addMessageToLog(`${cible.nom} <span class="greenbold">revient à la vie</span> !`)
                 addMessageToLog(`<span class="green">${cible.nom} gagne ${cible.hp} HP</span>.`)
             } else {
                 addMessageToLog(`${item.nom} est sans effet sur les vivants.`)
