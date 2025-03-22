@@ -291,7 +291,7 @@ function updateClassDescriptions() {
             document.getElementById("descClasse" + i).innerHTML = "Mage capable d'utiliser des sorts d'éléments Ténèbres et Sacré sur cible et de zone, le <strong>Chaomancien</strong> peut affaiblir la Volonté de ses adversaires et manipuler leurs esprits avec sa capacité <em>Discorde</em>, les forçant à s'attaquer les uns les autres."
         }
         if (selectedClasses[i-1] === "Magelame") {
-            document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire la Sagesse de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût de MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
+            document.getElementById("descClasse" + i).innerHTML = "Combattante équilibrée manipulant les forces éthérées, la <strong>Magelame</strong> peut combattre à l'épée et lancer des sorts sans élément sur cible et de zone, ainsi que réduire la Sagesse de ses ennemis. Sa capacité <em>Analyse</em> lui permet, pour un coût en MP fonction du nombre d'adversaires présents, de révéler leurs caractéristiques, forces et faiblesses."
         }
         if (selectedClasses[i-1] === "Prêtresse") {
             document.getElementById("descClasse" + i).innerHTML = "Personnage de soutien, la <strong>Prêtresse</strong> peut utiliser des attaques d'élément Sacré et des Soins sur cible et de zone. Elle est en outre capable de renforcer la Sagesse de son équipe, et sa capacité <em>Don de mana</em> lui permet de rendre des MP à ses alliés au prix des siens."

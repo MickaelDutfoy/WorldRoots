@@ -68,7 +68,7 @@ function fight() {
             else if (fighter.entity.skill === "Manamnesis") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Don de mana") {mpSkill = 2 * fighter.entity.niveau}
             else if (fighter.entity.skill === "Tourbillon") {mpSkill = fighter.entity.niveau}
-            else if (fighter.entity.skill === "Analyse") {mpSkill = Math.floor(fighter.entity.niveau * mobsAlive / 2)}
+            else if (fighter.entity.skill === "Analyse") {mpSkill = Math.floor(fighter.entity.niveau * mobsAlive / 2 + 1)}
             else if (fighter.entity.skill === "Larcin") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Lien animal") {mpSkill = fighter.entity.niveau}
             else if (fighter.entity.skill === "Portail") {mpSkill = 2 * fighter.entity.niveau}
@@ -395,10 +395,10 @@ function fight() {
             let mobsAlive = 0; mobs.forEach(mob => {
                 if (mob.hp > 0) mobsAlive++;
             })
-            if ( char.mp < Math.floor(char.niveau * mobsAlive / 2) ) {
+            if ( char.mp < Math.floor(char.niveau * mobsAlive / 2 + 1) ) {
                 tempoMsg = 0; addMessageToLog(`${char.nom} n'a pas assez de MP !`); return;
             } else {
-                addMessageToLog(`<span class="purple">${char.nom} perd ${Math.floor(char.niveau * mobsAlive / 2)} MP</span> et utilise ${char.skill}.`);
+                addMessageToLog(`<span class="purple">${char.nom} perd ${Math.floor(char.niveau * mobsAlive / 2 + 1)} MP</span> et utilise ${char.skill}.`);
                 cibleIndex = "all";
                 for (let i = 0; i < mobs.length; i++) {
                     if (mobs[i].hp > 0) {
@@ -429,7 +429,7 @@ function fight() {
                         addMessageToLog(`Analysé : ${mobs[i].nom}. Niveau ${mobs[i].niveau}. HP : ${mobs[i].hp}/${mobs[i].maxhp}, MP : ${mobs[i].mp}/${mobs[i].maxmp}. ${immuneText}${resistText}${weaknessText}`);
                     }
                 }
-                char.mp -= Math.floor(char.niveau * mobsAlive / 2);
+                char.mp -= Math.floor(char.niveau * mobsAlive / 2 + 1);
             }
         } else if (char.skill === "Larcin") {
             if ( char.mp < char.niveau ) {
